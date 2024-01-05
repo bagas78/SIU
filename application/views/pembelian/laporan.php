@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
+	<meta charset="utf-8"> 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title><?= strtoupper(@$title) ?> | <?=@$set['logo_nama'] ?></title> 
 
@@ -25,8 +25,15 @@
 		    border-style: solid;
 		    padding: 0.5%;
 		    font-weight: bold;
-		    font-size: x-large;
+		    font-size: large;
   		}
+  		table {
+			max-width: 100%;
+			max-height: 100%;
+		}
+		table .r {
+		  text-align: right;
+		}  	
   	</style>
 
 </head>
@@ -37,7 +44,7 @@
 		<div class="row">
 
 			<div class="col-md-6 col-xs-6">
-				<h4><?=strtoupper($set['logo_nama'])?></h4>
+				<h5><?=strtoupper($set['logo_nama'])?></h5>
 				<p><?=strtoupper($set['logo_alamat'])?></p>
 				<p>Telp : <?=$set['logo_telp']?></p>
 			</div>
@@ -51,12 +58,12 @@
 			<div class="clearfix"></div><br/>
 
 			<div class="col-md-12" align="center">
-				<span class="tit">PEMBELIAN AVALAN</span>
+				<span class="tit">NOTA PEMBELIAN</span>
 			</div>
 
 			<div class="clearfix"></div>
 		
-			<div class="col-md-12" style="margin-bottom: 2%; margin-top: 4%;">
+			<div class="col-md-12" style="margin-bottom: 3%;">
 				
 				<table>
 					<tr>
@@ -77,10 +84,11 @@
 						<tr>
 							<th width="70">No</th>
 							<th>Produk</th>
-							<th>Qty</th>
-							<th>Potongan</th>
-							<th>Harga</th>
-							<th>Subtotal</th>
+							<th class="r">Berat</th>
+							<th class="r">Panjang</th>
+							<th class="r">Berat / Meter</th>
+							<th class="r">Harga</th>
+							<th class="r">Total</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -90,39 +98,52 @@
 							<tr>
 								<td><?=$i?></td>
 								<td><?=@$val['bahan_nama']?></td>
-								<td><?=@$val['pembelian_barang_qty'].' '.@$val['satuan_singkatan']?></td>
-								<td><?=@$val['pembelian_barang_potongan'].' '.@$val['satuan_singkatan']?></td>
-								<td><?=number_format(@$val['pembelian_barang_harga'])?></td>
-								<td class="subtotal"><?=number_format(@$val['pembelian_total'])?></td>
+								<td class="r"><span class="number berat"><?=@$val['pembelian_barang_berat']?></span> Kg</td>
+								<td class="r"><span class="number"><?=@$val['pembelian_barang_panjang']?></span> Mtr</td>
+								<td class="r"><span class="number"><?=@$val['pembelian_barang_berat'] / @$val['pembelian_barang_panjang']?></span> Kg</td>
+								<td class="r">
+									Rp. <span class="number"><?=@$val['pembelian_barang_harga']?><span class="number">
+								</td>
+								<td class="r">
+									Rp. <span class="total number"><?=@$val['pembelian_barang_total']?><span class="number">
+								</td>
 							</tr>
 						
 						<?php $i++ ?>
 						<?php endforeach ?>
 
 						<tr>
-							<td colspan="4"></td>
-							<td>PPN</td>
-							<td id="ppn"><?=@$data[0]['pembelian_ppn']. '%'?></td>
+							<td colspan="5"></td>
+							<td class="r">Berat Total</td>
+							<td class="r" ><span class="number" id="berat_total"></span> Kg</td>
 						</tr>
 						<tr>
-							<td style="border-top: 0;" colspan="4">Jatuh Tempo : <?php @$d = date_create($data[0]['pembelian_jatuh_tempo']); echo date_format($d, 'd M Y') ?></td>
-							<td><b>Total</b></td>
-							<td><b id="total_akhir"></b></td>
+							<td style="border-top: 0;" colspan="5"></td>
+							<td style="border-top: 0;" class="r">PPN <?=@$data[0]['pembelian_ppn']. '%'?></td>
+							<td style="border-top: 0;" class="r">Rp. <span class="number" id="ppn"></span></td>
 						</tr>
 						<tr>
-							<td style="border-top: 0;" colspan="6">Keterangan : <?=@$data[0]['pembelian_keterangan']?></td>
+							<td style="border-top: 0;" colspan="5">Jatuh Tempo : <?php @$d = date_create($data[0]['pembelian_jatuh_tempo']); echo date_format($d, 'd M Y') ?></td>
+							<td style="border-top: 0;" class="r">Ekspedisi</td>
+							<td style="border-top: 0;" class="r">Rp. <span class="number" id="ekspedisi"><?=@$data[0]['pembelian_ekspedisi_total']?></span></td>
 						</tr>
+						<tr>
+							<td style="border-top: 0;" colspan="5">Keterangan : <?=@$data[0]['pembelian_keterangan']?></td>
+							<td class="r" style="border-top: 0;"><b>Grand Total</b></td>
+							<td class="r" style="border-top: 0;"><b>Rp. <span class="number" id="total_akhir"></span></b></td>
+						</tr>
+						
 
 					</tbody>
 				</table>
 			</div>
 
-			<div class="clearfix"></div><br/>
+			<div class="clearfix"></div>
 
 			<div class="col-md-4 col-xs-4">
 				<center style="float: left;">
 				<p>Penerima</p>
-				<br/><br/><br/>
+				<br/><br/>
 				<p>( ___________________  )</p>
 				</center>
 			</div>
@@ -130,7 +151,7 @@
 			<div class="col-md-4 col-xs-4">
 				<center>
 				<p>PT. Alumunium</p>
-				<br/><br/><br/>
+				<br/><br/>
 				<p>( ___________________  )</p>
 				</center>
 			</div>
@@ -144,19 +165,35 @@
 
 <script type="text/javascript">
 	
-	var subtotal = $('.subtotal');
+	var total = $('.total');
 	var num = 0;
-	$.each(subtotal, function(index, val) {
+	$.each(total, function(index, val) {
 		 
-		 num += parseInt($(this).text().replace(/,/g, ''));
+		 num += Number($(this).text().replaceAll('.', ''));
 		 
 	});
 
+	var ekspedisi = Number($('#ekspedisi').text().replaceAll('.', ''));
 	var ppn = (<?=@$data[0]['pembelian_ppn']?>) * num / 100;
-	var total = ppn + num;
+	var grandtotal = ppn + num + ekspedisi;
 
-	$('#total_akhir').text(number_format(total));
+	$('#ppn').text(ppn);
+	$('#total_akhir').text(number_format(grandtotal));
 
+	//berat total
+	var sum_berat = 0;
+	$.each($('.berat'), function() {
+		 sum_berat += Number($(this).text().replaceAll('.', ''));
+	});
+
+	$('#berat_total').text(sum_berat);
+
+	//number format
+	$.each($('.number'), function() {
+		 
+		 var val = Number($(this).text().replaceAll('.', ''));
+		 $(this).text(number_format(val));
+	});
 	
 	//print
 	window.print();

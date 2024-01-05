@@ -3,290 +3,174 @@ class Stok{
   protected $sql;
   function __construct(){
         $this->sql = &get_instance();
-  }
+  } 
   function cek($table, $where){
     $this->sql->db->where($where);
-    return $this->sql->db->get($table)->num_rows();
+    return $this->sql->db->get($table)->num_rows(); 
   }
 
   /////////////////////////////////////////// atribut /////////////////////////////////////////////////
  
-  function bahan(){ 
+  function pembelian(){  
     //sum stok bahan update
-      $pembelian = $this->sql->db->query("SELECT b.pembelian_barang_barang AS pembelian_barang ,SUM(b.pembelian_barang_qty) AS pembelian_jumlah FROM t_pembelian AS a JOIN t_pembelian_barang AS b ON a.pembelian_nomor = b.pembelian_barang_nomor WHERE a.pembelian_hapus = 0 AND a.pembelian_po = 0 GROUP BY b.pembelian_barang_barang")->result_array();
+      $pembelian = $this->sql->db->query("SELECT SUM(b.pembelian_barang_berat) AS berat, SUM(b.pembelian_barang_panjang) AS panjang, b.pembelian_barang_barang AS bahan, a.pembelian_gudang AS gudang, SUM(b.pembelian_barang_total) AS total, SUM(b.pembelian_barang_ekspedisi) AS ekspedisi, a.pembelian_hapus AS hapus FROM t_pembelian AS a JOIN t_pembelian_barang AS b ON a.pembelian_nomor = b.pembelian_barang_nomor WHERE a.pembelian_po = 0 AND a.pembelian_hapus = 0 GROUP BY a.pembelian_gudang, b.pembelian_barang_barang")->result_array();
 
-      $peleburan = $this->sql->db->query("SELECT b.peleburan_barang_barang AS peleburan_barang, SUM(b.peleburan_barang_qty) AS peleburan_jumlah FROM t_peleburan AS a JOIN t_peleburan_barang AS b ON a.peleburan_nomor = b.peleburan_barang_nomor WHERE peleburan_hapus = 0 GROUP BY b.peleburan_barang_barang")->result_array();
-
-      $produksi = $this->sql->db->query("SELECT b.produksi_barang_barang AS produksi_barang, SUM(b.produksi_barang_qty) AS produksi_jumlah FROM t_produksi AS a JOIN t_produksi_barang AS b ON a.produksi_nomor = b.produksi_barang_nomor WHERE produksi_hapus = 0 GROUP BY b.produksi_barang_barang")->result_array();
-
-      $pewarnaan = $this->sql->db->query("SELECT SUM(b.pewarnaan_barang_cacat) AS cacat FROM t_pewarnaan AS a JOIN t_pewarnaan_barang AS b ON a.pewarnaan_nomor = b.pewarnaan_barang_nomor WHERE a.pewarnaan_hapus = 0")->result_array();
-
-      $penyesuaian = $this->sql->db->query("SELECT b.penyesuaian_barang_barang AS id, a.penyesuaian_jenis AS jenis, SUM(b.penyesuaian_barang_selisih) AS jumlah, b.penyesuaian_barang_status AS status FROM t_penyesuaian AS a JOIN t_penyesuaian_barang AS b ON a.penyesuaian_nomor = b.penyesuaian_barang_nomor WHERE a.penyesuaian_jenis = 'pembelian' AND a.penyesuaian_hapus = 0 GROUP BY b.penyesuaian_barang_barang, b.penyesuaian_barang_status")->result_array();
+      $bahan_baku = $this->sql->db->query("SELECT a.produksi_hapus AS hapus, produksi_gudang AS gudang ,b.produksi_barang_barang AS bahan, SUM(b.produksi_barang_panjang) AS panjang, ROUND(SUM(b.produksi_barang_berat * b.produksi_barang_panjang), 2) AS berat FROM t_produksi AS a JOIN t_produksi_barang AS b ON a.produksi_nomor = b.produksi_barang_nomor WHERE a.produksi_so = 0 AND a.produksi_hapus = 0 GROUP BY b.produksi_barang_barang, a.produksi_gudang")->result_array();
 
       //pembelian update stok produk
-      foreach ($pembelian as $pb) {
-        $id = $pb['pembelian_barang'];
-        $jum = $pb['pembelian_jumlah'];
+      
+      //stok 0
+      $this->sql->db->query("UPDATE t_bahan_gudang SET bahan_gudang_berat = 0, bahan_gudang_panjang = 0, bahan_gudang_hpp = 0, bahan_gudang_berat_permeter = 0");
+      
+      foreach (@$pembelian as $pb) {
 
-        $set = ['bahan_stok' => $jum];
-        $where = ['bahan_id' => $id];
+        $bahan = $pb['bahan'];
+        $berat = $pb['berat'];
+        $panjang = $pb['panjang'];
+        $gudang = $pb['gudang'];
+        $hapus = $pb['hapus'];
+        $ekspedisi = $pb['ekspedisi'];
+        $total = $pb['total'];
 
-        $this->sql->db->set($set);
-        $this->sql->db->where($where);
-        $this->sql->db->update('t_bahan');
+        $cek = $this->sql->db->query("SELECT * FROM t_bahan_gudang WHERE bahan_gudang_bahan = '$bahan' AND bahan_gudang_gudang = '$gudang'")->num_rows();
 
-      }
+        if ($hapus != null && $hapus == 0) {
 
-      //tambah stok bahan cacat BH000
-      foreach ($pewarnaan as $pw) {
-        $jum = $pw['cacat'];
-        if ($jum != '') {
-          $this->sql->db->query("UPDATE t_bahan SET bahan_stok = bahan_stok + {$jum} WHERE bahan_id = 0"); 
+          //atribute
+          $hpp = round(($total + $ekspedisi) / $berat, 2);
+
+          //cek panjang 0
+          if ($panjang != 0) {
+            $permeter = round($berat / $panjang, 2);
+          }else{
+            $permeter = 0;
+          } 
+
+          $set = array(
+                  'bahan_gudang_bahan' => $bahan,
+                  'bahan_gudang_gudang' => $gudang,
+                  'bahan_gudang_berat' => $berat,
+                  'bahan_gudang_panjang' => $panjang,
+                  'bahan_gudang_hpp' => $hpp,
+                  'bahan_gudang_berat_permeter' => $permeter,
+            );
+
+          $this->sql->db->set($set);  
+
+          if ($cek == 0) {
+
+            // insert
+            $this->sql->db->insert('t_bahan_gudang');
+
+          }else{
+
+            //update
+            $this->sql->db->where(['bahan_gudang_gudang' => $gudang, 'bahan_gudang_bahan' => $bahan]);
+            $this->sql->db->update('t_bahan_gudang');
+
+          }
+
         }
+
       }
 
-      //kurangi peleburan
-      foreach ($peleburan as $pl) {
-        $id = $pl['peleburan_barang'];
-        $jum = $pl['peleburan_jumlah'];
-        $this->sql->db->query("UPDATE t_bahan SET bahan_stok = bahan_stok - {$jum} WHERE bahan_id = {$id}");
-      }
+      //produksi bahan baku
+      foreach (@$bahan_baku as $bh) {
 
-      //kurangi produksi
-      foreach ($produksi as $pr) {
-        $id = $pr['produksi_barang'];
-        $jum = $pr['produksi_jumlah'];
-        $this->sql->db->query("UPDATE t_bahan SET bahan_stok = bahan_stok - {$jum} WHERE bahan_id = {$id}");
-      }
+        $hapus = $bh['hapus'];
+        $gudang = $bh['gudang'];
+        $bahan = $bh['bahan'];
+        $panjang = $bh['panjang'];
+        $berat = $bh['berat'];
 
-      //kurangi penyesuain stok
-      foreach ($penyesuaian as $pn) {
-        $id = $pn['id'];
-        $jum = $pn['jumlah'];
-        $status = $pn['status'];
-        $jenis = $pn['jenis'];
+        if ($hapus != null && $hapus == 0) {
 
-        if ($status == 'bertambah') {
-          //bertambah
-          $this->sql->db->query("UPDATE t_bahan SET bahan_stok = bahan_stok + {$jum} WHERE bahan_id = {$id}");   
-
-        }else{
-          //berkurang
-          $this->sql->db->query("UPDATE t_bahan SET bahan_stok = bahan_stok - {$jum} WHERE bahan_id = {$id}");
-
+          $this->sql->db->query("UPDATE t_bahan_gudang SET bahan_gudang_panjang = bahan_gudang_panjang - {$panjang}, bahan_gudang_berat = bahan_gudang_berat - {$berat} WHERE bahan_gudang_bahan = {$bahan} AND bahan_gudang_gudang = {$gudang}");
         }
-       
+
       }
 
       return;
   }
-  function billet(){
 
-    //sum stok billet
-    $db1 = $this->sql->db->query("SELECT SUM(peleburan_billet) AS billet, (SUM(peleburan_biaya) / SUM(peleburan_billet)) AS hps, SUM(peleburan_biaya) as hpp, SUM(peleburan_billet_sisa) as billet_sisa FROM t_peleburan WHERE peleburan_hapus = 0")->row_array();
-    
-    $db2 = $this->sql->db->query("SELECT SUM(produksi_billet_qty) AS qty, SUM(produksi_billet_sisa) as billet_sisa FROM t_produksi WHERE produksi_hapus = 0")->row_array();
+  function produksi(){
 
-    //stok dan hpp dan billet
-    $full = $db1['billet'];
-    $min = $db2['qty'];
-    $stok = $full - $min;
-    $hps = $db1['hps'];
-    $hpp = $db1['hpp'];
-    $billet_sisa = $db2['billet_sisa'] - $db1['billet_sisa'];
+    $produksi = $this->sql->db->query("SELECT SUM(b.produksi_produksi_panjang) AS panjang, b.produksi_produksi_produk AS produk, a.produksi_hapus AS hapus, a.produksi_gudang AS gudang, SUM(a.produksi_grandtotal) AS total FROM t_produksi AS a JOIN t_produksi_produksi AS b ON a.produksi_nomor = b.produksi_produksi_nomor WHERE a.produksi_so = 0 AND a.produksi_hapus = 0 GROUP BY a.produksi_gudang, b.produksi_produksi_produk")->result_array();
 
-    $get = $this->sql->db->query("SELECT * FROM t_billet")->row_array();
-    $id = $get['billet_id']; 
+    //kurangi penjualan
 
-    $set = ['billet_full' => $full, 'billet_min' => $min, 'billet_stok' => $stok, 'billet_hps' => $hps, 'billet_hpp' => $hpp,'billet_sisa' => $billet_sisa, 'billet_update' => date('Y-m-d')];
-    $where = ['billet_id' => $id];
+    //stok 0
+    $this->sql->db->query("UPDATE t_produk_gudang SET produk_gudang_panjang = 0, produk_gudang_hps = 0");
 
-    $this->sql->db->set($set);
-    $this->sql->db->where($where);
-    return $this->sql->db->update('t_billet');
+    //produksi produk
+    foreach ($produksi as $pr) {
+      $panjang = @$pr['panjang'];
+      $produk = @$pr['produk'];
+      $hapus = @$pr['hapus'];
+      $gudang = @$pr['gudang'];
+      $total = @$pr['total'];
 
-  }
-  function produk(){
+      //cek produk
+      $cek = $this->sql->db->query("SELECT * FROM t_produk_gudang WHERE produk_gudang_gudang = '$gudang' AND produk_gudang_produk = '$produk'")->num_rows();
 
-    $db1 = $this->sql->db->query("SELECT a.produksi_barang_barang AS produk, SUM(a.produksi_barang_qty) AS stok, b.produksi_total_akhir AS total FROM t_produksi_barang as a JOIN t_produksi as b ON a.produksi_barang_nomor = b.produksi_nomor  WHERE b.produksi_hapus = 0 GROUP BY a.produksi_barang_barang")->result_array();
+      if ($hapus != null && $hapus == 0) {
+        
+        $hps = round($total / $panjang, 2);
 
-    $db2 = $this->sql->db->query("SELECT b.penyesuaian_barang_barang AS id, a.penyesuaian_jenis AS jenis, SUM(b.penyesuaian_barang_selisih) AS jumlah, b.penyesuaian_barang_status AS status FROM t_penyesuaian AS a JOIN t_penyesuaian_barang AS b ON a.penyesuaian_nomor = b.penyesuaian_barang_nomor WHERE a.penyesuaian_jenis = 'penjualan' AND a.penyesuaian_hapus = 0 GROUP BY b.penyesuaian_barang_barang, b.penyesuaian_barang_status")->result_array();
+        $set = array(
+                    'produk_gudang_gudang' => $gudang,
+                    'produk_gudang_produk' => $produk,
+                    'produk_gudang_panjang' => $panjang,
+                    'produk_gudang_hps' => $hps,
+                );
 
-    $table = 't_produk_barang';
-    
-    foreach ($db1 as $val1) {
+        $this->sql->db->set($set);
 
-      $produk = @$val1['produk'];
-      $stok = @$val1['stok'];
-      $total = @$val1['total'] / @$stok;
+        if ($cek == 0) {
+          //insert
+          $this->sql->db->insert('t_produk_gudang');
 
-      $this->sql->db->set(['produk_barang_barang' => $produk, 'produk_barang_stok' => $stok, 'produk_barang_jenis' => 3, 'produk_barang_warna' => 0, 'produk_barang_hps' => $total]);
-      
-      $where = ['produk_barang_barang' => $produk, 'produk_barang_warna' => 0];
-
-      if ($this->cek($table, $where)) {
-        //update
-        $this->sql->db->where($where);
-        $this->sql->db->update($table);
-      }else{
-        //insert
-        $this->sql->db->insert($table);
-      }
-      
-    }
-
-    //kurangi penyesuain stok
-    foreach ($db2 as $value) {
-      $id = $value['id'];
-      $jum = $value['jumlah'];
-      $status = $value['status'];
-      $jenis = $value['jenis'];
-
-      if ($status == 'bertambah') {
-        //bertambah
-        $this->sql->db->query("UPDATE t_produk_barang SET produk_barang_stok = produk_barang_stok + {$jum} WHERE produk_barang_barang = {$id}");   
-
-      }else{
-        //berkurang
-        $this->sql->db->query("UPDATE t_produk_barang SET produk_barang_stok = produk_barang_stok - {$jum} WHERE produk_barang_barang = {$id}");
+        }else{
+          //update
+          $this->sql->db->where(['produk_gudang_gudang' => $gudang, 'produk_gudang_produk' => $produk]);
+          $this->sql->db->update('t_produk_gudang');
+        }
 
       }
-     
+
     }
 
     return;
-
   }
 
-  function pewarnaan(){
-    $db1 = $this->sql->db->query("SELECT b.pewarnaan_barang_barang AS produk, b.pewarnaan_barang_jenis AS jenis, b.pewarnaan_barang_warna AS warna, SUM(b.pewarnaan_barang_qty) AS jumlah FROM t_pewarnaan AS a JOIN t_pewarnaan_barang AS b ON a.pewarnaan_nomor = b.pewarnaan_barang_nomor WHERE a.pewarnaan_hapus = 0 GROUP BY b.pewarnaan_barang_barang, b.pewarnaan_barang_jenis, b.pewarnaan_barang_warna")->result_array();
+  function penjualan()
+  {
+    $db = $this->sql->db->query("SELECT a.penjualan_hapus AS hapus, a.penjualan_gudang AS gudang ,b.penjualan_barang_barang AS produk, b.penjualan_barang_panjang AS panjang FROM t_penjualan AS a JOIN t_penjualan_barang AS b ON a.penjualan_nomor = b.penjualan_barang_nomor AND a.penjualan_so = 0 AND a.penjualan_hapus = 0 GROUP BY b.penjualan_barang_barang, a.penjualan_gudang, a.penjualan_nomor")->result_array();
 
-     foreach ($db1 as $value) {
+      foreach ($db as $value) {
        
-      $produk = $value['produk'];
-      $jenis = $value['jenis'];
-      $warna = $value['warna'];
-      $jumlah = $value['jumlah'];
+        $gudang = $value['gudang'];
+        $produk = $value['produk'];
+        $panjang = $value['panjang'];
+        $hapus = $value['hapus'];
 
-      //tambah
-      $cek = $this->sql->db->query("SELECT * FROM t_produk_barang WHERE produk_barang_barang = {$produk} AND produk_barang_jenis = {$jenis} AND produk_barang_warna = {$warna}")->num_rows();
+        if ($hapus != null && $hapus == 0) {
 
-      if (@$cek > 0) {
+          //kurangi stok produk
+          $this->sql->db->query("UPDATE t_produk_gudang SET produk_gudang_panjang = produk_gudang_panjang - {$panjang} WHERE produk_gudang_produk = {$produk} AND produk_gudang_gudang = {$gudang}"); 
 
-        //update
-        $this->sql->db->query("UPDATE t_produk_barang SET produk_barang_stok = $jumlah WHERE produk_barang_barang = {$produk} AND produk_barang_jenis = {$jenis} AND produk_barang_warna = {$warna}");  
-
-      }else{
-
-        //ambil hps
-        $get = $this->sql->db->query("SELECT * FROM t_produk_barang WHERE produk_barang_barang = {$produk} AND produk_barang_warna = 0")->row_array();
-        $hps = $get['produk_barang_hps'];
-
-        //add
-        $this->sql->db->query("INSERT INTO t_produk_barang (produk_barang_barang, produk_barang_stok, produk_barang_jenis, produk_barang_warna, produk_barang_hps) VALUES ($produk, $jumlah, $jenis, $warna, $hps)");
+        }
       }
-
-      //kurangi
-      $this->sql->db->query("UPDATE t_produk_barang SET produk_barang_stok = produk_barang_stok - $jumlah WHERE produk_barang_barang = {$produk} AND produk_barang_warna = 0"); 
-
-      ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-     }
 
      return;
   }
 
-  function packing(){
-
-     $db1 = $this->sql->db->query("SELECT a.packing_barang_barang AS produk, a.packing_barang_jenis AS jenis, a.packing_barang_warna AS warna, SUM(a.packing_barang_qty) AS jumlah FROM t_packing_barang AS a JOIN t_packing AS b ON a.packing_barang_nomor = b.packing_nomor WHERE packing_hapus = 0 GROUP BY a.packing_barang_barang, a.packing_barang_jenis, a.packing_barang_warna")->result_array();
-
-    foreach ($db1 as $value) {
-      
-      $produk = $value['produk'];
-      $jenis = $value['jenis'];
-      $warna = $value['warna'];
-      $jumlah = $value['jumlah'];
-
-      $this->sql->db->set(['produk_barang_packing' => $jumlah]);
-      $this->sql->db->where(['produk_barang_barang' => $produk, 'produk_barang_jenis' => $jenis, 'produk_barang_warna' => $warna]);
-      $this->sql->db->update('t_produk_barang');
-
-    }
-  }
-
   ///////////////////////////////////// end tribut ////////////////////////////////////////////////////
 
-  function update_bahan(){
-    $this->bahan();
-  }
-  function update_billet(){
-    $this->billet();
-  }
-  function update_produk(){
-
-    $this->produk();
-    $this->pewarnaan();
-  }
-  function update_pewarnaan(){
-
-    $this->produk();
-    $this->pewarnaan();
-    $this->bahan();
-  }
-  function update_packing(){
-
-   $this->packing();
+  function transaksi(){
+    $this->pembelian();
+    $this->produksi(); 
+    $this->penjualan();
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  function jurnal_delete($nomor, $status = ''){
-
-    if (@$status) {
-      //status
-      $this->sql->db->where('jurnal_nomor', $nomor);
-      $this->sql->db->set('jurnal_hapus', $status);  
-      $this->sql->db->update('t_jurnal');  
-    } else {
-      //permanen
-      $this->sql->db->where('jurnal_nomor', $nomor);
-      $this->sql->db->delete('t_jurnal');  
-    }
-
-  }
-  function jurnal($nomor, $akun, $type, $keterangan, $nominal, $tanggal = ''){
-
-    if (@$tanggal) {
-      $tgl = $tanggal;
-    } else {
-      $tgl = date('Y-m-d');
-    }
-
-    $set = array(
-                  'jurnal_nomor' => $nomor,
-                  'jurnal_akun' => $akun,
-                  'jurnal_keterangan' => $keterangan,
-                  'jurnal_type' => $type,
-                  'jurnal_nominal' => $nominal,
-                  'jurnal_tanggal' => $tgl,
-                );
-
-    $this->sql->db->set($set);
-    $this->sql->db->insert('t_jurnal');
-
-    return;
-  }
 }

@@ -3,6 +3,7 @@
   //atribut form
   $('form').attr('action', '<?=base_url('pembelian/umum_update/'.@$data['pembelian_umum_nomor'])?>');
   $('#nomor').val('<?=@$data['pembelian_umum_nomor']?>');
+  $('#gudang').val('<?=@$data['pembelian_umum_gudang']?>').change();
   $('#tanggal').val('<?=@$data['pembelian_umum_tanggal']?>');
   $('#pembayaran').val('<?=@$data['pembelian_umum_pembayaran']?>').change();
   $('#jatuh_tempo').val('<?=@$data['pembelian_umum_jatuh_tempo']?>');

@@ -209,4 +209,83 @@ class Inventori extends CI_Controller{
 	    // echo '<pre>';
 	    // print_r($data['data']);
 	}
+
+	// hydev added
+	function transfer() {
+		$data['title'] = 'Transfer stok';
+		$this->load->view('v_template_admin/admin_header',$data);
+	    $this->load->view('inventori/transfer');
+	    $this->load->view('v_template_admin/admin_footer');
+	}
+
+	function transfer_add() {
+		//generate nomor transaksi
+	    $pb = $this->query_builder->count("SELECT * FROM t_pewarnaan");
+	    $data['nomor'] = 'TS-'.date('dmY').'-'.($pb+1);
+
+	    //jenis
+	    $data['jenis_data'] = $this->query_builder->view("SELECT * FROM t_warna_jenis WHERE warna_jenis_hapus = 0");
+
+	    //warna
+	    $data['warna_data'] = $this->query_builder->view("SELECT * FROM t_warna WHERE warna_hapus = 0");
+
+	    // data gudang
+	    $data['gudang_data'] = $this->query_builder->view("SELECT * FROM t_gudang WHERE gudang_hapus = 0 AND gudang_id <> 0");
+
+		//produk
+		$data['produk_data'] = $this->query_builder->view("SELECT * FROM t_produk WHERE produk_hapus = 0");
+
+		$data['title'] = 'pewarnaan';
+		$this->load->view('v_template_admin/admin_header',$data);
+	    $this->load->view('inventori/transfer_add');
+	    $this->load->view('v_template_admin/admin_footer');
+	}
+
+	function pewarnaan_get_produk($id, $jenis = '3', $warna = '0') {
+
+		$data = $this->query_builder->view_row("SELECT 
+			produk_barang_stok AS stok 
+			FROM t_produk_barang 
+			WHERE produk_barang_warna = 0 AND produk_barang_barang = '$id'");
+
+		echo json_encode($data);
+	}
+
+	function transfer_save()
+	{
+		$user = $this->session->userdata('id');
+		$nomor = strip_tags(@$_POST['nomor']);
+
+		$set1 = array(
+			'penggudangan_nomor' 	=> $nomor,
+			'penggudangan_user' 	=> $user,
+			'penggudangan_tanggal' 	=> strip_tags(@$_POST['tanggal']),
+		);
+		$save = $this->query_builder->add('t_penggudangan',$set1);
+
+		if ($save == 1) {			
+			$jum = count($_POST['produk']);
+			for ($i = 0; $i < $jum; ++$i) {				
+				$set2 = array(
+					'penggudangan_barang_barang' 	=> strip_tags(@$_POST['produk'][$i]),
+					'penggudangan_barang_nomor' 	=> $nomor,
+					'penggudangan_barang_stok' 		=> strip_tags(@$_POST['stok'][$i]),
+					'penggudangan_barang_gudang' 	=> strip_tags(@$_POST['gudang'][$i]),
+					'penggudangan_barang_qty' 		=> strip_tags(@$_POST['qty'][$i]),
+					'penggudangan_barang_cacat' 	=> strip_tags(@$_POST['cacat'][$i]),
+				);
+				$this->query_builder->add('t_penggudangan_barang',$set2);
+			}
+			
+			// update stok
+			// $this->stok->update_pewarnaan();
+			// $this->stok->penggudangan();	// disable dulu
+			
+			$this->session->set_flashdata('success','Data berhasil di simpan');
+		} else {
+			$this->session->set_flashdata('gagal','Data gagal di simpan');
+		}
+
+		redirect(base_url('inventori/transfer'));
+	}
 }

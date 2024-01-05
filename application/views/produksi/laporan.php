@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
+	<meta charset="utf-8"> 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title><?= strtoupper(@$title) ?> | <?=@$set['logo_nama'] ?></title> 
 
@@ -18,7 +18,7 @@
 
   	<style type="text/css">
   		.box{
-  			padding: 3%;
+  			padding: 3%; 
   		}
   		.tit{
   			border-width: 2px;
@@ -27,6 +27,9 @@
 		    font-weight: bold;
 		    font-size: x-large;
   		}
+  		table .r {
+		  text-align: right;
+		} 
   	</style>
 
 </head>
@@ -37,13 +40,13 @@
 		<div class="row">
 
 			<div class="col-md-12" align="center">
-				<span class="tit">LAPORAN PRODUKSI</span>
+				<span class="tit">LAPORAN PRODUKSI <?=strtoupper(@$bahan_data[0]['gudang_nama'])?></span>
 			</div>
 
 			<div class="clearfix"></div><br/>
 
 			<div class="col-md-12" align="center">
-				<span style="font-size: x-large;">Tanggal : <?php $d = date_create($data[0]['produk_tanggal']); echo date_format($d, 'd/m/Y'); ?></span>
+				<span style="font-size: x-large;">Tanggal : <?php $d = date_create($produk_data[0]['produksi_tanggal']); echo date_format($d, 'd/m/Y'); ?></span>
 			</div>
 
 			<div class="clearfix"></div><br/>
@@ -54,28 +57,18 @@
 					<thead>
 						<tr>
 							<th width="70">No</th>
-							<th>Matras</th>
-							<th>Nama Profil</th>
-							<th>Gambar</th>
-							<th>Panjang</th>
-							<th>Berat / Btg</th>
-							<th>Jumlah</th>
-							<th>Subtotal</th>
+							<th>Nama Produk</th>
+							<th class="r">Panjang</th>
 						</tr>
 					</thead>
 					<tbody>
 						<?php $i = 1; ?>
-						<?php foreach ($data as $val): ?>
+						<?php foreach ($produk_data as $val): ?>
 
 							<tr>
 								<td><?=$i?></td>
-								<td class="matras"><?=@$val['produksi_barang_matras']?></td>
 								<td><?=@$val['produk_nama']?></td>
-								<td></td>
-								<td><?=@$val['produk_panjang'].' Cm'?></td>
-								<td><?=number_format(@$val['produk_berat']).' Kg'?></td>
-								<td><?=number_format(@$val['produksi_barang_qty'])?></td>
-								<td class="subtotal"><?=number_format(@$val['produk_berat'] * @$val['produksi_barang_qty']).' Kg'?></td>
+								<td class="r"><span class="number produksi_panjang"><?=@$val['produksi_produksi_panjang']?></span> Mtr</td>
 							</tr>
 						
 						<?php $i++ ?>
@@ -89,16 +82,36 @@
 				<table class="table table-bordered">
 					<thead>
 						<tr>
-							<th>Jumlah Matras</th>
-							<th>Jumlah Billet</th>
-							<th>Sisa Billet</th>
+							<th>Nama Bahan</th>
+							<th class="r">Panjang</th>
+							<th class="r">Berat</th>
+							<th class="r">Hpp</th>
+							<th class="r">Subtotal</th>
 						</tr>
 					</thead>
 					<tbody>
+						<?php foreach ($bahan_data as $v): ?>
+							
+							<tr>
+								<td><?=@$v['bahan_nama']?></td>
+								<td class="r"><span class="number panjang"><?=@$v['produksi_barang_panjang']?></span> Mtr</td>
+								<td class="r"><span class="number"><?=@$v['produksi_barang_berat'] *  @$v['produksi_barang_panjang']?></span> Kg</td>
+								<td class="r">Rp. <span class="number harga"><?=@$v['produksi_barang_harga']?></span></td>
+								<td class="r">Rp. <span class="number subtotal"><?=@$v['produksi_barang_subtotal']?></span></td>
+							</tr>
+
+						<?php endforeach ?>
 						<tr>
-							<td class="matras_sum"></td>
-							<td><?=number_format(@$data[0]['produksi_billet_qty']).' Kg'?></td>
-							<td><?=number_format(@$data[0]['produksi_billet_sisa']).' Kg'?></td>
+							<th colspan="4" class="r">Total Produksi</th>
+							<td class="r">Rp. <span class="number total_produksi"></span></td>
+						</tr>
+						<tr>
+							<th colspan="4" class="r">Biaya Jasa</th>
+							<td class="r">Rp. <span class="number jasa"><?=@$bahan_data[0]['produksi_jasa']?></span></td>
+						</tr>
+						<tr>
+							<th colspan="4" class="r">Total Akhir</th>
+							<td class="r">Rp. <span class="number total_akhir"></span></td>
 						</tr>
 					</tbody>
 				</table>
@@ -107,10 +120,10 @@
 			<div class="clearfix"></div><br/>
 
 			<div class="col-md-6 col-xs-6">
-				<?php if ($data[0]['produksi_pekerja'] != 'null'): ?>
+				<?php if ($produk_data[0]['produksi_pekerja'] != 'null'): ?>
 					<h4>Pekerja</h4>
 					<?php $s = 1; ?>
-					<?php foreach (json_decode($data[0]['produksi_pekerja']) as $key => $value): ?>
+					<?php foreach (json_decode($produk_data[0]['produksi_pekerja']) as $key => $value): ?>
 						<?php $kar = $this->query_builder->view_row("SELECT * FROM t_karyawan WHERE karyawan_id = '$value'"); ?>
 						<p><?=$s.'. '.$kar['karyawan_nama']?></p>
 					<?php $s++; ?>
@@ -121,7 +134,7 @@
 			<div class="col-md-6 col-xs-6">
 				<center style="float: right;">
 				<p>Di Buat oleh</p>
-				<br/><br/><br/>
+				<br/><br/>
 				<p>( ___________________  )</p>
 				</center>
 			</div>
@@ -135,23 +148,32 @@
 
 <script type="text/javascript">
 
-	var matras = $('.matras');
-	var num_matras = 0;
-	$.each(matras, function(index, val) {
+	var sum_sub = 0;
+	$.each($('.subtotal'), function() {
 		 
-		 num_matras += Number($(this).text().replace(/,/g, ''));
+		 sum_sub += Number($(this).text());
 		 
 	});
 
-	$('.matras_sum').text(number_format(num_matras));
+	var jasa = Number($('.jasa').text());
+	var total = Number(sum_sub) + jasa;
 
+	$('.total_produksi').text(sum_sub);
+	$('.total_akhir').text(total);
+
+	//format number
+	$.each($('.number'), function() {
+		 
+		 var val = Number($(this).text());
+		 $(this).text(number_format(val));
+	});
 	
 	//print
 	window.print();
-    window.onafterprint = back;
+   window.onafterprint = back;
 
-    function back() {
-        window.history.back();
-    }
+   function back() {
+       window.history.back();
+   }
 
 </script>

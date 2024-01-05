@@ -6,11 +6,27 @@
       <div class="box"> 
         <div class="box-header with-border">
  
-            <div align="left" class="bahan_add">
-              <a href="<?= base_url('bahan/add') ?>"><button class="btn btn-primary"><i class="fa fa-plus"></i> Tambah</button></a>             
-              <button onclick="filter('utama')" class="btn btn-default"><i class="fa fa-filter"></i> Bahan Baku Utama</button>
-              <button onclick="filter('pembantu')" class="btn btn-default"><i class="fa fa-filter"></i> Bahan Pembantu</button>
-            </div>
+            <div align="left" class="bahan_add row"> 
+
+              <div class="col-md-2">
+                <a href="<?= base_url('bahan/add') ?>"><button class="btn btn-primary form-control"><i class="fa fa-plus"></i> Tambah</button></a>    
+              </div>
+              <div class="col-md-2 row">
+                <select class="form-control" onchange="filter($(this).val())">
+                <option value="">Semua Gudang</option>
+                <?php foreach ($gudang_data as $g): ?>
+                  <option value="<?=$g['gudang_nama']?>"><?=$g['gudang_nama']?></option>
+                <?php endforeach ?>
+                </select>
+              </div>
+              <div class="col-md-2">
+                <select class="form-control" onchange="filter($(this).val())">
+                <option value="">Semua Kategori</option>
+                <option value="utama">Bahan Baku Utama</option>
+                <option value="pembantu">Bahan Pembantu</option>
+                </select>
+              </div>
+            </div> 
 
           <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
@@ -25,12 +41,14 @@
                 <thead>
                 <tr>
                   <th>Kode</th>
+                  <th>Gudang</th>
                   <th>Nama</th>
-                  <th>Stok</th>
-                  <th>Harga</th>
+                  <th>Berat <span class="stn">Kg</span></th>
+                  <th>Panjang <span class="stn">Mtr</span></th>
+                  <th>Harga <span class="stn">Rp</span></th>
+                  <th>Hpp <span class="stn">Rp</span></th>
                   <th>Kategori</th>
-                  <th>Satuan</th>
-                  <th width="30">Action</th>
+                  <th width="40">Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -57,14 +75,20 @@
                 "url": "<?=site_url('bahan/get_data') ?>",
                 "type": "GET"
             },
-            "columns": [  
+            "columns": [ 
                         { "data": "bahan_kode",
                         "render":
                         function(data) {
                           return "<span class='kode'>"+data+"</span>";
                         }},
+                        { "data": "gudang_nama"}, 
                         { "data": "bahan_nama"},
-                        { "data": "bahan_stok",
+                        { "data": "berat",
+                        "render":
+                        function(data) {
+                          return "<span>"+number_format(data)+"</span>";
+                        }},
+                        { "data": "panjang",
                         "render":
                         function(data) {
                           return "<span>"+number_format(data)+"</span>";
@@ -75,8 +99,13 @@
                             return "<span class='harga'>"+number_format(data)+"</span>"
                           }
                         },
+                        { "data": "hpp",
+                        "render":
+                          function(data) {
+                            return "<span class='harga'>"+number_format(data)+"</span>"
+                          }
+                        },
                         { "data": "bahan_kategori"},
-                        { "data": "satuan_singkatan"},
                         { "data": "bahan_id",
                         "render": 
                         function(data) {

@@ -56,7 +56,7 @@ class Kontak extends CI_Controller{
 			$this->session->set_flashdata('gagal','Data gagal di simpan');
 		}
 
-		redirect(base_url('kontak/karyawan'));
+		redirect(base_url('kontak'));
 	}
 	function karyawan_delete($id){
 
@@ -70,7 +70,7 @@ class Kontak extends CI_Controller{
 			$this->session->set_flashdata('gagal','Data gagal di hapus');
 		}
 		
-		redirect(base_url('kontak/karyawan'));	
+		redirect(base_url('kontak'));	
 	}
 	function karyawan_edit($id){
 		$data['data'] = $this->query_builder->view_row("SELECT * FROM t_karyawan where karyawan_id = '$id'");
@@ -97,7 +97,7 @@ class Kontak extends CI_Controller{
 			$this->session->set_flashdata('gagal','Data gagal di rubah');
 		}
 
-		redirect(base_url('kontak/karyawan'));
+		redirect(base_url('kontak'));
 	}
 
 	/////////////////////////////////////
@@ -169,7 +169,6 @@ class Kontak extends CI_Controller{
 						'kontak_nama' => strip_tags($_POST['nama']),
 						'kontak_alamat' => strip_tags($_POST['alamat']),
 						'kontak_tlp' => strip_tags($_POST['tlp']),
-						'kontak_email' => strip_tags($_POST['email']),
 						'kontak_rek' => strip_tags($_POST['rek']),
 						'kontak_bank' => strip_tags($_POST['bank']),
 						'kontak_npwp' => strip_tags($_POST['npwp']),
@@ -226,7 +225,6 @@ class Kontak extends CI_Controller{
 						'kontak_nama' => strip_tags($_POST['nama']),
 						'kontak_alamat' => strip_tags($_POST['alamat']),
 						'kontak_tlp' => strip_tags($_POST['tlp']),
-						'kontak_email' => strip_tags($_POST['email']),
 						'kontak_rek' => strip_tags($_POST['rek']),
 						'kontak_bank' => strip_tags($_POST['bank']),
 						'kontak_npwp' => strip_tags($_POST['npwp']),

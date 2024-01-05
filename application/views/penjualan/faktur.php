@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title><?= strtoupper(@$title) ?> | <?=@$set['logo_nama'] ?></title> 
 
-	<!-- Bootstrap 3.3.7 --> 
+	<!-- Bootstrap 3.3.7 -->  
   	<link rel="stylesheet" href="<?php echo base_url() ?>adminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css"> 
 
   	<!-- jQuery 3 -->
@@ -20,13 +20,20 @@
   		.box{
   			padding: 3%;
   		}
-  		.tit{
-  			float: right;
-		    border-width: 2px;
+  		.tit{ 
+  			border-width: 2px;
 		    border-style: solid;
 		    padding: 0.5%;
 		    font-weight: bold;
+		    font-size: large;
   		}
+  		table {
+			max-width: 100%;
+			max-height: 100%;
+		}
+		table .r {
+		  text-align: right;
+		}
   	</style>
 
 </head>
@@ -34,72 +41,88 @@
 
 	<div class="box">
 
-		<span class="tit">FAKTUR PENJUALAN</span>
+		<div class="col-md-6 col-xs-6">
+			<h5><?=strtoupper($set['logo_nama'])?></h5>
+			<p><?=strtoupper($set['logo_alamat'])?></p>
+			<p>Telp : <?=$set['logo_telp']?></p>
+		</div>
 
-		<h4><?=strtoupper($set['logo_nama'])?></h4>
-		<p><?=strtoupper($set['logo_alamat'])?></p>
-		<p>Telp : <?=$set['logo_telp']?></p>
+		<div class="col-md-6 col-xs-6" style="text-align: right;">
+			<p><?=@$data[0]['penjualan_nomor']?></p>
+			<p><?=date_format(date_create(@$data[0]['penjualan_tanggal']), 'd M Y')?></p>
+			<p><?=@$data[0]['user_name']?></p>
+		</div>	
 
-		<div class="clearfix"></div><br/>
+		<div class="col-md-12 col-xs-12" align="center">
+			<span class="tit">FAKTUR PENJUALAN</span>
+			<br/><br/>
+		</div>	
+
+		<table class="table table-borderless">
+			<tr>
+				<td style="border-top: 0;">Nama Customer : <?=@$data[0]['kontak_nama']?></td>
+			</tr>
+			<tr>
+				<td style="border-top: 0;"><?=@$data[0]['kontak_alamat']?>, Telp : <?=@$data[0]['kontak_tlp']?></td>
+			</tr>
+		</table>	
 		
-		<table class="table table-responsive table-bordered">
+		<table class="table table-responsive table-borderless">
 			<thead>
-				<tr>
-					<td>Nama</td>
-					<td colspan="4"><?=@$data[0]['kontak_nama']?></td>
-				<tr>
-					<td>Alamat</td>
-					<td colspan="4"><?=@$data[0]['kontak_alamat']?></td>
-				</tr>
-				<tr>
-					<td>Telp</td>
-					<td colspan="4"><?=@$data[0]['kontak_tlp']?></td>
-				</tr>
 				<tr>
 					<th width="70">No</th>
 					<th>Produk</th>
-					<th>Jenis</th>
-					<th>Warna</th>
-					<th>Qty</th>
-					<th>Harga</th>
-					<th>Subtotal</th>
+					<th class="r">Panjang</th>
+					<th class="r">Harga</th>
+					<th class="r">Total</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody>	
 				<?php $i = 1; ?>
-				<?php foreach ($data as $val): ?>
+				<?php foreach (@$data as $val): ?>
 
 					<tr>
 						<td><?=$i?></td>
-						<td><?=$val['produk_nama']?></td>
-						<td><?=$val['warna_jenis_type']?></td>
-						<td><?=$val['warna_nama']?></td>
-						<td><?=number_format($val['penjualan_barang_qty'])?></td>
-						<td><?=number_format($val['penjualan_barang_harga'])?></td>
-						<td class="subtotal"><?=number_format($val['penjualan_total'])?></td>
+						<td><?=@$val['produk_nama']?></td>
+						<td class="r"><?=number_format(@$val['penjualan_barang_panjang'])?> Mtr</td>
+						<td class="r">Rp. <span class="harga"><?=number_format(@$val['penjualan_barang_harga'])?></span></td>
+						<td class="r">Rp. <span class="subtotal"><?=number_format(@$val['penjualan_barang_total'])?></span></td>
 					</tr>
 				
 				<?php $i++ ?>
 				<?php endforeach ?>
 
 				<tr>
-					<td colspan="5"></td>
-					<td>PPN</td>
-					<td id="ppn"><?=@$data[0]['penjualan_ppn']?>%</td>
+					<td colspan="3" style="border-top: 0;">Jatuh Tempo : <?php if ($data[0]['penjualan_jatuh_tempo'] != '0000-00-00') { @$d = date_create($data[0]['penjualan_jatuh_tempo']); echo date_format($d, 'd M Y'); } else { echo '-'; } ?></td>
+					<td class="r" style="border-top: 0;">PPN <?=@$data[0]['penjualan_ppn']?>%</td>
+					<td class="r" style="border-top: 0;">Rp. <span id="ppn"></span></td>
 				</tr>
 				<tr>
-					<td>Jatuh Tempo</td>
-					<td colspan="4"><?php @$d = date_create($data[0]['penjualan_jatuh_tempo']); echo date_format($d, 'd M Y') ?></td>
-					<td>Total Akhir</td>
-					<td id="total_akhir"></td>
-				</tr>
-				<tr>
-					<td>Keterangan</td>
-					<td colspan="6"><?=@$data[0]['penjualan_keterangan']?></td>
+					<td colspan="3" style="border-top: 0;">Keterangan : <?=@$data[0]['penjualan_keterangan']?></td>
+					<td class="r" style="border-top: 0;">Grand Total</td>
+					<td class="r" style="border-top: 0;">Rp. <span id="total_akhir"></span></td>
 				</tr>
 
 			</tbody>
 		</table>
+
+		<div class="clearfix"></div>
+
+		<div class="col-md-4 col-xs-4">
+			<center style="float: left;">
+			<p>Penerima</p>
+			<br/><br/><br/>
+			<p>( ___________________  )</p>
+			</center>
+		</div>
+
+		<div class="col-md-4 col-xs-4">
+			<center>
+			<p><?=strtoupper($set['logo_nama'])?></p>
+			<br/><br/><br/>
+			<p>( ___________________  )</p>
+			</center>
+		</div>
 
 	</div>
 
@@ -108,18 +131,23 @@
 
 <script type="text/javascript">
 	
-	var subtotal = $('.subtotal');
-	var num = 0;
-	$.each(subtotal, function(index, val) {
+	var total = 0;
+	var sum = 0;
+	$.each($('.subtotal'), function() {
 		 
-		 num += parseInt($(this).text().replace(/,/g, ''));
+		 total += Number($(this).text().replace(/,/g, ''));
+		 sum += Number($(this).closest('tr').find('.qty').text().replace(/,/g, '')) * Number($(this).closest('tr').find('.harga').text().replace(/,/g, ''));
 		 
 	});
 
-	var ppn = (<?=@$data[0]['penjualan_ppn']?>) * num / 100;
-	var total = ppn + num;
 
-	$('#total_akhir').text(number_format(total));
+	//ppn
+	var ppn = (<?=@$data[0]['penjualan_ppn']?>) * total / 100;
+	$('#ppn').text(number_format(ppn));
+
+	//total akhir
+	var akhir = number_format(ppn + total);
+	$('#total_akhir').text(akhir);
 
 	
 	// print

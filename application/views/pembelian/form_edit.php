@@ -1,14 +1,16 @@
 <script>
 
   //atribut form
-  $('form').attr('action', '<?=base_url('pembelian/'.@$url.'_update/'.@$data['pembelian_nomor'])?>');
   $('#nomor').val('<?=@$data['pembelian_nomor']?>');
   $('#tanggal').val('<?=@$data['pembelian_tanggal']?>');
   $('#pembayaran').val('<?=@$data['pembelian_pembayaran']?>').change();
   $('#supplier').val('<?=@$data['pembelian_supplier']?>').change();
-  $('#jatuh_tempo').val('<?=@$data['pembelian_jatuh_tempo']?>');
+  $('#gudang').val('<?=@$data['pembelian_gudang']?>').change();
+  $('#jatuh_tempo').val('<?=@$data['pembelian_jatuh_tempo']?>'); 
   $('#status').val('<?=@$data['pembelian_status']?>').change();
   $('#keterangan').val('<?=@$data['pembelian_keterangan']?>');
+  $('#ekspedisi').val('<?=@$data['pembelian_ekspedisi']?>').change(); 
+  $('#ekspedisi_total').val('<?=@$data['pembelian_ekspedisi_total']?>');
 
   if ('<?=@$data['pembelian_lampiran']?>' != '') {
     $('#previewImg').attr('src', '<?=base_url('assets/gambar/pembelian/'.@$data['pembelian_lampiran'])?>');
@@ -26,10 +28,10 @@
 
       //blank new input
       $('#copy').find('select').val('');
-      $('#copy').find('.potongan').val(0);
-      $('#copy').find('.qty').val(1);
+      $('#copy').find('.berat').val(0);
+      $('#copy').find('.panjang').val(1);
       $('#copy').find('.harga').val(0);
-      $('#copy').find('.subtotal').val(0);
+      $('#copy').find('.total').val(0);
       $('#copy').find('.satuan').html('');
     
     }
@@ -39,15 +41,23 @@
       var i = index+1;
 
       //insert value
-      $('#copy:nth-child('+i+') > td:nth-child(1) > select').val(val.pembelian_barang_barang).change();
-      $('#copy:nth-child('+i+') > td:nth-child(2) > div > input').val(val.pembelian_barang_stok);
-      $('#copy:nth-child('+i+') > td:nth-child(3) > div > input').val(val.pembelian_barang_qty);
-      $('#copy:nth-child('+i+') > td:nth-child(4) > div > input').val(val.pembelian_barang_potongan);
+      $('#copy:nth-child('+i+') > td:nth-child(1) > select').val(val.pembelian_barang_barang);
+      $('#copy:nth-child('+i+') > td:nth-child(2) > input').val(val.pembelian_barang_berat);
+      $('#copy:nth-child('+i+') > td:nth-child(3) > input').val(val.pembelian_barang_panjang);
+      $('#copy:nth-child('+i+') > td:nth-child(4) > input').val(val.pembelian_barang_harga);
 
       //ppn 0
       if (<?=@$data['pembelian_ppn']?> == 0) {
         $('.check').removeAttr('checked').change();
       }
+
+    });
+
+    //number format
+    $.each($('input[type=number]'), function() {
+       
+       var val = $(this).val();
+       $(this).val(number_format(val));
 
     });
 

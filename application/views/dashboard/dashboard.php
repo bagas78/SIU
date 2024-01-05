@@ -28,9 +28,10 @@
       <table id="example1" class="table table-responsive table-borderless">
         <thead>
           <tr>
+            <th>Gudang</th>
             <th>Bahan</th>
-            <th width="1">Stok</th>
-            <th width="1">Satuan</th>
+            <th>Berat ( KG )</th>
+            <th>Panjang ( M )</th>
           </tr>
         </thead>
       </table>
@@ -42,9 +43,9 @@
       <table id="example2" class="table table-responsive table-borderless">
         <thead>
           <tr>
-            <th>Produk</th>
-            <th width="1">Stok</th>
-            <th width="1">Satuan</th>
+            <th>Gudang</th>
+            <th>Bahan</th>
+            <th>Panjang ( M )</th>
           </tr>
         </thead>
       </table> 
@@ -97,18 +98,22 @@
             "order"         :[],
             
             "ajax": {
-                "url": "<?=site_url('bahan/get_data') ?>",
+                "url": "<?=site_url('dashboard/get_bahan'); ?>",
                 "type": "GET"
             },
             "columns": [  
-                        { "data": "bahan_nama"},
-                        { "data": "bahan_stok",
+                        { "data": "gudang"},
+                        { "data": "nama"},
+                        { "data": "berat",
                         "render":
                         function(data) {
                           return "<span>"+number_format(data)+"</span>";
                         }},
-                        { "data": "satuan_singkatan"},
-                        
+                        { "data": "panjang",
+                        "render":
+                        function(data) {
+                          return "<span>"+number_format(data)+"</span>";
+                        }}
                     ],
         });
 
@@ -129,17 +134,17 @@
             "order"         :[],
             
             "ajax": {
-                "url": "<?=site_url('produk/master_get_data') ?>",
+                "url": "<?=site_url('dashboard/get_produk') ?>",
                 "type": "GET"
             },
             "columns": [  
-                        { "data": "produk_nama"},
-                        { "data": "stok",
+                        { "data": "gudang"},
+                        { "data": "nama"},
+                        { "data": "panjang",
                         "render":
                         function(data) {
                           return "<span>"+number_format(data)+"</span>";
-                        }},
-                        { "data": "satuan_singkatan"},
+                        }}
                         
                     ],
         });
@@ -156,7 +161,7 @@ var options = {
   exportEnabled: false,
   animationEnabled: true,
   title:{
-    text: "Grafik Pembelian | Produksi | Penjualan Tahun <?=date('Y')?>"
+    text: "Grafik Pembelian | Penjualan Tahun <?=date('Y')?>"
   },
   subtitles: [{
     text: ""
@@ -210,23 +215,6 @@ var options = {
   },
   {
     type: "spline",
-    name: "Produksi",
-    axisYType: "secondary",
-    showInLegend: true,
-    xValueFormatString: "<?=(@$filter == 1)?'DD MMMM YYYY':'MMMM YYYY' ?>",
-    yValueFormatString: "Rp #,##0.#",
-    dataPoints: [
-      
-      <?php foreach($produksi_data as $p): ?>
-
-        { x: new Date(<?=$p['tahun'].','.$p['bulan'].','.$p['tanggal']?>),  y: <?=$p['total']?> },
-
-      <?php endforeach ?>
-
-    ]
-  },
-  {
-    type: "spline",
     name: "Penjualan",
     axisYType: "secondary",
     showInLegend: true,
@@ -258,5 +246,6 @@ function toggleDataSeries(e) {
 }
 
 </script>
+
 
 <script src="https://cdn.canvasjs.com/jquery.canvasjs.min.js"></script>

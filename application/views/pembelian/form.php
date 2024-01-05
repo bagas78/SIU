@@ -9,13 +9,13 @@
  
   <!-- Default box -->  
   <div class="box"> 
-    <div class="box-header with-border">
+    <div class="box-header with-border">  
 
       <div class="back" align="left" hidden>
         <a href="<?= @$_SERVER['HTTP_REFERER'] ?>"><button class="btn btn-danger"><i class="fa fa-arrow-left"></i> Kembali</button></a>
-      </div>
-
-      <div class="box-tools pull-right">
+      </div> 
+ 
+      <div class="box-tools pull-right"> 
         <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
           <i class="fa fa-minus"></i></button>
         <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
@@ -32,7 +32,7 @@
       </div>
 
     </div>
-    <div class="box-body">
+    <div class="box-body"> 
 
       <form method="post" enctype="multipart/form-data" class="bg-alice">
         <div class="row">
@@ -44,7 +44,7 @@
             <div class="form-group">
               <label>Tanggal Transaksi</label>
               <input type="date" name="tanggal" class="form-control" required id="tanggal">
-            </div>
+            </div> 
             <div class="form-group">
               <label>Supplier</label>
               <select name="supplier" class="form-control select2" required id="supplier">
@@ -54,8 +54,25 @@
                 <?php endforeach ?>
               </select>
             </div>
+            <div class="form-group">
+              <label>Gudang</label>
+              <select name="gudang" class="form-control select2" required id="gudang">
+                <option value="" hidden>-- Pilih --</option>
+                <?php foreach ($gudang_data as $g): ?>
+                  <option value="<?= $g['gudang_id']?>"><?= $g['gudang_nama']?></option>
+                <?php endforeach ?>
+              </select>
+            </div>
           </div>
           <div class="col-md-3">
+            <div class="form-group">
+              <label>Status Pembayaran</label>
+              <select name="status" class="form-control" required id="status">
+                <option value="" hidden>-- Pilih --</option>
+                <option value="lunas">Lunas</option>
+                <option value="belum">Belum Lunas</option>
+              </select>
+            </div>
             <div class="form-group">
               <label>Jatuh Tempo</label>
               <input type="date" name="jatuh_tempo" class="form-control" required id="jatuh_tempo">
@@ -71,18 +88,19 @@
               </select>
             </div>
             <div class="form-group">
-              <label>Status Pembayaran</label>
-              <select name="status" class="form-control" required id="status">
+              <label>Ekspedisi</label>
+              <select name="ekspedisi" class="form-control select2" required id="ekspedisi">
                 <option value="" hidden>-- Pilih --</option>
-                <option value="lunas">Lunas</option>
-                <option value="belum">Belum Lunas</option>
+                <?php foreach ($ekspedisi_data as $e): ?>
+                  <option value="<?= $e['ekspedisi_id']?>"><?= $e['ekspedisi_nama']?></option>
+                <?php endforeach ?>
               </select>
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-group">
               <label>Keterangan</label>
-              <textarea name="keterangan" class="form-control" style="height: 110px;" id="keterangan"></textarea>
+              <textarea name="keterangan" class="form-control textarea" style="height: 110px;" id="keterangan"></textarea>
             </div>
           </div>
           <div class="col-md-2">
@@ -101,13 +119,12 @@
         <table class="table table-responsive table-borderless">
           <thead>
             <tr>
-              <th width="200">Bahan</th>
-              <th>Stok</th>
-              <th>Qty</th>
-              <th>Potongan</th>
-              <th>Harga</th>
-              <th>Subtotal</th>
-              <th><button type="button" onclick="clone()" class="add btn btn-success btn-sm">+</button></th>
+              <th width="300">Bahan</th>
+              <th width="200">Berat <span class="stn">Kg</span></th>
+              <th width="200">Panjang <span class="stn">Mtr</span></th>
+              <th width="200">Harga <span class="stn">Rp</span></th>
+              <th width="200">Total <span class="stn">Rp</span></th>
+              <th><button type="button" onclick="clone()" class="add btn btn-success btn-sm"><i class="fa fa-plus"></i></button></th>
             </tr>
           </thead>
           <tbody id="paste">
@@ -122,37 +139,39 @@
                 </select>
               </td>
               <td>
-                <div class="input-group">
-                  <input readonly="" type="number" name="stok[]" class="stok form-control" value="0">
-                  <span class="satuan input-group-addon"></span>
-                </div>
+                <input type="number" name="berat[]" class="berat form-control" value="0" min="0" step="any">
               </td>
               <td>
-                <div class="input-group">
-                  <input type="number" name="qty[]" class="qty form-control" value="1" min="1">
-                  <span class="satuan input-group-addon"></span>
-                </div>
+                <input type="number" name="panjang[]" class="panjang form-control" value="0" min="0" step="any">
               </td>
               <td>
-                <div class="input-group">
-                  <input min="0" type="number" name="potongan[]" class="potongan form-control" value="0" required step="0.01">
-                  <span class="satuan input-group-addon"></span>
-                </div>
+                <input type="number" name="harga[]" class="harga form-control" required value="0" min="0" step="any">
               </td>
-              <td><input type="text" name="harga[]" class="harga form-control" required value="0" min="0"></td>
-              <td><input readonly="" type="text" name="subtotal[]" class="subtotal form-control" required value="0" min="0"></td>
-              <td><button type="button" onclick="$(this).closest('tr').remove()" class="remove btn btn-danger btn-sm">-</button></td>
+              <td>
+                <input readonly="" type="text" name="total[]" class="total form-control" required value="0" min="0">
+              </td>
+              <td>
+                <button type="button" onclick="$(this).closest('tr').remove()" class="remove btn btn-danger btn-sm"><i class="fa fa-minus"></i></button>
+              </td>
             </tr>
 
             <tr>
-              <td colspan="4"></td>
-              <td align="right">Qty Akhir</td>
-              <td><input id="qty_akhir" readonly="" type="text" name="qty_akhir" class="form-control"></td>
+              <td colspan="3"></td>
+              <td align="right"><b>Subtotal</b> <span class="stn">Kg</span></td>
+              <td><input id="subtotal" readonly="" type="text" name="subtotal" class="form-control"></td>
             </tr>
 
             <tr>
-              <td colspan="4"></td>
-              <td align="right">PPN ( % )</td>
+              <td colspan="3"></td>
+              <td align="right"><b>Ekspedisi</b> <span class="stn">Rp</span></td>
+              <td>
+                <input min="0" type="number" name="ekspedisi_total" class="ekspedisi form-control" value="0" required step="any" id="ekspedisi_total">
+              </td>
+            </tr>
+
+            <tr>
+              <td colspan="3"></td>
+              <td align="right"><b>PPN</b> <span class="stn">&#160;%&#160;</span></td>
               <td>
                 <input readonly="" id="ppn" type="text" name="ppn" class="form-control" value="<?=$ppn['pajak_persen']?>">
               </td>
@@ -160,13 +179,13 @@
             </tr>
 
             <tr>
-              <td colspan="4"></td>
-              <td align="right">Total Akhir</td>
-              <td><input id="total" readonly="" type="text" name="total" class="form-control" value="0" min="0"></td>
+              <td colspan="3"></td>
+              <td align="right"><b>Grand Total</b> <span class="stn">Rp</span></td>
+              <td><input id="grandtotal" readonly="" type="text" name="grandtotal" class="form-control" value="0" min="0"></td>
             </tr>
 
             <tr class="save">
-              <td colspan="6" align="right">
+              <td colspan="5" align="right">
                 <button type="submit" class="btn btn-primary">Simpan <i class="fa fa-check"></i></button>
                 <a href="<?= @$_SERVER['HTTP_REFERER'] ?>"><button type="button" class="btn btn-danger">Batal <i class="fa fa-times"></i></button></a>
               </td>
@@ -198,27 +217,41 @@ $('#nomor').val('<?=@$nomor?>');
 $('#tanggal').val('<?=date('Y-m-d')?>');
 $('#previewImg').attr('src', '<?=base_url('assets/gambar/camera.png')?>');
 
-  //get barang
   $(document).on('change', '#barang', function() {
       var id = $(this).val();
       var index = $(this).closest('tr').index();
+      var target = $(this);
       $.get('<?=base_url('pembelian/get_barang/')?>'+id, function(data) {
         var val = JSON.parse(data);
         var i = (index + 1);
         
-        //harga
-        $('#copy:nth-child('+i+') > td:nth-child(5) > input').val(number_format(val['bahan_harga']));
-
-        //satuan
-        var satuan = $('.satuan');
-        $(satuan).empty().html(val['satuan_singkatan']);
-
-        //stok
-        var stok = $('.stok');
-        $('#copy:nth-child('+i+') > td:nth-child(2) > div > input').val(number_format(val['bahan_stok']));
+        //get
+        target.closest('tr').find('.harga').val(number_format(val['bahan_harga']));
 
       });
   });
+
+  //status
+$(document).on('change', '#status', function() {
+
+  var val = $(this).val();
+
+  if (val == 'lunas') {
+
+    //status lunas jatuh tempo tidak perlu
+    $('#jatuh_tempo').removeAttr('required');
+    $('#jatuh_tempo').attr('readonly', true);
+
+  }else{
+
+    //kembalikan
+    $('#jatuh_tempo').removeAttr('readonly');
+    $('#jatuh_tempo').attr('required', true);
+
+  }
+
+});
+
 
   //copy paste
   function clone(){
@@ -227,12 +260,12 @@ $('#previewImg').attr('src', '<?=base_url('assets/gambar/camera.png')?>');
 
     //blank new input
     $('#copy').find('select').val('');
-    $('#copy').find('.potongan').val(0);
     $('#copy').find('.qty').val(1);
+    $('#copy').find('.berat').val(0);
+    $('#copy').find('.panjang').val(0);
     $('#copy').find('.stok').val(0);
     $('#copy').find('.harga').val(0);
-    $('#copy').find('.subtotal').val(0);
-    $('#copy').find('.satuan').html('');
+    $('#copy').find('.total').val(0);
   }
 
   //foto preview
@@ -258,38 +291,38 @@ $('#previewImg').attr('src', '<?=base_url('assets/gambar/camera.png')?>');
     //border none
     $('td').css('border-top', 'none');
     
-    var num_qty = 0;
-    $.each($('.qty'), function(index, val) {
+    var sum_berat = 0;
+    $.each($('.berat'), function(index, val) {
        var i = index+1;
+       var target = $(this).closest('tr');
 
-       var qty = $('#copy:nth-child('+i+') > td:nth-child(3) > div > input').val();
-       var harga = $('#copy:nth-child('+i+') > td:nth-child(5) > input').val().replace(/,/g, '');
-       var diskon = $('#copy:nth-child('+i+') > td:nth-child(4) > div > input').val();
+       var berat = target.find('.berat').val().replaceAll('.', '');
+       var harga = target.find('.harga').val().replaceAll('.', '');
 
-       var sub = '#copy:nth-child('+i+') > td:nth-child(6) > input';
-       var potongan = parseInt(diskon) * parseInt(harga);  
-       var subtotal = parseInt(qty) * parseInt(harga) - potongan;
-       num_qty += parseInt($(this).val());
+       //perhitungan
+       var total = Number(berat) * Number(harga);
+       sum_berat += Number($(this).val());
 
-       //subtotal
-       $(sub).val(number_format(subtotal));
+       //total number format
+       target.find('.total').val(number_format(total));
 
     });
 
-    //qty akhir
-    $('#qty_akhir').val(number_format(num_qty));
+    //subtotal
+    $('#subtotal').val(number_format(sum_berat));
 
     //total akhir
-    var num_total = 0;
-    $.each($('.subtotal'), function(index, val) {
+    var sum_total = 0;
+    $.each($('.total'), function(index, val) {
         
-      num_total += parseInt($(this).val().replace(/,/g, ''));
+      sum_total += Number($(this).val().replaceAll('.', ''));
     });
 
     //total akhir
-    var ppn = (parseInt($('#ppn').val()) * parseInt(num_total) / 100);
-    var total = ppn + num_total;
-    $('#total').val(number_format(total));
+    var ekspedisi = Number($('#ekspedisi_total').val().replaceAll('.', ''));
+    var ppn = (Number($('#ppn').val()) * Number(sum_total) / 100);
+    var grandtotal = ppn + sum_total + ekspedisi;
+    $('#grandtotal').val(number_format(grandtotal));
 
     setTimeout(function() {
         auto();

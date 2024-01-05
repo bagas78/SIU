@@ -13,12 +13,11 @@ class Keuangan extends CI_Controller{
 		    $this->load->view('keuangan/coa');
 		    $this->load->view('v_template_admin/admin_footer');
 
-		}
-		else{
+		} else {
 			redirect(base_url('login'));
 		}
 	} 
-	function buku_besar($akun = '', $d = ''){
+	function buku_besar($akun = '', $d = '') {
 		if ( $this->session->userdata('login') == 1) {
 		    $data['title'] = 'buku besar';
 
@@ -48,12 +47,13 @@ class Keuangan extends CI_Controller{
 		    $this->load->view('v_template_admin/admin_header',$data);
 		    $this->load->view('keuangan/buku_besar');
 		    $this->load->view('v_template_admin/admin_footer');
-		}
-		else{
+
+		} else {
 			redirect(base_url('login'));
 		}
 	}
-	function kas($d = ''){
+	function kas($d = '')
+	{
 		if ( $this->session->userdata('login') == 1) {
 		    $data['title'] = 'Kas Keluar';
 
@@ -133,5 +133,34 @@ class Keuangan extends CI_Controller{
 		$this->session->set_flashdata('success','Data berhasil di tambah');
 		
 		redirect(base_url('keuangan/saldo'));
+	}
+
+	// laba rugi
+	function laba_rugi($d = '')
+	{
+		if ( $this->session->userdata('login') == 1) {
+		    $data['title'] = 'Laba Rugi';
+
+		    //filter tahun & tanggal
+		    if (@$d) {
+		    	$date = $d;
+		    } else {
+		    	$date = date('Y-m');	
+		    }
+
+		    $data['tgl'] = $date;
+
+		    $data['data'] = $this->query_builder->view("SELECT * FROM t_jurnal as a JOIN t_coa as b ON a.jurnal_akun = b.coa_id WHERE a.jurnal_hapus = 0 AND a.jurnal_akun = 1 AND a.jurnal_type = 'kredit' AND DATE_FORMAT(a.jurnal_tanggal, '%Y-%m') = '$date' ORDER BY a.jurnal_tanggal ASC");
+
+		    $data['data_pendapatan'] = $this->query_builder->view("SELECT * FROM t_jurnal as a JOIN t_coa as b ON a.jurnal_akun = b.coa_id WHERE a.jurnal_hapus = 0 AND a.jurnal_akun = 8 AND a.jurnal_type = 'debit' AND DATE_FORMAT(a.jurnal_tanggal, '%Y-%m') = '$date' ORDER BY a.jurnal_tanggal ASC");
+
+		    $data['data_beban'] = $this->query_builder->view("SELECT * FROM t_jurnal as a JOIN t_coa as b ON a.jurnal_akun = b.coa_id WHERE a.jurnal_hapus = 0 AND a.jurnal_akun = 9 AND a.jurnal_type = 'debit' AND DATE_FORMAT(a.jurnal_tanggal, '%Y-%m') = '$date' ORDER BY a.jurnal_tanggal ASC");
+
+		    $this->load->view('v_template_admin/admin_header',$data);
+		    $this->load->view('keuangan/laba_rugi');
+		    $this->load->view('v_template_admin/admin_footer');
+		} else {
+			redirect(base_url('login'));
+		}
 	}
 }

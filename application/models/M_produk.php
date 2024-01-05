@@ -9,7 +9,7 @@ class M_produk extends CI_Model {
 	var $column_order = array(null, 'produk_nama','produk_kode'); 
 
 	//kolom yang di tampilkan setelah seacrh
-	var $column_search = array('produk_nama','produk_kode'); 
+	var $column_search = array('produk_nama','produk_kode','gudang_nama'); 
 
 	//urutan 
 	var $order = array('produk_id' => 'desc'); 
@@ -62,13 +62,15 @@ class M_produk extends CI_Model {
 	function get_datatables($where)
 	{	
 		$this->db->select('*');
-		$this->db->select('IF(produk_barang_stok, SUM(produk_barang_stok), 0) AS stok');
+		$this->db->select('IFNULL(SUM(produk_gudang_panjang), 0) AS stok');
+		$this->db->select('IFNULL(produk_gudang_harga, 0) AS harga');
 		$this->_get_datatables_query();
 		if($_GET['length'] != -1)
 		$this->db->where($where);
-		$this->db->join('t_satuan', 't_produk.produk_satuan = t_satuan.satuan_id');
-		$this->db->join('t_produk_barang', 't_produk_barang.produk_barang_barang = t_produk.produk_id', 'LEFT');
-		$this->db->group_by('t_produk.produk_id');
+		$this->db->join('t_produk_gudang', 't_produk_gudang.produk_gudang_produk = t_produk.produk_id', 'LEFT');
+		$this->db->join('t_gudang', 't_gudang.gudang_id = t_produk_gudang.produk_gudang_gudang', 'LEFT');
+		$this->db->group_by('produk_id');
+		$this->db->group_by('produk_gudang_gudang');
 		$this->db->limit($_GET['length'], $_GET['start']);
 		$query = $this->db->get();
 		return $query->result();
@@ -78,8 +80,8 @@ class M_produk extends CI_Model {
 	{
 		$this->_get_datatables_query();
 		$this->db->where($where);
-		$this->db->join('t_satuan', 't_produk.produk_satuan = t_satuan.satuan_id');
-		$this->db->join('t_produk_barang', 't_produk_barang.produk_barang_barang = t_produk.produk_id', 'LEFT');
+		$this->db->join('t_produk_gudang', 't_produk_gudang.produk_gudang_produk = t_produk.produk_id', 'LEFT');
+		$this->db->join('t_gudang', 't_gudang.gudang_id = t_produk_gudang.produk_gudang_gudang', 'LEFT');
 		$this->db->group_by('t_produk.produk_id');
 		$query = $this->db->get();
 		return $query->num_rows();
@@ -89,8 +91,8 @@ class M_produk extends CI_Model {
 	{
 		$this->db->from($this->table);
 		$this->db->where($where);
-		$this->db->join('t_satuan', 't_produk.produk_satuan = t_satuan.satuan_id');
-		$this->db->join('t_produk_barang', 't_produk_barang.produk_barang_barang = t_produk.produk_id', 'LEFT');
+		$this->db->join('t_produk_gudang', 't_produk_gudang.produk_gudang_produk = t_produk.produk_id', 'LEFT');
+		$this->db->join('t_gudang', 't_gudang.gudang_id = t_produk_gudang.produk_gudang_gudang', 'LEFT');
 		$this->db->group_by('t_produk.produk_id');
 		return $this->db->count_all_results();
 	}

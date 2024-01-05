@@ -1,6 +1,6 @@
    <!-- Main content --> 
     <section class="content">
- 
+  
       <!-- Default box -->
       <div class="box"> 
         <div class="box-header with-border">
@@ -14,40 +14,46 @@
         </div>
         <div class="box-body">
 
-          <div class="col-md-4 row">
-            <table class="table table-bordered table-hover" style="margin-bottom: 0;">
-              <tr>
-                <td style="background: lightgreen;">Total Penjualan</td>
-                <td id="tot_pembelian"></td>
-              </tr>
-            </table>
+          <div class="row py-4">
+
+            <div class="col-md-4">
+              <table class="table table-bordered table-hover">
+                <tr>
+                  <td style="background: lightgreen;">Total Penjualan</td>
+                  <td id="tot_pembelian"></td>
+                </tr>
+              </table>
+            </div>
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+              <div class="sx-right" align="right">
+                <form action="" method="POST" class="">              
+                  <input name="filter" type="date" class="p03">
+                  <button class="p03 filter">Filter <i class="fa fa-search"></i></button>
+                </form>
+              </div>
+            </div>
+
           </div>
 
-          <div class="clearfix"></div>
-
-          <div class="sx-right" align="right">
-            <form action="" method="POST" class="sc">              
-              <input name="filter" type="date" class="p03">
-              <button class="p03 filter">Filter <i class="fa fa-search"></i></button>
-            </form>
-          </div>
+          <div class="clearfix"></div>          
           
           <table id="table" class="table table-bordered table-hover" style="width: 100%;">
             <thead>
             <tr>
+              <th>Gudang</th>
               <th>Nomor</th>
               <th>Total</th>
-              <th>Status</th>
-              <th>Tanggal</th>
+              <th>Pelunasan</th>
             </tr>
             </thead>
             <tbody>
               <?php foreach ($data as $val): ?>
                 <tr>
-                  <td><?=$val['penjualan_nomor'] ?></td>
-                  <td class="total"><?=$val['penjualan_total'] ?></td>
-                  <td><?=($val['penjualan_status'] == 'l')?'Lunas':'Belum Lunas'?></td>
-                  <td><?php $dt = date_create($val['penjualan_tanggal']); echo date_format($dt, 'd/m/Y'); ?></td>
+                  <td><?=@$val['gudang'] ?></td>
+                  <td><?=@$val['nomor'] ?></td>
+                  <td class="total"><?=@$val['total'] ?></td>
+                  <td><?php $dt = date_create($val['pelunasan']); echo date_format($dt, 'd/m/Y'); ?></td>
                 </tr>
               <?php endforeach ?>
             </tbody>

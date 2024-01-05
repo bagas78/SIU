@@ -42,12 +42,12 @@
             </div>
             <div class="row">
               <div class="col-lg-6">
-                <label>Email</label>
-                <input type="text" name="email" class="form-control" required value="<?=@$data['kontak_email']?>">
-              </div>
-              <div class="col-lg-6">
                 <label>No. Rekening</label>
                 <input type="number" name="rek" class="form-control" required value="<?=@$data['kontak_rek']?>">
+              </div>
+              <div class="col-lg-6">
+                <label>NPWP</label>
+                <input type="text" name="npwp" class="form-control" required value="<?=@$data['kontak_npwp']?>">
               </div>
             </div>
             <div class="row">
@@ -65,10 +65,12 @@
                 </script>
 
               </div>
-              <div class="col-lg-6">
-                <label>NPWP</label>
-                <input type="text" name="npwp" class="form-control" required value="<?=@$data['kontak_npwp']?>">
+
+              <!-- hidden -->
+              <input type="hidden" name="jenis" class="form-control" required value="<?=@$data['kontak_jenis']?>">
+
               </div>
+
             </div>
 
             <br/>

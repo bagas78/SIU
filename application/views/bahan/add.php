@@ -19,32 +19,24 @@
             
             <div class="form-group">
               <label>Kode Bahan</label>
-              <input readonly="" required="" type="text" name="kode" class="form-control" value="<?=@$kode?>">
+              <input id="kode" readonly="" required="" type="text" name="kode" class="form-control" value="<?=@$kode?>">
             </div>
             <div class="form-group">
               <label>Nama Bahan</label>
-              <input required="" type="text" name="nama" class="form-control">
+              <input id="nama" required="" type="text" name="nama" class="form-control">
             </div>
+            
             <div class="form-group">
               <label>Kategori</label>
-              <select name="kategori" class="form-control" required>
+              <select id="kategori" name="kategori" class="form-control" required>
                 <option value="" hidden>-- Pilih --</option>
                 <option value="utama">Bahan Baku Utama</option>
                 <option value="pembantu">Bahan Pembantu</option>
               </select>
-            </div>
+            </div>            
             <div class="form-group">
-              <label>Satuan</label>
-              <select name="satuan" class="form-control" required>
-               <option value="" hidden>-- Pilih --</option>
-                <?php foreach ($satuan_data as $s): ?>
-                  <option value="<?= $s['satuan_id']?>"><?= $s['satuan_singkatan']?></option>
-                <?php endforeach ?>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Harga</label>
-              <input required="" type="number" name="harga" class="form-control">
+              <label>Harga <span class="stn">Rp</span></label>
+              <input id="harga" required="" type="number" name="harga" class="form-control">
             </div>            
 
             <button type="submit" class="btn btn-success">Simpan <i class="fa fa-check"></i></button>

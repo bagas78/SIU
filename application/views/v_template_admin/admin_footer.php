@@ -24,7 +24,7 @@
 <script src="<?php echo base_url() ?>adminLTE/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 
 <!-- Bootstrap WYSIHTML5 -->
-<script src="<?php echo base_url() ?>adminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+<script src="<?php echo base_url() ?>adminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.js"></script>
 <!-- Slimscroll -->
 <script src="<?php echo base_url() ?>adminLTE/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->
@@ -32,9 +32,9 @@
 <!-- AdminLTE App -->
 <script src="<?php echo base_url() ?>adminLTE/dist/js/adminlte.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="<?php echo base_url() ?>adminLTE/dist/js/pages/dashboard.js"></script>
+<!-- <script src="<?php // echo base_url() ?>adminLTE/dist/js/pages/dashboard.js"></script> -->
 <!-- AdminLTE for demo purposes -->
-<script src="<?php echo base_url() ?>adminLTE/dist/js/demo.js"></script>
+<!-- <script src="<?php // echo base_url() ?>adminLTE/dist/js/demo.js"></script> -->
 
 <!-- ChartJS -->
 <script src="<?php echo base_url() ?>adminLTE/bower_components/chart/Chart.js"></script>
@@ -68,11 +68,20 @@
 
 <script>
 
+//footer
+var content = $('.content').height();
+if (Number(content) < 500) {
+    $('.main-footer').css({
+        'position': 'fixed',
+        'bottom' : '0',
+    });;
+}
+
 $(function () {
-    
+    /* hydev disabled
     CKEDITOR.replace('editor1', {
         height: '500px'
-    });
+    }); */
 
     //bootstrap WYSIHTML5 - text editor
     $('.textarea').wysihtml5()
@@ -88,9 +97,11 @@ $(function () {
   
   
 //data table
+    /* hydev disabled, error datatable reinitialize
   $(function () {
 
     //data table
+    
     $('#example').DataTable({
       // 'scrollX'     : true,
       'autoWidth'   : true,
@@ -107,7 +118,7 @@ $(function () {
       'autoWidth'   : false,
       'scrollX'     : true
     })
-  })
+  }) */
 
   $.fn.dataTableExt.sErrMode = 'throw';
 </script>
@@ -243,6 +254,37 @@ $(document).ready(function() {
 
 //show menu
 setTimeout(function(){ $('.sidebar-menu').removeAttr('hidden'); }, 1000);
+
+
+//notifikasi
+function notif(){
+
+    //reminder bahan
+    $.get('<?=base_url('reminder/bahan_notif')?>', function(data) {
+        
+        if (parseInt(data) > 0) {
+            $('.reminder_notif').text('New');
+            $('.bahan_notif').text(data);
+        }
+
+    });
+
+    //reminder produk
+    $.get('<?=base_url('reminder/produk_notif')?>', function(data) {
+        
+        if (parseInt(data) > 0) {
+            $('.reminder_notif').text('New');
+            $('.produk_notif').text(data);
+        }
+
+    });
+
+    setTimeout(function() {
+        notif();
+    }, 100);
+}
+
+//notif();
 
 </script>
 

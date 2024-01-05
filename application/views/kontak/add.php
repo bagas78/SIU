@@ -42,12 +42,12 @@
             </div>
             <div class="row">
               <div class="col-lg-6">
-                <label>Email</label>
-                <input type="text" name="email" class="form-control" required>
-              </div>
-              <div class="col-lg-6">
                 <label>No. Rekening</label>
                 <input type="number" name="rek" class="form-control" required>
+              </div>
+              <div class="col-lg-6">
+                <label>NPWP</label>
+                <input type="text" name="npwp" class="form-control" required>
               </div>
             </div>
             <div class="row">
@@ -60,10 +60,10 @@
                   <?php endforeach ?>
                 </select>
               </div>
-              <div class="col-lg-6">
-                <label>NPWP</label>
-                <input type="text" name="npwp" class="form-control" required>
-              </div>
+
+              <!-- hidden -->
+              <input type="hidden" name="jenis" class="form-control" required value="<?=@$jenis?>">
+
             </div>
 
             <br/>

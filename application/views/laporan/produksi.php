@@ -3,7 +3,7 @@
     <section class="content">
  
       <!-- Default box -->
-      <div class="box"> 
+      <div class="box">  
         <div class="box-header with-border">
 
           <div class="box-tools pull-right">
@@ -14,47 +14,48 @@
           </div>
         </div>
         <div class="box-body"> 
-
-          <div class="col-md-4 row">
-            <table class="table table-bordered table-hover" style="margin-bottom: 0;">
-              <tr>
-                <td style="background: lightgreen;">Total Produksi</td>
-                <td id="tot_produksi"></td>
-              </tr>
-              <tr>
-                <td style="background: pink;">Total Biaya Jasa</td>
-                <td id="tot_jasa"></td>
-              </tr>
-            </table>
+          <div class="row">
+            <div class="col-md-4">
+              <table class="table table-bordered table-hover">
+                <tr>
+                  <td style="background: lightgreen;">Total Produksi</td>
+                  <td id="tot_produksi"></td>
+                </tr>
+              </table>
+            </div>
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+              <div class="sx-right" align="right">
+                <form action="" method="POST" class="">
+                  <input name="filter" type="date" class="p03">
+                  <button class="p03 filter">Filter <i class="fa fa-search"></i></button>
+                </form>
+              </div>
+            </div>
           </div>
 
-          <div class="clearfix"></div>
-
-          <div class="sx-right" align="right">
-            <form action="" method="POST" class="sc">
-              <input name="filter" type="date" class="p03">
-              <button class="p03 filter">Filter <i class="fa fa-search"></i></button>
-            </form>
+          <div class="row">
+            <div class="clearfix my-4"></div>
           </div>
           
           <table id="table" class="table table-bordered table-hover" style="width: 100%;">
             <thead>
             <tr>
-              <th>Nomor</th>
+              <th>Gudang</th>
               <th>Shift</th>
               <th>Produksi</th>
-              <th>Biaya Jasa</th>
+              <th>Panjang ( M )</th>
               <th>Tanggal</th>
             </tr>
             </thead>
             <tbody>
               <?php foreach ($data as $val): ?>
                 <tr>
-                  <td><?=$val['produksi_nomor'] ?></td>
-                  <td><?=$val['user_name'] ?></td>
-                  <td class="produksi_qty"><?=$val['produksi_barang_qty'] ?></td>
-                  <td class="jasa"><?=$val['produksi_jasa'] ?></td>
-                  <td><?php $dt = date_create($val['produksi_tanggal']); echo date_format($dt, 'd/m/Y'); ?></td>
+                  <td><?=$val['gudang'] ?></td>
+                  <td><?=$val['shift'] ?></td>
+                  <td><?=$val['produk'] ?></td>
+                  <td class="produksi_qty"><?=$val['jumlah'] ?></td>
+                  <td><?php $dt = date_create($val['tanggal']); echo date_format($dt, 'd/m/Y'); ?></td>
                 </tr>
               <?php endforeach ?>
             </tbody>
@@ -75,6 +76,7 @@ $(document).ready(function() {
     //datatables
     table = $('#table').DataTable({ 
 
+        "searching" : false,
         "bPaginate": false,
         "bFilter": false,
         "scrollX": true, 
@@ -96,16 +98,5 @@ $(document).ready(function() {
  });
 
  $('#tot_produksi').text(number_format(p));
-
- //jasa
- var j = 0;
- $.each($('.jasa'), function(index, val) {
-    var parse = parseInt($(this).text());
-    j += parseInt($(this).text());
-
-    $(this).text(number_format(parse));
- });
-
- $('#tot_jasa').text(number_format(j));
 
 </script>

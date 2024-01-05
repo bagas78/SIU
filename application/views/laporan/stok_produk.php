@@ -18,9 +18,9 @@
           <table id="table" class="table table-bordered table-hover table-responsive" style="width: 100%;">
                 <thead>
                 <tr>
+                  <th>Gudang</th>
                   <th>Nama</th>
-                  <th>Stok</th>
-                  <th>Satuan</th>
+                  <th>Stok ( M )</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -51,9 +51,14 @@
                 "type": "GET"
             },
             "columns": [ 
+                        { "data": "gudang_nama"},
                         { "data": "produk_nama"},
-                        { "data": "stok"},
-                        { "data": "satuan_singkatan"},
+                        { "data": "stok",
+                        "render": 
+                        function( data ) {
+                            return number_format(data);
+                          }
+                        },
                     ],
             "dom": "Bfrtip",
             "buttons": [

@@ -1,30 +1,26 @@
 <script>
 
   //atribut form
-  $('form').attr('action', '<?=base_url('produksi/'.@$url.'_update/'.@$data['produksi_nomor'])?>');
   $('#nomor').val('<?=@$data['produksi_nomor']?>');
   $('#tanggal').val('<?=@$data['produksi_tanggal']?>');
   $('#shift').val('<?=@$data['produksi_shift']?>').change();
-  $('#keterangan').val('<?=@$data['produksi_keterangan']?>');
-  $('#mesin').val('<?=@$data['produksi_mesin']?>').change();
-  $('#pekerja').val(<?=@$data['produksi_pekerja']?>).change();
+  $('#keterangan').val('<?=@$data['produksi_keterangan']?>'); 
+  $('#mesin').val('<?=@$data['produksi_mesin']?>').change();   
+  $('#gudang').val('<?=@$data['produksi_gudang']?>');
+
+  if ('<?=@$data['produksi_pekerja']?>' != '') {
+    $('#pekerja').val(<?=@$data['produksi_pekerja']?>).change();
+  }
  
   if ('<?=@$data['produksi_lampiran_1']?>' != '') {
     $('#previewImg1').attr('src', '<?=base_url('assets/gambar/produksi/'.@$data['produksi_lampiran_1'])?>');
   }
 
-  if ('<?=@$data['produksi_lampiran_2']?>' != '') {
+  if ('<?=@$data['produksi_lampiran_2']?>' != '') { 
     $('#previewImg2').attr('src', '<?=base_url('assets/gambar/produksi/'.@$data['produksi_lampiran_2'])?>');
   }
 
-  //qty
-  var stok_billet = parseInt($('#stok_billet').text()) + <?=@$data['produksi_billet_qty']?>;
-  $('#stok_billet').text(stok_billet);
-  $('#qty_billet').val('<?=@$data['produksi_billet_qty']?>');
-  $('#jasa').val('<?=@$data['produksi_jasa']?>');
-  $('#sisa_billet').val('<?=@$data['produksi_billet_sisa']?>');
-
-  //get produksi
+  //get produk
   $.get('<?=base_url('produksi/get_produksi/'.$data['produksi_nomor'])?>', function(data) {
     var json = JSON.parse(data);
 
@@ -32,11 +28,11 @@
     for (var num = 1; num <= json.length - 1; num++) {
      
       //paste
-      clone();
+      clone(1);
       
       //blank new input
-      $('#copy').find('select').val('');
-      $('#copy').find('.qty').val(0);
+      $('#copy1').find('select').val('');
+      $('#copy1').find('.panjang').val(0);
 
     }
 
@@ -45,14 +41,52 @@
       var i = index+1;
 
       //insert value
-      $('#copy:nth-child('+i+') > td:nth-child(1) > input').val(val.produksi_barang_matras);
-      $('#copy:nth-child('+i+') > td:nth-child(2) > select').val(val.produksi_barang_barang); 
-      $('#copy:nth-child('+i+') > td:nth-child(3) > div > input').val(number_format(val.produksi_barang_berat)); 
-      $('#copy:nth-child('+i+') > td:nth-child(4) > div > input').val(number_format(val.produksi_barang_qty));    
-      $('#copy:nth-child('+i+') > td:nth-child(6) > input').val(val.produksi_barang_id);
+      $('#copy1:nth-child('+i+') > td:nth-child(1) > select').val(val.produksi_produksi_produk); 
+      $('#copy1:nth-child('+i+') > td:nth-child(2) > input').val(val.produksi_produksi_panjang);  
 
-      //satuan
-      $('#copy:nth-child('+i+') > td:nth-child(4) > div > span').text(val.satuan_singkatan);
+    });
+
+  });
+
+  //get bahan baku
+  $.get('<?=base_url('produksi/get_bahan_baku/'.$data['produksi_nomor'])?>', function(data) {
+    var json = JSON.parse(data);
+
+    //clone
+    for (var num = 1; num <= json.length - 1; num++) {
+     
+      //paste
+      clone(2);
+      
+      //blank new input
+      $('#copy2').find('select').val('');
+      $('#copy2').find('.qty').val(0);
+
+    }
+
+    $.each(json, function(index, val) {
+      
+      var i = index+1;
+
+      //insert value
+      $('#copy2:nth-child('+i+') > td:nth-child(1) > select').val(val.produksi_barang_barang); 
+      $('#copy2:nth-child('+i+') > td:nth-child(2) > input').val(val.bahan_kategori); 
+      $('#copy2:nth-child('+i+') > td:nth-child(3) > input').val(val.produksi_barang_harga); 
+      $('#copy2:nth-child('+i+') > td:nth-child(4) > input').val(val.produksi_barang_stok); 
+      $('#copy2:nth-child('+i+') > td:nth-child(5) > input').val(val.produksi_barang_berat);  
+      $('#copy2:nth-child('+i+') > td:nth-child(6) > input').val(val.produksi_barang_panjang);
+      $('#copy2:nth-child('+i+') > td:nth-child(7) > input').val(val.produksi_barang_total);
+
+      //jasa
+      $('#jasa').val('<?=@$data['produksi_jasa']?>');
+
+    });
+
+    //number format
+    $.each($('input[type=number]'), function() {
+       
+       var val = $(this).val();
+       $(this).val(number_format(val));
 
     });
 

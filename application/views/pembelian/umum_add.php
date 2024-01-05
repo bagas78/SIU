@@ -15,7 +15,7 @@
         <a href="<?= @$_SERVER['HTTP_REFERER'] ?>"><button class="btn btn-danger"><i class="fa fa-arrow-left"></i> Kembali</button></a>
       </div>
 
-      <div class="box-tools pull-right">
+      <div class="box-tools pull-right"> 
         <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
           <i class="fa fa-minus"></i></button>
         <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
@@ -46,11 +46,20 @@
               <input type="date" name="tanggal" class="form-control" required id="tanggal">
             </div>
             <div class="form-group">
-              <label>Jatuh Tempo</label>
-              <input type="date" name="jatuh_tempo" class="form-control" required id="jatuh_tempo">
+              <label>Gudang</label>
+              <select name="gudang" class="form-control select2" required id="gudang">
+                <option value="" hidden>-- Pilih --</option>
+                <?php foreach ($gudang_data as $g): ?>
+                  <option value="<?= $g['gudang_id']?>"><?= $g['gudang_nama']?></option>
+                <?php endforeach ?>
+              </select>
             </div>
           </div>
           <div class="col-md-3">
+            <div class="form-group">
+              <label>Jatuh Tempo</label>
+              <input type="date" name="jatuh_tempo" class="form-control" required id="jatuh_tempo">
+            </div>
             <div class="form-group">
               <label>Pembayaran</label>
               <select name="pembayaran" class="form-control select2" required id="pembayaran">
@@ -73,7 +82,7 @@
           <div class="col-md-4">
             <div class="form-group">
               <label>Keterangan</label>
-              <textarea name="keterangan" class="form-control" style="height: 110px;" id="keterangan"></textarea>
+              <textarea name="keterangan" class="form-control textarea" style="height: 110px;" id="keterangan"></textarea>
             </div>
           </div>
           <div class="col-md-2">
@@ -106,11 +115,11 @@
               <td>
                 <input required type="text" name="barang[]" class="barang form-control" placeholder="Nama Barang">
               </td>
-              <td><input type="number" name="harga[]" class="harga form-control" required min="0" placeholder="Harga Barang"></td>
-              <td><input type="number" name="qty[]" class="qty form-control" value="1" min="1">
+              <td><input type="number" name="harga[]" class="harga form-control" required min="0" placeholder="Harga Barang" step="any"></td>
+              <td><input type="number" name="qty[]" class="qty form-control" value="1" min="1" step="any">
               </td>
-              <td><input min="0" type="number" name="potongan[]" class="potongan form-control" value="0" required></td>
-              <td><input readonly="" type="text" name="subtotal[]" class="subtotal form-control" required value="0" min="0"></td>
+              <td><input min="0" type="number" name="potongan[]" class="potongan form-control" value="0" required step="any"></td>
+              <td><input readonly="" type="text" name="subtotal[]" class="subtotal form-control" required value="0" min="0" step="any"></td>
               <td><button type="button" onclick="$(this).closest('tr').remove()" class="remove btn btn-danger btn-sm">-</button></td>
             </tr>
 
@@ -213,10 +222,10 @@ $('#previewImg').attr('src', '<?=base_url('assets/gambar/camera.png')?>');
        var diskon = $('#copy:nth-child('+i+') > td:nth-child(4) > input').val();
        var sub = '#copy:nth-child('+i+') > td:nth-child(5) > input';
 
-       var potongan = (parseInt(diskon) / 100) * (parseInt(harga) * parseInt(qty));
+       var potongan = (Number(diskon) / 100) * (Number(harga) * Number(qty));
 
-       var subtotal = parseInt(qty) * parseInt(harga) - potongan;
-       num_qty += parseInt($(this).val());
+       var subtotal = Number(qty) * Number(harga) - potongan;
+       num_qty += Number($(this).val());
 
        //subtotal
        $(sub).val(number_format(subtotal));
@@ -230,11 +239,11 @@ $('#previewImg').attr('src', '<?=base_url('assets/gambar/camera.png')?>');
     var num_total = 0;
     $.each($('.subtotal'), function(index, val) {
         
-      num_total += parseInt($(this).val().replace(/,/g, ''));
+      num_total += Number($(this).val().replace('.', ''));
     });
 
     //total akhir
-    var ppn = (parseInt($('#ppn').val()) * parseInt(num_total) / 100);
+    var ppn = (Number($('#ppn').val()) * Number(num_total) / 100);
     var total = ppn + num_total;
     $('#total').val(number_format(total));
 

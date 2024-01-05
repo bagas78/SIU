@@ -1,8 +1,49 @@
+<style type="text/css">
+  .tit{
+    background: black;
+    padding: 0.5%;
+    color: white;
+  }
+</style>
 
     <!-- Main content --> 
     <section class="content">
- 
+
       <!-- Default box -->
+      <div class="box"> 
+        <div class="box-header with-border"> 
+
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+              <i class="fa fa-minus"></i></button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+              <i class="fa fa-times"></i></button>
+          </div>
+        </div>
+        <div class="box-body">
+          <h4 align="center" class="tit">Antrean Pesanan (PO)</h4>
+          <table id="example1" class="table table-bordered table-hover" style="width: 100%;">
+                <thead>
+                <tr>
+                  <th>Nomor</th> 
+                  <th>Supplier</th>
+                  <th>Jatuh Tempo</th>
+                  <th>Status</th>
+                  <th width="60">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+              </table>
+
+        </div>
+
+        
+      </div>
+      <!-- /.box -->
+ 
+      <!-- Default box --> 
       <div class="box"> 
         <div class="box-header with-border"> 
  
@@ -20,8 +61,8 @@
           </div>
         </div>
         <div class="box-body">
-          
-          <table id="example" class="table table-bordered table-hover" style="width: 100%;">
+          <h4 align="center" class="tit">Proses Pembelian</h4>
+          <table id="example2" class="table table-bordered table-hover" style="width: 100%;">
                 <thead>
                 <tr>
                   <th>Nomor</th> 
@@ -43,10 +84,53 @@
       <!-- /.box -->
 
 <script type="text/javascript">
-    var table;
+  var table1;
     $(document).ready(function() {
         //datatables
-        table = $('#example').DataTable({ 
+        table1 = $('#example1').DataTable({ 
+
+            "processing": true, 
+            "serverSide": true,
+            "order":[], 
+            "scrollX": true, 
+            
+            "ajax": {
+                "url": "<?=site_url('pembelian/po_get_data')?>",
+                "type": "GET"
+            },
+            "columns": [                               
+                        { "data": "pembelian_nomor"},
+                        { "data": "kontak_nama"},
+                        { "data": "pembelian_jatuh_tempo",
+                        "render": 
+                        function( data ) {
+                            if (data == '0000-00-00') {var j = '-';}else{var j = moment(data).format("DD/MM/YYYY");}
+                            return "<span>"+j+"</span>";
+                          }
+                        },
+                        { "data": "pembelian_status",
+                        "render": 
+                        function( data ) {
+                            if (data == 'lunas') {var s = 'Lunas';} else {var s = 'Belum Lunas';}
+                            return "<span>"+s+"</span>";
+                          }
+                        },
+                        { "data": "pembelian_id",
+                        "render": 
+                        function( data ) {
+                            return "<a class='view' href='<?php echo base_url('pembelian/po_proses/')?>"+data+"'><button class='btn btn-xs btn-primary'>Proses <i class='fa fa-angle-double-right'></i></button></a>";
+                          }
+                        },
+                        
+                    ],
+        });
+
+    });
+
+    var table2;
+    $(document).ready(function() {
+        //datatables
+        table2 = $('#example2').DataTable({ 
 
             "processing": true, 
             "serverSide": true,
@@ -63,7 +147,8 @@
                         { "data": "pembelian_jatuh_tempo",
                         "render": 
                         function( data ) {
-                            return "<span>"+moment(data).format("DD/MM/YYYY")+"</span>";
+                            if (data == '0000-00-00') {var j = '-';}else{var j = moment(data).format("DD/MM/YYYY");}
+                            return "<span>"+j+"</span>";
                           }
                         },
                         { "data": "pembelian_status",
@@ -89,8 +174,11 @@
     });
 
 function filter($val){
-  var table = $('#example').DataTable();
-  table.search($val).draw();
+  var table1 = $('#example1').DataTable();
+  table1.search($val).draw();
+
+  var table2 = $('#example2').DataTable();
+  table2.search($val).draw();
 }
 
  

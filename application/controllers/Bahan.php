@@ -10,6 +10,8 @@ class Bahan extends CI_Controller{
 		if ( $this->session->userdata('login') == 1) {
 		    $data["title"] = 'bahan';
 
+		    $data['gudang_data'] = $this->query_builder->view("SELECT * FROM t_gudang WHERE gudang_hapus = 0");
+
 		    $this->load->view('v_template_admin/admin_header',$data);
 		    $this->load->view('bahan/index');
 		    $this->load->view('v_template_admin/admin_footer');
@@ -33,18 +35,23 @@ class Bahan extends CI_Controller{
 
 		return $output;
 	} 
-	function get_data(){
+	function get_data($filter = 'all'){
 		
 		$model = 'm_bahan';
-		$where = array('bahan_hapus' => 0);
+
+		if ($filter == 'all') {
+			$where = array('bahan_hapus' => 0);
+		}else{
+			$where = array('bahan_hapus' => 0, );
+		}
+		
 		$output = $this->serverside($where, $model);
 		echo json_encode($output);
 	} 
 	function add(){
 
 		$data["title"] = 'bahan';
-
-	    $data['satuan_data'] = $this->query_builder->view("SELECT * FROM t_satuan WHERE satuan_hapus = 0");
+		$data['satuan_data'] = $this->query_builder->view("SELECT * FROM t_satuan WHERE satuan_hapus = 0");
 	    
 	    //generate kde
 	    $bh = $this->query_builder->count("SELECT * FROM t_bahan WHERE bahan_kode != 'BH000'");
@@ -60,8 +67,8 @@ class Bahan extends CI_Controller{
 		$set = array(
 						'bahan_kode' => strip_tags($_POST['kode']),
 						'bahan_nama' => strip_tags($_POST['nama']),
-						'bahan_kategori' => strip_tags($_POST['kategori']),
 						'bahan_satuan' => strip_tags($_POST['satuan']),
+						'bahan_kategori' => strip_tags($_POST['kategori']),
 						'bahan_harga' => strip_tags($_POST['harga']),
 					);
 
@@ -79,10 +86,11 @@ class Bahan extends CI_Controller{
 		
 		$data["title"] = 'bahan';
 
+	    $data['data'] = $this->query_builder->view_row("SELECT * FROM t_bahan as a LEFT JOIN t_satuan as b ON a.bahan_satuan = b.satuan_id WHERE a.bahan_id = '$id'");
 	    $data['satuan_data'] = $this->query_builder->view("SELECT * FROM t_satuan WHERE satuan_hapus = 0");
-	    $data['data'] = $this->query_builder->view_row("SELECT * FROM t_bahan as a JOIN t_satuan as b ON a.bahan_satuan = b.satuan_id WHERE a.bahan_id = '$id'");
 
 	    $this->load->view('v_template_admin/admin_header',$data);
+	    $this->load->view('bahan/add');
 	    $this->load->view('bahan/edit');
 	    $this->load->view('v_template_admin/admin_footer');
 	}
@@ -90,8 +98,8 @@ class Bahan extends CI_Controller{
 		
 		$set = array(
 						'bahan_nama' => strip_tags($_POST['nama']),
-						'bahan_kategori' => strip_tags($_POST['kategori']),
 						'bahan_satuan' => strip_tags($_POST['satuan']),
+						'bahan_kategori' => strip_tags($_POST['kategori']),
 						'bahan_harga' => strip_tags($_POST['harga']),
 					);
 
@@ -122,6 +130,6 @@ class Bahan extends CI_Controller{
 			$this->session->set_flashdata('gagal','Data gagal di hapus');
 		}
 
-		direct(base_url('bahan'));
-	}	
+		redirect(base_url('bahan'));
+	}
 }

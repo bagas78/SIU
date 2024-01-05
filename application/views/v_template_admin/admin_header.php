@@ -31,7 +31,7 @@
   <link rel="stylesheet" href="<?php echo base_url() ?>adminLTE/bower_components/bootstrap-daterangepicker/daterangepicker.css">
   
   <!-- bootstrap wysihtml5 - text editor -->
-  <link rel="stylesheet" href="<?php echo base_url() ?>adminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+  <link rel="stylesheet" href="<?php echo base_url() ?>adminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.css">
   
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -66,9 +66,20 @@
   <script src="<?php echo base_url('assets/') ?>sweetalert/sweet-alert.js"></script>
 
 <style type="text/css">
+  .stn{
+    background: #3c8dbc;
+    color: white;
+    padding: 3px 4px 4px 4px;
+    font-weight: bold;
+    border-radius: 5px;
+  }
   .main-sidebar{
     background: #e9fcff;
-    box-shadow: 0 1px 9px 0px rgba(0, 0, 0, 0.2), 0 3px 18px 0px rgba(0, 0, 0, 0.19);
+    height: auto; 
+    position: fixed; 
+    overflow-y: scroll; 
+    top: 0; 
+    bottom: 0;
   }
   ::-webkit-scrollbar {
     width: 10px;
@@ -107,10 +118,10 @@
    margin: -10px; 
  }
  hr{
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   border: 0;
   margin-top: 0;
-  border-top: 20px solid #F2F2F2;
+  border-top: 15px solid #F2F2F2;
  }
  .clock {
     font-size: 18px;
@@ -144,21 +155,22 @@
 }
 
 .active {
-    background: #cff8ff;
+    background: #cff8ff; 
 }
 
 thead{
-  background: aliceblue;
+  background: aliceblue; 
 }
 
 .bg-alice{
-  background: aliceblue;
+  /* background: aliceblue; */
+  background: #ffe1e4;
   padding: 2%;
   margin: 0;
 }
 
 .p03{
-  padding: 0.3%;
+  padding: 2%;
 }
 .sx-right{
   margin-top: 2vh;
@@ -244,10 +256,32 @@ thead{
           </a>
         </li>
 
-        <li class="menu_reminder">
+        <li class="treeview menu_kontak">
           <a href="#">
-            <div class="col-md-1 col-xs-1"><i class='material-icons'>add_alert</i></div> <div class="col-md-5 col-xs-5"><span>Reminder</span></div>
+            <div class="col-md-1 col-xs-1"><i class="material-icons">add_alert</i></div> 
+            <div class="col-md-5 col-xs-5"><span>Reminder</span></div>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+              <small class="label pull-right bg-green reminder_notif"></small>
+            </span>
           </a>
+          <ul class="treeview-menu">
+
+            <li class="">
+              <a href="<?php echo base_url('reminder/bahan') ?>">
+                <i class="material-icons">more_horiz</i>
+                <span class="multi-li">Stok Bahan</span>
+                <small class="label pull-right bg-red bahan_notif"></small>
+              </a>
+            </li>
+            <li class="">
+              <a href="<?php echo base_url('reminder/produk') ?>">
+                <i class="material-icons">more_horiz</i>
+                <span class="multi-li">Stok Produk</span>
+                <small class="label pull-right bg-red produk_notif"></small>
+              </a>
+            </li>
+          </ul>
         </li>
 
         <li class="treeview menu_kontak">
@@ -261,7 +295,7 @@ thead{
           <ul class="treeview-menu">
 
             <li class="">
-              <a href="#">
+              <a href="<?php echo base_url('gudang') ?>">
                 <i class="material-icons">more_horiz</i>
                 <span class="multi-li">Master Gudang</span>
               </a>
@@ -273,7 +307,7 @@ thead{
               </a>
             </li>
             <li class="">
-              <a href="#">
+              <a href="<?php echo base_url('ekspedisi') ?>">
                 <i class="material-icons">more_horiz</i>
                 <span class="multi-li">Master Ekpedisi</span>
               </a>
@@ -291,7 +325,7 @@ thead{
               </a>
             </li>
             <li class="">
-              <a href="<?php echo base_url('produk') ?>">
+              <a href="<?php echo base_url('produk/') ?>">
                 <i class="material-icons">more_horiz</i>
                 <span class="multi-li">Master Produk</span>
               </a>
@@ -347,31 +381,19 @@ thead{
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class="peleburan">
-              <a href="<?php echo base_url('produksi/peleburan') ?>">
+            
+            <!-- <li class="peleburan">
+              <a href="<?php echo base_url('produksi/so') ?>">
                 <i class="material-icons">more_horiz</i>
-                <span class="multi-li">Peleburan</span>
+                <span class="multi-li">Antrian (SO)</span>
               </a>
-            </li> 
+            </li>  -->
             <li class="produksi">
               <a href="<?php echo base_url('produksi/proses') ?>">
                 <i class="material-icons">more_horiz</i>
                 <span class="multi-li">Proses Produksi</span>
               </a>
             </li>
-            <li class="pewarnaan">
-              <a href="<?php echo base_url('produksi/pewarnaan') ?>">
-                <i class="material-icons">more_horiz</i>
-                <span class="multi-li">Pewarnaan</span>
-              </a>
-            </li>
-            <li class="packing">
-              <a href="<?php echo base_url('produksi/packing') ?>">
-                <i class="material-icons">more_horiz</i>
-                <span class="multi-li">Packing</span>
-              </a>
-            </li>
-            
           </ul>
         </li>
 
@@ -386,9 +408,9 @@ thead{
           <ul class="treeview-menu">
 
             <li class="penjualan_po">
-              <a href="<?php echo base_url('penjualan/po') ?>">
+              <a href="<?php echo base_url('penjualan/so') ?>">
                 <i class="material-icons">more_horiz</i>
-                <span class="multi-li">Purchase Order ( PO )</span>
+                <span class="multi-li">Sales Order ( SO )</span>
               </a>
             </li>
             <li class="penjualan_produk">
@@ -401,50 +423,6 @@ thead{
               <a href="<?php echo base_url('penjualan/bayar') ?>">
                 <i class="material-icons">more_horiz</i>
                 <span class="multi-li">Pembayaran Piutang</span>
-              </a>
-            </li>
-            
-          </ul>
-        </li>
-
-        <li class="treeview menu_keuangan">
-          <a href="#">
-            <div class="col-md-1 col-xs-1"><i class="material-icons">equalizer</i></div> 
-            <div class="col-md-5 col-xs-5"><span>Keuangan</span></div>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-
-            <li class="coa">
-              <a href="<?php echo base_url('keuangan/coa') ?>">
-                <i class="material-icons">more_horiz</i>
-                <span class="multi-li">COA</span>
-              </a>
-            </li>
-            <li class="kas">
-              <a href="<?php echo base_url('keuangan/kas') ?>">
-                <i class="material-icons">more_horiz</i>
-                <span class="multi-li">Kas Keluar</span>
-              </a>
-            </li>
-            <li class="jurnal">
-              <a href="<?php echo base_url('keuangan/jurnal') ?>">
-                <i class="material-icons">more_horiz</i>
-                <span class="multi-li">Jurnal Umum</span>
-              </a>
-            </li>
-            <li class="buku_besar">
-              <a href="<?php echo base_url('keuangan/buku_besar') ?>">
-                <i class="material-icons">more_horiz</i>
-                <span class="multi-li">Buku Besar</span>
-              </a>
-            </li>
-            <li class="penyesuaian">
-              <a href="<?php echo base_url('keuangan/saldo') ?>">
-                <i class="material-icons">more_horiz</i>
-                <span class="multi-li">Penyesuaian Saldo</span>
               </a>
             </li>
             
@@ -479,28 +457,28 @@ thead{
                 <span class="multi-li">Produksi</span>
               </a>
             </li>
-            <li class="laporan_pembelian_po">
-              <a href="<?= base_url('laporan/po_pembelian') ?>">
+            <li class="laporan_pembelian bahan">
+              <a href="<?= base_url('laporan/pembelian_bahan') ?>">
                 <i class="material-icons">more_horiz</i>
-                <span class="multi-li">PO Pembelian</span>
+                <span class="multi-li">Pembelian Bahan</span>
               </a>
             </li>
-            <li class="laporan_pembelian">
-              <a href="<?= base_url('laporan/pembelian') ?>">
+            <li class="laporan_pembelian bahan">
+              <a href="<?= base_url('laporan/pembelian_umum') ?>">
                 <i class="material-icons">more_horiz</i>
-                <span class="multi-li">Pembelian</span>
+                <span class="multi-li">Pembelian Umum</span>
               </a>
             </li>
-            <li class="laporan_hutang">
-              <a href="<?= base_url('laporan/pelunasan_hutang') ?>">
+            <li class="laporan_hutang_bahan">
+              <a href="<?= base_url('laporan/pelunasan_bahan') ?>">
                 <i class="material-icons">more_horiz</i>
-                <span class="multi-li">Pelunasan Hutang</span>
+                <span class="multi-li">Pelunasan Bahan</span>
               </a>
             </li>
-            <li class="laporan_hutang_jatuh_tampo">
-              <a href="<?= base_url('laporan/hutang_jatuh_tempo') ?>">
+            <li class="laporan_hutang_umum">
+              <a href="<?= base_url('laporan/pelunasan_umum') ?>">
                 <i class="material-icons">more_horiz</i>
-                <span class="multi-li">Hutang Jatuh Tempo</span>
+                <span class="multi-li">Pelunasan Umum</span>
               </a>
             </li>
             <li class="laporan_penjualan">
@@ -516,48 +494,62 @@ thead{
                 <span class="multi-li">Pelunasan Piutang</span>
               </a>
             </li>
-            <li class="laporan_piutang_jatuh_tampo">
-              <a href="<?= base_url('laporan/piutang_jatuh_tempo') ?>">
-                <i class="material-icons">more_horiz</i>
-                <span class="multi-li">Piutang Jatuh Tempo</span>
-              </a>
-            </li>
-             <li class="laporan_packing">
-              <a href="<?= base_url('laporan/packing') ?>">
-                <i class="material-icons">more_horiz</i>
-                <span class="multi-li">Packing</span>
-              </a>
-            </li>
-            
-            <!-- <li>
-              <a href="#">
-                <i class="material-icons">more_horiz</i>
-                <span class="multi-li">Kas Keluar</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <i class="material-icons">more_horiz</i>
-                <span class="multi-li">Laba Rugi</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <i class="material-icons">more_horiz</i>
-                <span class="multi-li">Neraca</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <i class="material-icons">more_horiz</i>
-                <span class="multi-li">Buku Besar</span>
-              </a>
-            </li> -->
             
           </ul>
         </li>
 
-        <!-- <li class="treeview menu_inventori">
+        <li class="treeview menu_keuangan">
+          <a href="#">
+            <div class="col-md-1 col-xs-1"><i class="material-icons">equalizer</i></div> 
+            <div class="col-md-5 col-xs-5"><span>Keuangan</span></div>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+
+            <li class="coa">
+              <a href="<?php echo base_url('keuangan/coa') ?>">
+                <i class="material-icons">more_horiz</i>
+                <span class="multi-li">COA</span>
+              </a>
+            </li>
+            <li class="lr">
+              <a href="<?php echo base_url('keuangan/laba_rugi') ?>">
+                <i class="material-icons">more_horiz</i>
+                <span class="multi-li">Laba Rugi</span>
+              </a>
+            </li>
+            <li class="kas">
+              <a href="<?php echo base_url('keuangan/kas') ?>">
+                <i class="material-icons">more_horiz</i>
+                <span class="multi-li">Kas Keluar</span>
+              </a>
+            </li>
+            <li class="jurnal">
+              <a href="<?php echo base_url('keuangan/jurnal') ?>">
+                <i class="material-icons">more_horiz</i>
+                <span class="multi-li">Jurnal Umum</span>
+              </a>
+            </li>
+            <li class="buku_besar">
+              <a href="<?php echo base_url('keuangan/buku_besar') ?>">
+                <i class="material-icons">more_horiz</i>
+                <span class="multi-li">Buku Besar</span>
+              </a>
+            </li>
+            <li class="penyesuaian">
+              <a href="<?php echo base_url('keuangan/saldo') ?>">
+                <i class="material-icons">more_horiz</i>
+                <span class="multi-li">Penyesuaian Saldo</span>
+              </a>
+            </li>
+            
+          </ul>
+        </li>
+
+        <!-- hydev enabled -->
+        <li class="treeview menu_inventori">
           <a href="#">
             <div class="col-md-1 col-xs-1"><i class="material-icons">layers</i></div> 
             <div class="col-md-5 col-xs-5"><span>Inventori</span></div>
@@ -567,6 +559,12 @@ thead{
           </a>
           <ul class="treeview-menu">
 
+            <li class="penyesuaian_stok">
+              <a href="<?php echo base_url('inventori/transfer') ?>">
+                <i class="material-icons">more_horiz</i>
+                <span class="multi-li">Transfer Stok</span>
+              </a>
+            </li>
             <li class="opname_pembelian">
               <a href="<?php echo base_url('inventori/opname_pembelian') ?>">
                 <i class="material-icons">more_horiz</i>
@@ -587,7 +585,7 @@ thead{
             </li>
 
           </ul>
-        </li> -->
+        </li>
 
         <li class="treeview menu_akun">
           <a href="#">

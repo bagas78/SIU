@@ -33,10 +33,6 @@
               <td>: <?=@$data['kontak_tlp']?></td>
             </tr>
             <tr>
-              <td>Email</td>
-              <td>: <?=@$data['kontak_email']?></td>
-            </tr>
-            <tr>
               <td>No. Rekening</td>
               <td>: <?=@$data['kontak_rek']?></td>
             </tr>

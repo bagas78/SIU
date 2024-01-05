@@ -5,14 +5,21 @@
     padding: 5px 10px;
     text-align: center;
   }
+  .tit{
+    padding: 0.5%;
+    font-size: large;
+    background: black;
+    color: white;
+    margin-bottom: 15px;
+  }
 </style> 
 
 <!-- Main content --> 
 <section class="content">
- 
+   
   <!-- Default box -->  
   <div class="box"> 
-    <div class="box-header with-border">
+    <div class="box-header with-border">  
 
       <div class="back" align="left" hidden>
         <a href="<?= @$_SERVER['HTTP_REFERER'] ?>"><button class="btn btn-danger"><i class="fa fa-arrow-left"></i> Kembali</button></a>
@@ -26,8 +33,8 @@
       </div>
 
     </div>
-    <div class="box-body">
 
+    <div class="box-body">
       <form method="post" enctype="multipart/form-data" class="bg-alice">
         <div class="row">
           <div class="col-md-3">
@@ -37,7 +44,7 @@
             </div>
             <div class="form-group">
               <label>Tanggal Produksi</label>
-              <input type="date" name="tanggal" class="form-control" required id="tanggal">
+              <input type="datetime-local" name="tanggal" class="form-control" required id="tanggal">
             </div>
             <div class="form-group">
               <label>Shift</label>
@@ -45,6 +52,15 @@
                 <option value="" hidden>-- Pilih --</option>
                 <?php foreach ($user_data as $u): ?>
                   <option value="<?= $u['user_id']?>"><?= $u['user_name']?></option>
+                <?php endforeach ?>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Gudang</label>
+              <select name="gudang" class="form-control select2" required id="gudang">
+                <option value="" hidden>-- Pilih --</option>
+                <?php foreach ($gudang_data as $g): ?>
+                  <option value="<?= $g['gudang_id']?>"><?= $g['gudang_nama']?></option>
                 <?php endforeach ?>
               </select>
             </div>
@@ -69,9 +85,11 @@
             </div>
             <div class="form-group">
               <label>Keterangan</label>
-              <textarea name="keterangan" class="form-control" id="keterangan"></textarea>
+              <textarea name="keterangan" class="form-control textarea" style="height: 105px;" id="keterangan"></textarea>
             </div>
           </div>
+
+          <!-- img atachment -->
           <div class="col-md-2">
             <div class="form-group">
 
@@ -90,29 +108,24 @@
           
             </div>
           </div>
+
         </div>
 
-        <div class="clearfix"></div>
+        <div class="clearfix"></div><br/>
+
+        <center class="tit"><span>Produksi</span></center>
 
         <table class="table table-responsive table-borderless">
           <thead>
             <tr>
-              <th width="300">Matras</th>
-              <th width="300">Produk</th>
-              <th width="300">Berat</th>              
-              <th width="300">Qty</th>
-              <th width="300">Subtotal</th>
-              <th hidden width="150">ID</th>
-              <th hidden width="150">Delete</th>
-              <th><button type="button" onclick="clone()" class="add btn btn-success btn-sm">+</button></th>
+              <th>Produk</th>           
+              <th>Panjang <span class="stn">Mtr</span></th>
+              <th width="1"><button type="button" onclick="clone('1')" class="add btn btn-success btn-sm"><i class="fa fa-plus"></i></button></th>
             </tr>
           </thead>
-          <tbody id="paste">
+          <tbody id="paste1">
 
-             <tr id="copy">
-              <td>
-                <input min="0" type="number" name="matras[]" class="matras form-control" value="0" required step='0.01'>
-              </td>
+             <tr id="copy1">
               <td>
                 <select required id="produk" class="produk form-control" name="produk[]">
                   <option value="" hidden>-- Pilih --</option>
@@ -123,110 +136,106 @@
               </td>
 
               <td>
-                <div class="input-group">
-                  <input min="0" type="number" name="berat[]" class="berat form-control" value="0" required step="0.01">
-                  <span class="input-group-addon">Kg</span>
-                </div>
-              </td>
-
-              <td>
-                <div class="input-group">
-                  <input type="number" name="qty[]" class="qty form-control" required value="0" min="0">
-                  <span class="satuan input-group-addon"></span>
-                </div>
-              </td>
-
-              <td>
-                <div class="input-group">
-                  <input readonly min="0" type="text" name="subtotal[]" class="subtotal form-control" value="0" required>
-                  <span class="input-group-addon">Kg</span>
-                </div>
-              </td>
-
-              <!--hidden-->
-              <td hidden>
-                <input type="text" name="id[]" class="id form-control" value="0" style="width: 100px;">
-              </td>
-              <td hidden>
-                <input type="text" name="delete[]" class="delete form-control" value="0" style="width: 100px;">
+                <input type="number" name="produk_panjang[]" class="produk_panjang form-control" required value="0" min="0">
               </td>
               
-              <td><button type="button" class="remove btn btn-danger btn-sm">-</button></td>
-            </tr>
-
-            <tr>
-              <td colspan="3"></td>
-              <td align="right">Total Produksi</td>
-              <td>
-                <div class="input-group">
-                  <input readonly required id="total_produksi" type="number" name="total_produksi" class="form-control" value="0" min="0">
-                  <span class="input-group-addon">Kg</span>
-                </div>
-              </td>
-            </tr>
-
-            <tr hidden>
-              <td colspan="3"></td>
-              <td align="right">Qty Produk</td>
-              <td><input id="qty_produk" readonly="" type="text" name="qty_produk" class="form-control"></td>
-            </tr>
-
-            <tr hidden>
-              <td colspan="3"></td>
-              <td align="right">HPS Billet</td>
-              <td>
-                <input value="<?=number_format($billet_data['billet_hps'])?>" id="hps_billet" readonly="" type="text" name="hps_billet" class="form-control">
-              </td>
-            </tr>
-
-            <tr>
-              <td colspan="3"></td>
-              <td align="right">Qty Billet</td>
-              <td>
-                <div class="input-group">
-                  <input required id="qty_billet" type="number" name="qty_billet" class="form-control" value="0" min="0">
-                  <span class="input-group-addon"><span id="stok_billet" hidden><?=number_format($billet_data['billet_stok'])?></span>Kg</span>
-                </div>
-              </td>
-            </tr>
-
-            <tr>
-              <td colspan="3"></td>
-              <td align="right">Biaya Jasa</td>
-              <td>
-                <div class="input-group">
-                  <input id="jasa" type="number" name="jasa" class="form-control" value="0" min="0">
-                  <span class="input-group-addon">Rp</span>
-                </div>
-              </td>
-            </tr>
-
-            <tr>
-              <td colspan="3"></td>
-              <td align="right">Total Akhir</td>
-              <td><input id="total_akhir" readonly="" type="text" name="total_akhir" class="form-control" value="0" min="0"></td>
-            </tr>
-
-            <tr>
-              <td colspan="3"></td>
-              <td align="right">Sisa Billet</td>
-              <td>
-                <div class="input-group">
-                  <input id="sisa_billet" type="number" name="sisa_billet" class="form-control" value="0" min="0">
-                  <span class="input-group-addon">Kg;</span>
-                </div>
-              </td>
-            </tr>
-
-            <tr class="save">
-              <td colspan="5" align="right">
-                <button type="submit" class="btn btn-primary">Simpan <i class="fa fa-check"></i></button>
-                <a href="<?= @$_SERVER['HTTP_REFERER'] ?>"><button type="button" class="btn btn-danger">Batal <i class="fa fa-times"></i></button></a>
-              </td>
+              <td><button type="button" class="remove btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></td>
             </tr>
 
           </tbody>
         </table>
+
+        <div class="clearfix"></div><br/>
+
+        <center class="tit"><span>Bahan Baku</span></center>
+
+        <div id="form-bahan">
+
+          <table class="table table-responsive table-borderless">
+            <thead>
+              <tr>
+                <th width="300">Bahan</th>
+                <th width="300">Kategori</th>
+                <th width="300" hidden>Hpp <span class="stn">Rp</span></th>
+                <th width="300">Stok <span class="stn">Mtr</span></th>   
+                <th width="300">Berat / Meter <span class="stn">Kg</span></th>           
+                <th width="300">Panjang <span class="stn">Mtr</span></th>
+                <th width="300" hidden>Total <span class="stn">Rp</span></th>
+                <th><button type="button" onclick="clone('2')" class="add btn btn-success btn-sm"><i class="fa fa-plus"></i></button></th>
+              </tr>
+            </thead>
+            <tbody id="paste2">
+
+               <tr id="copy2">
+                <td>
+                  <select required id="bahan" class="bahan form-control" name="bahan[]">
+                    <option value="" hidden>-- Pilih --</option>
+                    <?php foreach ($bahan_data as $b): ?>
+                      <option value="<?=@$b['bahan_id']?>"><?=@$b['bahan_nama']?></option>
+                    <?php endforeach ?>
+                  </select>
+                </td>
+
+                <td>
+                  <input type="text" name="kategori[]" class="kategori form-control" required readonly>
+                </td>
+                <td hidden>
+                  <input min="0" type="number" name="harga[]" class="harga form-control" value="0" required readonly step="any">
+                </td>
+
+                <td>
+                  <input min="0" type="number" name="stok[]" class="stok form-control" value="0" required readonly step="any">                
+                </td>
+
+                <td>
+                  <input type="number" name="berat[]" class="berat form-control" required value="0" min="0" readonly step="any">
+                </td>
+
+                <td>
+                  <input type="number" name="panjang[]" class="panjang form-control" required value="0" min="0" step="any">
+                </td>
+
+                <td hidden>
+                  <input readonly min="0" type="number" name="total[]" class="total form-control" value="0" required step="any">
+                </td>
+                
+                <td><button type="button" class="remove btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></td>
+              </tr>
+
+              <tr hidden>
+                <td colspan="5"></td>
+                <td align="right"><b>Subtotal</b> <span class="stn">Rp</span></td>
+                <td>
+                  <input readonly required id="subtotal" type="number" name="subtotal" class="form-control" value="0" min="0" step="any">
+                </td>
+              </tr>
+
+              <tr hidden>
+                <td colspan="5"></td>
+                <td align="right"><b>Biaya Jasa</b> <span class="stn">Rp</span></td>
+                <td>
+                  <input id="jasa" type="number" name="jasa" class="form-control" value="0" min="0" step="any">
+                </td>
+              </tr>
+
+              <tr hidden>
+                <td colspan="5"></td>
+                <td align="right"><b>Grand Total</b> <span class="stn">Rp</span></td>
+                <td>
+                  <input id="grandtotal" readonly="" type="number" name="grandtotal" class="form-control" value="0" min="0" step="any">
+                </td>
+              </tr>
+              <tr class="save">
+                <td colspan="7" align="right">
+                  <button type="submit" class="btn btn-primary">Simpan <i class="fa fa-check"></i></button>
+                  <a href="<?= @$_SERVER['HTTP_REFERER'] ?>"><button type="button" class="btn btn-danger">Batal <i class="fa fa-times"></i></button></a>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+          </div>
 
       </form>
 
@@ -251,16 +260,113 @@ $('#nomor').val('<?=@$nomor?>');
 $('#tanggal').val('<?=date('Y-m-d')?>');
 $('#previewImg1').attr('src', '<?=base_url('assets/gambar/1.png')?>');
 $('#previewImg2').attr('src', '<?=base_url('assets/gambar/2.png')?>');
+  
+  //gudang
+  $(document).on('blur focus change', '#gudang', function() {
 
-  //get barang
+    $("#form-bahan").load(location.href + " #form-bahan");
+
+  })
+
+  //bahan
+  $(document).on('change', '.bahan', function() {
+
+    var id = $(this).val();
+    var index = $(this).closest('tr').index();
+    var arr = new Array(); 
+    var kategori = $(this).closest('tr').find('.kategori');
+    var stok = $(this).closest('tr').find('.stok');
+    var berat = $(this).closest('tr').find('.berat');
+    var harga = $(this).closest('tr').find('.harga');
+    var bahan = $(this);
+    var panjang = $(this).closest('tr').find('.panjang');
+    var total = $(this).closest('tr').find('.total');
+
+   /////// cek exist barang ///////////
+    $.each($('.bahan'), function(idx, val) {
+        
+        if (index != idx)
+        arr.push($(this).val());
+
+    });
+
+    if (id != '') {
+
+      if ($.inArray(id, arr) != -1) {
+        var i = index + 1;
+
+        alert_sweet('Bahan sudah ada');
+
+        //empty
+        bahan.val('').change();
+        kategori.val('');
+        stok.val(0);
+        berat.val(0);
+        harga.val(0);
+        panjang.val(0);
+        total.val(0);
+        
+      }else{
+
+        var gudang = $('#gudang').val();
+
+        if (gudang == '') {
+
+          //empty
+          bahan.val('').change();
+          kategori.val('');
+          stok.val(0);
+          berat.val(0);
+          harga.val(0);
+          panjang.val(0);
+          total.val(0);
+
+          alert_sweet('Gudang belum di pilih');
+
+        }else{
+
+          $.get('<?= base_url('produksi/get_bahan/') ?>'+id+'/'+gudang, function(data) {
+      
+            var val = JSON.parse(data);
+
+            if (val == null) {
+
+              //empty
+              bahan.val('').change();
+              kategori.val('');
+              stok.val(0);
+              berat.val(0);
+              harga.val(0);
+              panjang.val(0);
+              total.val(0);
+
+              alert_sweet('Bahan tidak tersedia di gudang yang di pilih');
+
+            }else{
+
+              kategori.val(val.bahan_kategori);
+              stok.val(number_format(val.stok));
+              berat.val(val.berat);
+              harga.val(val.bahan_gudang_hpp);
+            }
+
+          });
+
+        }
+        
+      }
+      ////// end exist barang ///////////
+    }
+
+  });
 
   $(document).on('change', '.produk', function() {
 
     var id = $(this).val();
     var index = $(this).closest('tr').index();
     var arr = new Array(); 
-    var berat = $(this).closest('tr').find('.berat');
-    var satuan = $(this).closest('tr').find('.satuan');
+    var stok = $(this).closest('tr').find('.stok_produk');
+    var produk = $(this);
 
    /////// cek exist barang ///////////
     $.each($('.produk'), function(idx, val) {
@@ -278,19 +384,8 @@ $('#previewImg2').attr('src', '<?=base_url('assets/gambar/2.png')?>');
         alert_sweet('Produk sudah ada');
 
         //empty
-        $(this).val('').change();
-        berat.val(0);
-        satuan.text('');
+        produk.change();
         
-      }else{
-
-        $.get('<?= base_url('produksi/proses_get_produk/') ?>'+id, function(data) {
-      
-          var val = JSON.parse(data);
-          satuan.text(val.satuan_singkatan);
-
-        });
-
       }
       ////// end exist barang ///////////
     }
@@ -298,23 +393,28 @@ $('#previewImg2').attr('src', '<?=base_url('assets/gambar/2.png')?>');
   });
 
   //copy paste
-  function clone(){
+  function clone(target){
     //paste
-    $('#paste').prepend($('#copy').clone());
+    $('#paste'+target).prepend($('#copy'+target).clone());
     
     //blank new input
-    $('#copy').find('select').val('');
-    $('#copy').find('.qty').val(0);
-    $('#copy').find('.id').val(0);
-    $('#copy').find('.berat').val(0);
+    $('#copy'+target).find('select').val('');
+    $('#copy'+target).find('.kategori').val('');
+    $('#copy'+target).find('.harga').val(0);
+    $('#copy'+target).find('.stok').val(0);
+    $('#copy'+target).find('.total').val(0);
+    $('#copy'+target).find('.panjang').val(0);
+    $('#copy'+target).find('.produk_panjang').val(0);
+    $('#copy'+target).find('.id').val(0);
 
+    //produk
+    $('#copy'+target).find('.qty_produk').val(0);
   }
 
   //remove
   $(document).on('click', '.remove', 'tr a.remove', function(e) {
     e.preventDefault();
-    $(this).parent().prev().find('.delete').val(1);
-    $(this).closest('tr').attr('hidden', true);
+    $(this).closest('tr').remove();
   });
 
   //foto preview
@@ -357,46 +457,58 @@ $('#previewImg2').attr('src', '<?=base_url('assets/gambar/2.png')?>');
       }
   }
 
-  function auto(){
-    
-    //sum qty
-    var sum_qty = 0;
-    var sum_produksi = 0;
-    $.each($('.qty'), function(index, val) {
-       var i = index+1;
-       var berat = Number($(this).closest('tr').find('.berat').val(), 10);
-       var qty = Number($(this).val());
-       var total = qty * berat;
+  //subtotal
+  $(document).on('keyup blur focus', '.panjang', function() {
+      
+     var panjang = $(this).val().replaceAll('.', '');
+     var harga = $(this).closest('tr').find('.harga').val().replaceAll('.', '');
+     var total = Number(harga) * Number(panjang);
 
-       sum_qty += qty;
-       sum_produksi += total;
+     $(this).closest('tr').find('.total').val(number_format(total));
 
-       //subtotal
-       $(this).closest('tr').find('.subtotal').val(total);
+  });
 
-    });
+  //submit validation
+  $('form').on('submit', function() {
+      
+      var err = 0;
+      $.each($('.bahan'), function(index, val) {
+         
+         var stok = $(this).closest('tr').find('.stok').val().replaceAll('.', '');
+         var panjang = $(this).closest('tr').find('.panjang').val().replaceAll('.', '');
 
-    //sum total produksi
-    $('#total_produksi').val(sum_produksi);
+         if (Number(stok) < Number(panjang)) {
 
-    //sum qty produk
-    $('#qty_produk').val(sum_qty);
+          err += 1;
 
-    //cek stok billet
-    var billet = $('#qty_billet');
-    var stok_billet = Number($('#stok_billet').text());
-    if (Number(billet.val().replace(/,/g, '')) > stok_billet) {
-        
-      alert_sweet('Stok billet kurang');
-      billet.val(0);
-    }
+         }
 
-    //total akhir
-    var hps_billet = Number($('#hps_billet').val().replace(/,/g, ''));
-    var qty_billet = Number(billet.val()) * hps_billet;
+      });
+
+      if (err != 0) {
+
+        alert_sweet('Terdapat panjang yang lebih dari stok');
+        return false;
+      }else{
+
+        return true;
+      }
+
+  });
+
+  function auto() { 
+
+    //total produksi
     var jasa = Number($('#jasa').val());
-    var total = qty_billet + jasa;
-    $('#total_akhir').val(number_format(total));
+    var total = 0;
+    $.each($('.total'), function(index, val) {
+        
+        total += Number($(this).val().replaceAll('.', ''));
+
+    });   
+
+    $('#subtotal').val(number_format(total));
+    $('#grandtotal').val(Number(number_format(total) + jasa));
 
     //border none
     $('td').css('border-top', 'none');
@@ -406,6 +518,6 @@ $('#previewImg2').attr('src', '<?=base_url('assets/gambar/2.png')?>');
     }, 100);
   }
 
-  auto();
+  auto();  
 
 </script>

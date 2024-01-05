@@ -9,13 +9,13 @@ class M_bahan extends CI_Model {
 	var $column_order = array(null, 'bahan_nama','bahan_kategori'); 
 
 	//kolom yang di tampilkan setelah seacrh
-	var $column_search = array('bahan_nama','bahan_kategori'); 
+	var $column_search = array('bahan_nama','bahan_kategori','gudang_nama'); 
 
 	//urutan 
 	var $order = array('bahan_id' => 'asc'); 
 
 	public function __construct()
-	{
+	{ 
 		parent::__construct();
 		$this->load->database();
 	}
@@ -61,11 +61,19 @@ class M_bahan extends CI_Model {
 
 	function get_datatables($where)
 	{
+		$this->db->select('*');
+		$this->db->select('IFNULL(SUM(bahan_gudang_berat), 0) AS berat');
+		$this->db->select('IFNULL(SUM(bahan_gudang_panjang), 0) AS panjang');
+		$this->db->select('IFNULL(SUM(bahan_gudang_hpp), 0) AS hpp');
 		$this->_get_datatables_query();
 		if($_GET['length'] != -1)
 		$this->db->where($where);
-		$this->db->join('t_satuan', 't_bahan.bahan_satuan = t_satuan.satuan_id');
+		$this->db->join('t_bahan_gudang', 't_bahan_gudang.bahan_gudang_bahan = t_bahan.bahan_id', 'left');
+		$this->db->join('t_gudang', 't_gudang.gudang_id = t_bahan_gudang.bahan_gudang_gudang', 'left');
+		$this->db->join('t_satuan', 't_satuan.satuan_id = t_bahan.bahan_satuan', 'left');
 		$this->db->limit($_GET['length'], $_GET['start']);
+		$this->db->group_by('bahan_id');
+		$this->db->group_by('bahan_gudang_gudang'); 
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -73,7 +81,9 @@ class M_bahan extends CI_Model {
 	function count_filtered($where)
 	{
 		$this->_get_datatables_query();
-		$this->db->join('t_satuan', 't_bahan.bahan_satuan = t_satuan.satuan_id');
+		$this->db->join('t_bahan_gudang', 't_bahan_gudang.bahan_gudang_bahan = t_bahan.bahan_id', 'left');
+		$this->db->join('t_gudang', 't_gudang.gudang_id = t_bahan_gudang.bahan_gudang_gudang', 'left');
+		$this->db->join('t_satuan', 't_satuan.satuan_id = t_bahan.bahan_satuan', 'left');
 		$this->db->where($where);
 		$query = $this->db->get();
 		return $query->num_rows();
@@ -82,7 +92,9 @@ class M_bahan extends CI_Model {
 	public function count_all($where)
 	{
 		$this->db->from($this->table);
-		$this->db->join('t_satuan', 't_bahan.bahan_satuan = t_satuan.satuan_id');
+		$this->db->join('t_bahan_gudang', 't_bahan_gudang.bahan_gudang_bahan = t_bahan.bahan_id', 'left');
+		$this->db->join('t_gudang', 't_gudang.gudang_id = t_bahan_gudang.bahan_gudang_gudang', 'left');
+		$this->db->join('t_satuan', 't_satuan.satuan_id = t_bahan.bahan_satuan', 'left');
 		$this->db->where($where);
 		return $this->db->count_all_results();
 	}

@@ -34,7 +34,7 @@
                   <th>Atas Nama</th>
                   <th>Bank</th>
                   <th>No. Rekening</th>
-                  <th width="50">Action</th>
+                  <th width="40">Action</th>
                 </tr>
                 </thead>
                 <tbody>
