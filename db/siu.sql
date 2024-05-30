@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 22, 2024 at 01:29 PM
+-- Generation Time: May 30, 2024 at 08:07 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -123,10 +123,10 @@ CREATE TABLE `t_bahan_gudang` (
 --
 
 INSERT INTO `t_bahan_gudang` (`bahan_gudang_id`, `bahan_gudang_bahan`, `bahan_gudang_gudang`, `bahan_gudang_berat_permeter`, `bahan_gudang_berat`, `bahan_gudang_panjang`, `bahan_gudang_hpp`, `bahan_gudang_tanggal`) VALUES
-(24, '28', '0', '3.07', '247.25', '79.80', '19682.54', '2024-01-26'),
+(24, '28', '0', '3.07', '247.25', '79.80', '20139.47', '2024-01-26'),
 (25, '29', '0', '2.31', '231.42', '100.40', '15873.58', '2024-01-26'),
 (52, '30', '0', '3.93', '20.47', '5.20', '15598.97', '2024-05-06'),
-(53, '32', '0', '1.64', '8904.58', '5419.32', '16386.15', '2024-05-06'),
+(53, '32', '0', '1.66', '10.58', '6.32', '4794695.65', '2024-05-06'),
 (54, '33', '0', '1.64', '3518.49', '2142.18', '16075.89', '2024-05-06'),
 (55, '42', '0', '0.34', '2605.00', '7680.00', '30449.47', '2024-05-11'),
 (56, '34', '0', '2.36', '3393.20', '1438.32', '15050.00', '2024-05-14'),
@@ -139,9 +139,9 @@ INSERT INTO `t_bahan_gudang` (`bahan_gudang_id`, `bahan_gudang_bahan`, `bahan_gu
 (63, '45', '0', '0.00', '0.00', '0.00', '0.00', '2024-05-16'),
 (64, '46', '0', '0.74', '4500.00', '6072.00', '14958.24', '2024-05-16'),
 (65, '47', '0', '0.79', '4395.00', '5552.00', '14858.24', '2024-05-16'),
-(66, '38', '0', '1.28', '4446.00', '3480.00', '16787.28', '2024-05-21'),
-(67, '39', '0', '1.26', '4362.00', '3450.00', '16787.28', '2024-05-21'),
-(68, '40', '0', '1.95', '7730.00', '3960.00', '15887.28', '2024-05-21');
+(66, '38', '0', '0.00', '0.00', '0.00', '0.00', '2024-05-21'),
+(67, '39', '0', '0.00', '0.00', '0.00', '0.00', '2024-05-21'),
+(68, '40', '0', '0.00', '0.00', '0.00', '0.00', '2024-05-21');
 
 -- --------------------------------------------------------
 
@@ -404,7 +404,7 @@ CREATE TABLE `t_gudang` (
 
 INSERT INTO `t_gudang` (`gudang_id`, `gudang_kode`, `gudang_nama`, `gudang_keterangan`, `gudang_hapus`, `gudang_tanggal`) VALUES
 (0, 'GD000', 'Gudang Utama', NULL, 0, '0000-00-00'),
-(2, 'GD001', 'Gudang A', NULL, 1, '2023-09-03');
+(2, 'GD001', 'Gudang A', NULL, 0, '2023-09-03');
 
 -- --------------------------------------------------------
 
@@ -542,8 +542,8 @@ INSERT INTO `t_kartu` (`kartu_id`, `kartu_gudang`, `kartu_jenis`, `kartu_transak
 (55, '0', 'pembelian', 'masuk', 'PB-06052024-1', '28', 'BH001', 'GALVALUME 0.20 X 914', 'Mtr', '100.50', '79.80', '2024-05-06', '11:29:33', 0),
 (56, '0', 'pembelian', 'masuk', 'PB-11052024-7', '33', 'BH006', 'PPGL HIJAU 0.23 X 914', 'Mtr', '0.00', NULL, '2024-05-11', '11:34:34', 0),
 (57, '0', 'pembelian', 'masuk', 'PB-11052024-8', '42', 'BH0015', 'INDOLUM 0.45 BMT X 101', 'Mtr', '0.00', NULL, '2024-05-11', '11:50:43', 0),
-(58, '0', 'pembelian', 'masuk', 'PB-12052024-9', '28', 'BH001', 'GALVALUME 0.20 X 914', 'Mtr', '0.00', NULL, '2024-05-12', '11:02:10', 0),
-(65, '0', 'pembelian', 'masuk', 'PB-15052024-12', '28', 'BH001', 'GALVALUME 0.20 X 914', 'Mtr', '0.00', NULL, '2024-05-15', '18:11:59', 0),
+(58, '0', 'pembelian', 'masuk', 'PB-12052024-9', '28', 'BH001', 'GALVALUME 0.20 X 914', 'Mtr', '0.00', '79.80', '2024-05-12', '11:02:10', 0),
+(65, '0', 'pembelian', 'masuk', 'PB-15052024-12', '28', 'BH001', 'GALVALUME 0.20 X 914', 'Mtr', '0.00', '79.80', '2024-05-15', '18:11:59', 0),
 (73, '0', 'pembelian', 'masuk', 'PB-20102023-1', '34', 'BH007', 'PPGL BIRU 0.33 X 914', 'Mtr', '1509.00', NULL, '2023-10-20', '15:31:04', 0),
 (74, '0', 'pembelian', 'masuk', 'PB-20102023-1', '33', 'BH006', 'PPGL HIJAU 0.23 X 914', 'Mtr', '2132.00', NULL, '2023-10-20', '15:31:04', 0),
 (75, '0', 'pembelian', 'masuk', 'PB-20102023-2', '37', 'BH0010', 'PPGL BIRU 0.27 X 914', 'Mtr', '1855.00', NULL, '2023-10-20', '08:33:41', 0),
@@ -563,12 +563,6 @@ INSERT INTO `t_kartu` (`kartu_id`, `kartu_gudang`, `kartu_jenis`, `kartu_transak
 (113, '0', 'pembelian', 'masuk', 'PB-20102023-3', '42', 'BH0015', 'INDOLUM 0.45 BMT X 101', 'Mtr', '7680.00', NULL, '2023-09-26', '12:50:30', 0),
 (114, '0', 'pembelian', 'masuk', 'PB-20102023-3', '43', 'BH0016', 'INDOLUM 0.50 BMT X 152', 'Mtr', '8400.00', NULL, '2023-09-26', '12:50:30', 0),
 (115, '0', 'pembelian', 'masuk', 'PB-20102023-3', '41', 'BH0014', 'INDOLUM 0.40 BMT X 101', 'Mtr', '15183.00', NULL, '2023-09-26', '12:50:30', 0),
-(122, '0', 'pembelian', 'masuk', 'PB-02102023-1', '40', 'BH0013', 'PPGL MAROON 0.27 X 914', 'Mtr', '1978.00', NULL, '2023-10-02', '09:57:56', 0),
-(123, '0', 'pembelian', 'masuk', 'PB-02102023-1', '40', 'BH0013', 'PPGL MAROON 0.27 X 914', 'Mtr', '1982.00', NULL, '2023-10-02', '09:57:56', 0),
-(124, '0', 'pembelian', 'masuk', 'PB-02102023-1', '32', 'BH005', 'PPGL MAROON 0.23 X 914', 'Mtr', '2713.00', NULL, '2023-10-02', '09:57:56', 0),
-(125, '0', 'pembelian', 'masuk', 'PB-02102023-1', '32', 'BH005', 'PPGL MAROON 0.23 X 914', 'Mtr', '2700.00', NULL, '2023-10-02', '09:57:56', 0),
-(126, '0', 'pembelian', 'masuk', 'PB-02102023-1', '39', 'BH0012', 'PPGL BIRU 0.20 X 914', 'Mtr', '3450.00', NULL, '2023-10-02', '09:57:56', 0),
-(127, '0', 'pembelian', 'masuk', 'PB-02102023-1', '38', 'BH0011', 'PPGL MAROON 0.20 X 914', 'Mtr', '3480.00', NULL, '2023-10-02', '09:57:56', 0),
 (128, '0', 'penjualan', 'keluar', 'SO-22052024-8', '15', 'MP0010', 'SPANDEK BIRU 0.30', 'Mtr', '500.00', NULL, '2024-05-22', '09:02:07', 0),
 (129, '0', 'penjualan', 'keluar', 'SO-22052024-9', '6', 'MP001', 'SPANDEK SILVER 0.25', 'Mtr', '5.50', NULL, '2024-05-22', '09:06:19', 0),
 (130, '0', 'produksi', 'keluar', 'PR-19122023-1', '57', 'BH0030', 'PPGL BIRU 0.22 X 914', 'Mtr', '0.00', NULL, '2024-05-22', '13:04:40', 0),
@@ -589,7 +583,15 @@ INSERT INTO `t_kartu` (`kartu_id`, `kartu_gudang`, `kartu_jenis`, `kartu_transak
 (171, '0', 'penjualan', 'keluar', 'PJ-06052024-1', '6', 'MP001', 'SPANDEK SILVER 0.25', 'Mtr', '60.00', NULL, '2024-05-06', '11:37:33', 0),
 (172, '0', 'penjualan', 'keluar', 'PJ-06052024-2', '6', 'MP001', 'SPANDEK SILVER 0.25', 'Mtr', '60.00', NULL, '2024-05-06', '11:56:06', 0),
 (173, '0', 'penjualan', 'keluar', 'PJ-06052024-2', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', '77.00', NULL, '2024-05-06', '11:56:06', 0),
-(178, '0', 'penjualan', 'keluar', 'PJ-22052024-11', '6', 'MP001', 'SPANDEK SILVER 0.25', 'Mtr', '70.68', NULL, '2024-05-22', '12:56:51', 0);
+(178, '0', 'penjualan', 'keluar', 'PJ-22052024-11', '6', 'MP001', 'SPANDEK SILVER 0.25', 'Mtr', '70.68', NULL, '2024-05-22', '12:56:51', 0),
+(184, '0', 'penjualan', 'keluar', 'PJ-27052024-10', '6', 'MP001', 'SPANDEK SILVER 0.25', 'Mtr', '60.00', NULL, '2024-05-27', '23:03:17', 0),
+(185, '0', 'pembelian', 'masuk', 'PB-27052024-15', '28', 'BH001', 'GALVALUME 0.20 X 914', 'Mtr', '0.00', NULL, '2024-05-27', '17:02:30', 0),
+(186, '0', 'pembelian', 'masuk', 'PB-02102023-1', '40', 'BH0013', 'PPGL MAROON 0.27 X 914', 'Mtr', '0.00', NULL, '2023-10-02', '09:57:56', 0),
+(187, '0', 'pembelian', 'masuk', 'PB-02102023-1', '40', 'BH0013', 'PPGL MAROON 0.27 X 914', 'Mtr', '0.00', NULL, '2023-10-02', '09:57:56', 0),
+(188, '0', 'pembelian', 'masuk', 'PB-02102023-1', '32', 'BH005', 'PPGL MAROON 0.23 X 914', 'Mtr', '0.00', NULL, '2023-10-02', '09:57:56', 0),
+(189, '0', 'pembelian', 'masuk', 'PB-02102023-1', '32', 'BH005', 'PPGL MAROON 0.23 X 914', 'Mtr', '0.00', NULL, '2023-10-02', '09:57:56', 0),
+(190, '0', 'pembelian', 'masuk', 'PB-02102023-1', '39', 'BH0012', 'PPGL BIRU 0.20 X 914', 'Mtr', '0.00', NULL, '2023-10-02', '09:57:56', 0),
+(191, '0', 'pembelian', 'masuk', 'PB-02102023-1', '38', 'BH0011', 'PPGL MAROON 0.20 X 914', 'Mtr', '0.00', NULL, '2023-10-02', '09:57:56', 0);
 
 -- --------------------------------------------------------
 
@@ -768,7 +770,7 @@ CREATE TABLE `t_logo` (
 --
 
 INSERT INTO `t_logo` (`logo_id`, `logo_foto`, `logo_nama`, `logo_telp`, `logo_kota`, `logo_alamat`) VALUES
-(1, '393621bd7bad14338cdf4bc5fe01ce5f.jpg', 'DWIKARYA SUKSES BERSAMA', '085399793558', 'Makassar', 'Jl. Komp Pergud Parangloe blok i4/17');
+(1, '8070be03d83f8954076632975a7c8429.jpg', 'WEB APLIKASI SIU', '021-7980421', 'Jakarta', 'JL. Raya Pasar Minggu No. 17 Jakarta Selatan 12520');
 
 -- --------------------------------------------------------
 
@@ -865,8 +867,9 @@ INSERT INTO `t_pembelian` (`pembelian_id`, `pembelian_proses`, `pembelian_po`, `
 (10, 1, 0, '0000-00-00', '5', 'PB-20102023-1', '22', '4', '0', '2023-10-20', '15:31:04', '2023-11-20', 'belum', NULL, '', 'tunai', 'INV/-/HIM-DSB/IX/2023 14 SEPT 2023', '', '7062', '0', '11', '109084700', 0),
 (11, 1, 0, '0000-00-00', '5', 'PB-20102023-2', '24', '4', '0', '2023-10-20', '08:33:41', '2023-11-20', 'belum', NULL, '', 'tunai', '', '', '15448', '11121000', '11', '254288300', 0),
 (12, 1, 0, '0000-00-00', '5', 'PB-15052024-12', '22', '4', '0', '2024-05-15', '18:11:59', '0000-00-00', 'lunas', NULL, '', 'tunai', 'test test', '', '10.78', '2000', '0', '177714', 0),
-(13, 1, 0, '0000-00-00', '5', 'PB-20102023-3', '25', '9503400', '0', '2023-09-26', '12:50:30', '2023-10-26', 'belum', NULL, '', 'tunai', 'PAL/PC/IX/23/0767', '', '36800', '9503400', '11', '559434650', 0),
-(14, 1, 0, '0000-00-00', '5', 'PB-02102023-1', '22', '4', '0', '2023-10-02', '09:57:56', '2023-11-02', 'lunas', '2024-05-22', 'LUNAS', 'tunai', '', '', '25432', '11121000', '11', '416419600', 0);
+(13, 1, 0, '0000-00-00', '5', 'PB-20102023-3', '25', '4', '0', '2023-09-26', '12:50:30', '2023-10-26', 'lunas', '2024-05-28', 'lunas hari ini', 'tunai', 'PAL/PC/IX/23/0767', '', '36800', '9503400', '11', '559434650', 0),
+(14, 1, 0, '0000-00-00', '5', 'PB-02102023-1', '22', '4', '0', '2023-10-02', '09:57:56', '0000-00-00', 'lunas', '2024-05-22', 'LUNAS', 'tunai', '', '', '25432', '11121000', '11', '416419600', 0),
+(15, 1, 0, '0000-00-00', '5', 'PB-27052024-15', '22', '4', '0', '2024-05-27', '17:02:30', '0000-00-00', 'lunas', NULL, '', 'tunai', 'cek saldo edit', '', '10', '20000', '11', '183000', 0);
 
 -- --------------------------------------------------------
 
@@ -919,12 +922,13 @@ INSERT INTO `t_pembelian_barang` (`pembelian_barang_id`, `pembelian_barang_nomor
 (52, 'PB-20102023-3', '42', '5145.00', '15240.00', '2605.00', '7680.00', '15150', '77946750', '1328668.2880435'),
 (53, 'PB-20102023-3', '43', '9400.00', '16888.00', '4700.00', '8400.00', '15000', '141000000', '2427498.9130435'),
 (54, 'PB-20102023-3', '41', '4540.00', '15183.00', '4540.00', '15183.00', '15350', '69689000', '1172430.326087'),
-(55, 'PB-02102023-1', '40', '3878.00', '1978.00', '3878.00', '1978.00', '15450', '59915100', '1695786.3321799'),
-(56, 'PB-02102023-1', '40', '3852.00', '1982.00', '3852.00', '1982.00', '15450', '59513400', '1684416.9550173'),
-(57, 'PB-02102023-1', '32', '4456.00', '2713.00', '4456.00', '2713.00', '15950', '71073200', '1948536.3321799'),
-(58, 'PB-02102023-1', '32', '4438.00', '2700.00', '4438.00', '2700.00', '15950', '70786100', '1940665.2249135'),
-(59, 'PB-02102023-1', '39', '4362.00', '3450.00', '4362.00', '3450.00', '16350', '71318700', '1907431.6608997'),
-(60, 'PB-02102023-1', '38', '4446.00', '3480.00', '4446.00', '3480.00', '16350', '72692100', '1944163.4948097');
+(66, 'PB-27052024-15', '28', '10.00', '30.00', '0.00', '0.00', '16300', '163000', '20000'),
+(67, 'PB-02102023-1', '40', '3878.00', '1978.00', '0.00', '0.00', '15450', '59915100', '1695786.3321799'),
+(68, 'PB-02102023-1', '40', '3852.00', '1982.00', '0.00', '0.00', '15450', '59513400', '1684416.9550173'),
+(69, 'PB-02102023-1', '32', '4456.00', '2713.00', '0.00', '0.00', '15950', '71073200', '1948536.3321799'),
+(70, 'PB-02102023-1', '32', '4438.00', '2700.00', '0.00', '0.00', '15950', '70786100', '1940665.2249135'),
+(71, 'PB-02102023-1', '39', '4362.00', '3450.00', '0.00', '0.00', '16350', '71318700', '1907431.6608997'),
+(72, 'PB-02102023-1', '38', '4446.00', '3480.00', '0.00', '0.00', '16350', '72692100', '1944163.4948097');
 
 -- --------------------------------------------------------
 
@@ -1011,6 +1015,13 @@ CREATE TABLE `t_pembelian_umum` (
   `pembelian_umum_hapus` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `t_pembelian_umum`
+--
+
+INSERT INTO `t_pembelian_umum` (`pembelian_umum_id`, `pembelian_umum_user`, `pembelian_umum_nomor`, `pembelian_umum_gudang`, `pembelian_umum_tanggal`, `pembelian_umum_jatuh_tempo`, `pembelian_umum_status`, `pembelian_umum_pelunasan`, `pembelian_umum_pelunasan_keterangan`, `pembelian_umum_pembayaran`, `pembelian_umum_keterangan`, `pembelian_umum_lampiran`, `pembelian_umum_qty_akhir`, `pembelian_umum_ppn`, `pembelian_umum_total`, `pembelian_umum_hapus`) VALUES
+(17, '5', 'PU-27052024-1', '0', '2024-05-27', '2024-05-20', 'lunas', NULL, NULL, 'tunai', '7000', '', '1', '0', '7000', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -1026,6 +1037,13 @@ CREATE TABLE `t_pembelian_umum_barang` (
   `pembelian_umum_barang_harga` text NOT NULL,
   `pembelian_umum_barang_subtotal` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `t_pembelian_umum_barang`
+--
+
+INSERT INTO `t_pembelian_umum_barang` (`pembelian_umum_barang_id`, `pembelian_umum_barang_nomor`, `pembelian_umum_barang_barang`, `pembelian_umum_barang_qty`, `pembelian_umum_barang_potongan`, `pembelian_umum_barang_harga`, `pembelian_umum_barang_subtotal`) VALUES
+(39, 'PU-27052024-1', 'Nasi Goreng', '1', '0', '7,000', '7,000');
 
 -- --------------------------------------------------------
 
@@ -1073,7 +1091,8 @@ INSERT INTO `t_penjualan` (`penjualan_id`, `penjualan_proses`, `penjualan_so`, `
 (6, '0', 1, '0000-00-00', 'PJ-22052024-9', '27', '2024-05-22', '09:06:19', '2024-05-22', 'tunai', '', 'tidak', '', '60500', '11', '60500', '1', 'belum', NULL, '0', NULL, '0', NULL, 0),
 (7, '0', 1, '0000-00-00', 'PJ-22052024-10', '27', '2024-05-22', '12:40:22', '2024-05-22', 'tunai', '', 'iya', '', '577500', '11', '577500', '1', 'belum', NULL, '0', NULL, '0', NULL, 0),
 (8, '1', 1, '0000-00-00', 'PJ-22052024-11', '27', '2024-05-22', '12:56:51', '2024-05-22', 'tunai', 'di proses produk', 'tidak', '', '2049720', '11', '2049720', '1', 'lunas', '2024-05-22', '49720', 'lunas', '0', NULL, 0),
-(9, '1', 0, '0000-00-00', 'PJ-22052024-12', '27', '2024-05-22', '13:04:20', '2024-05-22', 'tunai', 'di edit', 'tidak', '', '20000000', '11', '20000000', '1', 'belum', NULL, '0', NULL, '0', NULL, 0);
+(9, '1', 0, '0000-00-00', 'PJ-22052024-12', '27', '2024-05-22', '13:04:20', '2024-05-22', 'tunai', 'di edit', 'tidak', '', '20000000', '11', '20000000', '1', 'lunas', '2024-05-28', '20000000', 'lunas', '0', NULL, 0),
+(12, '1', 0, '0000-00-00', 'PJ-27052024-10', '20', '2024-05-27', '23:03:17', '0000-00-00', 'tunai', 'penjualan', 'iya', '', '660000', '0', '660000', '0', 'lunas', NULL, '0', NULL, '0', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -1124,7 +1143,8 @@ INSERT INTO `t_penjualan_barang` (`penjualan_barang_id`, `penjualan_barang_nomor
 (56, 'PJ-06052024-1', '6', '360.00', '30.00', '0', '0', '2', '60.00', '11000', '', '660000'),
 (57, 'PJ-06052024-2', '6', '450.00', '30.00', '0', '0', '2', '60.00', '11000', '0', '660000'),
 (58, 'PJ-06052024-2', '7', '120.00', '15.40', '0', '0', '5', '77.00', '18000', '', '1386000'),
-(64, 'PJ-22052024-11', '6', '518.68', '5.89', '0', '0', '12', '70.68', '29000', '', '2049720');
+(64, 'PJ-22052024-11', '6', '518.68', '5.89', '0', '0', '12', '70.68', '29000', '', '2049720'),
+(65, 'PJ-27052024-10', '6', '448.00', '30.00', '0', '0', '2', '60.00', '11000', '0', '660000');
 
 -- --------------------------------------------------------
 
@@ -1387,7 +1407,7 @@ CREATE TABLE `t_produk_gudang` (
 --
 
 INSERT INTO `t_produk_gudang` (`produk_gudang_id`, `produk_gudang_gudang`, `produk_gudang_produk`, `produk_gudang_panjang`, `produk_gudang_hps`, `produk_gudang_harga`, `produk_gudang_tanggal`) VALUES
-(16, '0', '6', '448.00', '0', '11000', '2024-01-30'),
+(16, '0', '6', '388.00', '0', '11000', '2024-01-30'),
 (51, '0', '7', '43.00', '0', '0', '2024-05-06'),
 (52, '0', '8', '450.00', '0', '0', '2024-05-06'),
 (53, '0', '38', '120.00', '0', '0', '2024-05-06'),
@@ -1402,10 +1422,10 @@ INSERT INTO `t_produk_gudang` (`produk_gudang_id`, `produk_gudang_gudang`, `prod
 
 CREATE TABLE `t_rekening` (
   `rekening_id` int(11) NOT NULL,
-  `rekening_nama` text NOT NULL,
-  `rekening_bank` text NOT NULL,
-  `rekening_no` text NOT NULL,
-  `rekening_tanggal` date NOT NULL DEFAULT curdate(),
+  `rekening_nama` text DEFAULT NULL,
+  `rekening_bank` text DEFAULT NULL,
+  `rekening_no` text DEFAULT NULL,
+  `rekening_tanggal` date DEFAULT curdate(),
   `rekening_hapus` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -1416,6 +1436,40 @@ CREATE TABLE `t_rekening` (
 INSERT INTO `t_rekening` (`rekening_id`, `rekening_nama`, `rekening_bank`, `rekening_no`, `rekening_tanggal`, `rekening_hapus`) VALUES
 (7, 'BCA', '8', '158895555', '2023-09-27', 0),
 (8, 'BRI', '1', '03430108888303', '2023-12-17', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `t_saldo`
+--
+
+CREATE TABLE `t_saldo` (
+  `saldo_id` int(11) NOT NULL,
+  `saldo_nomor` text DEFAULT NULL,
+  `saldo_sumber` set('langsung','pembelian','penjualan') DEFAULT NULL,
+  `saldo_nominal` text DEFAULT '0',
+  `saldo_rekening` text DEFAULT NULL,
+  `saldo_jenis` set('setor','tarik') DEFAULT NULL,
+  `saldo_keterangan` text DEFAULT NULL,
+  `saldo_tanggal` timestamp NULL DEFAULT current_timestamp(),
+  `saldo_hapus` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `t_saldo`
+--
+
+INSERT INTO `t_saldo` (`saldo_id`, `saldo_nomor`, `saldo_sumber`, `saldo_nominal`, `saldo_rekening`, `saldo_jenis`, `saldo_keterangan`, `saldo_tanggal`, `saldo_hapus`) VALUES
+(3, '', 'langsung', '100000', 'tunai', 'setor', 'tunai', '2024-05-24 11:39:53', 0),
+(4, '', 'langsung', '50000', 'tunai', 'tarik', 'tarik saldo', '2024-05-27 04:07:07', 0),
+(6, NULL, 'langsung', '300000', 'tunai', 'setor', 'tambah 300 ribu', '2024-05-27 05:50:18', 0),
+(12, 'PU-27052024-1', 'pembelian', '7000', 'tunai', 'tarik', 'transaksi pembelian umum', '2024-05-27 13:22:33', 0),
+(13, NULL, 'langsung', '30000', '7', 'setor', 'dari BCA', '2024-05-27 13:30:10', 0),
+(15, 'PJ-27052024-10', 'penjualan', '660000', 'tunai', 'setor', 'transaksi penjualan', '2024-05-27 16:03:17', 0),
+(16, 'PB-27052024-15', 'pembelian', '183000', 'tunai', 'tarik', 'transaksi pembelian bahan', '2024-05-27 16:07:37', 0),
+(17, 'PB-02102023-1', 'pembelian', '416419600', 'tunai', 'tarik', 'transaksi pembelian bahan', '2024-05-27 16:07:42', 0),
+(18, 'PB-20102023-3', 'pembelian', '559434650', 'tunai', 'tarik', 'transaksi pembelian bahan', '2024-05-28 06:51:36', 0),
+(19, 'PJ-22052024-12', 'penjualan', '20000000', 'tunai', 'setor', 'transaksi penjualan', '2024-05-28 07:33:36', 0);
 
 -- --------------------------------------------------------
 
@@ -1670,6 +1724,12 @@ ALTER TABLE `t_rekening`
   ADD PRIMARY KEY (`rekening_id`);
 
 --
+-- Indexes for table `t_saldo`
+--
+ALTER TABLE `t_saldo`
+  ADD PRIMARY KEY (`saldo_id`);
+
+--
 -- Indexes for table `t_satuan`
 --
 ALTER TABLE `t_satuan`
@@ -1743,7 +1803,7 @@ ALTER TABLE `t_jurnal_old`
 -- AUTO_INCREMENT for table `t_kartu`
 --
 ALTER TABLE `t_kartu`
-  MODIFY `kartu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=179;
+  MODIFY `kartu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=192;
 
 --
 -- AUTO_INCREMENT for table `t_karyawan`
@@ -1785,13 +1845,13 @@ ALTER TABLE `t_pajak`
 -- AUTO_INCREMENT for table `t_pembelian`
 --
 ALTER TABLE `t_pembelian`
-  MODIFY `pembelian_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `pembelian_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `t_pembelian_barang`
 --
 ALTER TABLE `t_pembelian_barang`
-  MODIFY `pembelian_barang_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `pembelian_barang_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT for table `t_pembelian_partial`
@@ -1803,25 +1863,25 @@ ALTER TABLE `t_pembelian_partial`
 -- AUTO_INCREMENT for table `t_pembelian_umum`
 --
 ALTER TABLE `t_pembelian_umum`
-  MODIFY `pembelian_umum_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `pembelian_umum_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `t_pembelian_umum_barang`
 --
 ALTER TABLE `t_pembelian_umum_barang`
-  MODIFY `pembelian_umum_barang_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `pembelian_umum_barang_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `t_penjualan`
 --
 ALTER TABLE `t_penjualan`
-  MODIFY `penjualan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `penjualan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `t_penjualan_barang`
 --
 ALTER TABLE `t_penjualan_barang`
-  MODIFY `penjualan_barang_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `penjualan_barang_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `t_penyesuaian`
@@ -1869,7 +1929,13 @@ ALTER TABLE `t_produk_gudang`
 -- AUTO_INCREMENT for table `t_rekening`
 --
 ALTER TABLE `t_rekening`
-  MODIFY `rekening_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `rekening_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `t_saldo`
+--
+ALTER TABLE `t_saldo`
+  MODIFY `saldo_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `t_satuan`
