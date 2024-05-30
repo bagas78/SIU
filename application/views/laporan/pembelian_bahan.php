@@ -12,7 +12,7 @@
             <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
               <i class="fa fa-times"></i></button>
           </div>
-        </div>
+        </div> 
         <div class="box-body">
 
           <div class="row py-4">
@@ -79,7 +79,7 @@ $(document).ready(function() {
     //datatables
     table = $('#table').DataTable({ 
 
-        "bPaginate": false,
+        "bPaginate": true,
         "bFilter": false,
         "scrollX": true, 
         "dom": "Bfrtip",

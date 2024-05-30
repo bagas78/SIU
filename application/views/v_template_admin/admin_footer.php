@@ -2,7 +2,7 @@
 <footer class="main-footer">
   <span>Copyright &nbsp; JTM &nbsp; Group &nbsp; 2023</span>
 </footer>
- 
+  
 <!-- Bootstrap 3.3.7 -->
 <script src="<?php echo base_url() ?>assets/bootstrap/dist/js/bootstrap.min.js"></script>
 
@@ -12,7 +12,7 @@
 <!-- jvectormap -->
 <script src="<?php echo base_url() ?>adminLTE/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
 <script src="<?php echo base_url() ?>adminLTE/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-
+ 
 <!-- jQuery Knob Chart -->
 <script src="<?php echo base_url() ?>adminLTE/bower_components/jquery-knob/dist/jquery.knob.min.js"></script>
 
@@ -259,6 +259,12 @@ setTimeout(function(){ $('.sidebar-menu').removeAttr('hidden'); }, 1000);
 //notifikasi
 function notif(){
 
+    //cek sesi login
+    if ('<?=$this->session->userdata('login');?>' != 1) {
+
+        window.location.replace('<?=base_url('login/index/1')?>');
+    }
+
     //reminder bahan
     $.get('<?=base_url('reminder/bahan_notif')?>', function(data) {
         
@@ -284,7 +290,39 @@ function notif(){
     }, 100);
 }
 
-//notif();
+notif();
+
+
+//ubah text to number
+// $(document).ready(function () {
+//     $(".text-number").keypress(function (e) {
+//        var length = jQuery(this).val().length;
+//      if(length > 100) {
+//           return false;
+//      } else if(e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+//           return false;
+//      } else if((length == 0) && (e.which == 48)) {
+//           return false;
+//      }
+//     });
+// });
+
+function text_number(){
+
+    //number format
+    $.each($('.text-number'), function() {
+       
+       var val = $(this).val();
+       $(this).val(number_format(val));
+
+    });
+
+setTimeout(function() {
+        text_number();
+    }, 100);
+}
+
+text_number();
 
 </script>
 

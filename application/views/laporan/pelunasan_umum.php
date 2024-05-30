@@ -74,7 +74,7 @@ $(document).ready(function() {
     //datatables
     table = $('#table').DataTable({ 
 
-        "bPaginate": false,
+        "bPaginate": true,
         "bFilter": false,
         "scrollX": true, 
         "dom": "Bfrtip",

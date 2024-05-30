@@ -58,7 +58,7 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] = array('upload_builder','stok','query_builder', 'database', 'session');
+$autoload['libraries'] = array('saldo_stok','partial_stok','upload_builder','stok','kartu','query_builder', 'database','session');
 
 /*
 | -------------------------------------------------------------------

@@ -13,12 +13,12 @@ class M_produk extends CI_Model {
 
 	//urutan 
 	var $order = array('produk_id' => 'desc'); 
-
+ 
 	public function __construct()
 	{
 		parent::__construct();
 		$this->load->database();
-	}
+	} 
 
 	private function _get_datatables_query()
 	{
@@ -62,6 +62,7 @@ class M_produk extends CI_Model {
 	function get_datatables($where)
 	{	
 		$this->db->select('*');
+		$this->db->select('IFNULL(gudang_nama, "-") AS gudang');
 		$this->db->select('IFNULL(SUM(produk_gudang_panjang), 0) AS stok');
 		$this->db->select('IFNULL(produk_gudang_harga, 0) AS harga');
 		$this->_get_datatables_query();

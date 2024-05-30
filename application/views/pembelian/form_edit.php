@@ -10,57 +10,54 @@
   $('#status').val('<?=@$data['pembelian_status']?>').change();
   $('#keterangan').val('<?=@$data['pembelian_keterangan']?>');
   $('#ekspedisi').val('<?=@$data['pembelian_ekspedisi']?>').change(); 
-  $('#ekspedisi_total').val('<?=@$data['pembelian_ekspedisi_total']?>');
+  $('#ekspedisi_total').val(number_format('<?=@$data['pembelian_ekspedisi_total']?>'));
 
   if ('<?=@$data['pembelian_lampiran']?>' != '') {
     $('#previewImg').attr('src', '<?=base_url('assets/gambar/pembelian/'.@$data['pembelian_lampiran'])?>');
   }
 
   //get pembelian
-  $.get('<?=base_url('pembelian/get_pembelian/'.$data['pembelian_nomor'])?>', function(data) {
-    var json = JSON.parse(data);
+  $.ajax({
+      url: "<?=base_url('pembelian/get_pembelian/'.$data['pembelian_nomor'])?>",
+      type: 'GET',
+      dataType: 'json', 
+      success: function(json) {
+ 
+        //clone
+        for (var num = 1; num <= json.length - 1; num++) {
+          
+          //paste 
+          clone();
 
-    //clone
-    for (var num = 1; num <= json.length - 1; num++) {
-      
-      //paste 
-      clone();
+          //blank new input
+          $('#copy').find('select').val('');
+          $('#copy').find('.berat').val(0);
+          $('#copy').find('.panjang').val(1);
+          $('#copy').find('.harga').val(0);
+          $('#copy').find('.total').val(0);
+          $('#copy').find('.satuan').html('');
+        
+        }
 
-      //blank new input
-      $('#copy').find('select').val('');
-      $('#copy').find('.berat').val(0);
-      $('#copy').find('.panjang').val(1);
-      $('#copy').find('.harga').val(0);
-      $('#copy').find('.total').val(0);
-      $('#copy').find('.satuan').html('');
-    
-    }
+        $.each(json, function(index, val) {
+          
+          var i = index+1;
 
-    $.each(json, function(index, val) {
-      
-      var i = index+1;
+          //insert value
+          $('#copy:nth-child('+i+') > td:nth-child(1) > select').val(val.pembelian_barang_barang);
+          $('#copy:nth-child('+i+') > td:nth-child(2) > input').val(val.pembelian_barang_berat);
+          $('#copy:nth-child('+i+') > td:nth-child(3) > input').val(val.pembelian_barang_panjang);
+          $('#copy:nth-child('+i+') > td:nth-child(4) > input').val(number_format(val.pembelian_barang_harga));
 
-      //insert value
-      $('#copy:nth-child('+i+') > td:nth-child(1) > select').val(val.pembelian_barang_barang);
-      $('#copy:nth-child('+i+') > td:nth-child(2) > input').val(val.pembelian_barang_berat);
-      $('#copy:nth-child('+i+') > td:nth-child(3) > input').val(val.pembelian_barang_panjang);
-      $('#copy:nth-child('+i+') > td:nth-child(4) > input').val(val.pembelian_barang_harga);
+          //ppn 0
+          if (<?=@$data['pembelian_ppn']?> == 0) {
+            $('.check').removeAttr('checked').change();
+          }
 
-      //ppn 0
-      if (<?=@$data['pembelian_ppn']?> == 0) {
-        $('.check').removeAttr('checked').change();
+        });
+
       }
 
     });
-
-    //number format
-    $.each($('input[type=number]'), function() {
-       
-       var val = $(this).val();
-       $(this).val(number_format(val));
-
-    });
-
-  });
 
 </script>

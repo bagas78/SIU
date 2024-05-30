@@ -30,12 +30,12 @@ body {
 span {
   line-height: 1.6;
 }
-
 body {
   /*font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 400;*/
   /*font-family: 'Open Sans', sans-serif;*/
-  font: 1000 14px Manrope;
+  /*font: 1000 14px Manrope;*/
+  font: 14px sans-serif;
   /*font-size: 15px;*/
   overflow-x: hidden;
   overflow-y: auto;
@@ -74,7 +74,7 @@ body {
   -moz-transition: -moz-transform 0.3s ease-in-out, margin 0.3s ease-in-out;
   -o-transition: -o-transform 0.3s ease-in-out, margin 0.3s ease-in-out;
   transition: transform 0.3s ease-in-out, margin 0.3s ease-in-out;
-  margin-left: 230px;
+  margin-left: 215px;
   z-index: 820;
 }
 .layout-top-nav .content-wrapper,
@@ -109,15 +109,14 @@ body {
 }
 .main-footer {
   margin-left: 0; 
-  position:fixed;
+  position:static;
   bottom:0;
   width:100%;
   background: #17A2B8;
-
   padding: 8px;
   color: white;
   border-top: 1px solid #d2d6de;
-  padding-left: 33%;
+  /*text-align: center;*/
 }
 
 /* Fixed layout */
@@ -163,7 +162,7 @@ body {
 /* Content */
 .content {
   min-height: 250px;
-  padding: 2%;
+  padding: 1%;
   /*margin-right: auto;
   margin-left: auto;
   padding-left: 15px;
@@ -219,7 +218,7 @@ a:focus {
   -o-transition: margin-left 0.3s ease-in-out;
   transition: margin-left 0.3s ease-in-out;
   margin-bottom: 0;
-  margin-left: 230px;
+  margin-left: 215px;
   border: none;
   min-height: 50px;
   border-radius: 0;
@@ -440,7 +439,7 @@ a:focus {
   left: 0;
   padding-top: 10px;
   min-height: 100%;
-  width: 230px;
+  width: 215px;
   z-index: 810;
   -webkit-transition: -webkit-transform 0.3s ease-in-out, width 0.3s ease-in-out;
   -moz-transition: -moz-transform 0.3s ease-in-out, width 0.3s ease-in-out;
@@ -1564,7 +1563,7 @@ a:focus {
   position: relative;
   border-radius: 3px;
   background: #fff;
-  margin-bottom: 5vh;
+  margin-bottom: 1%;
   width: 100%;
   box-shadow: 0 1px 1px rgb(0 0 0 / 10%);
 }

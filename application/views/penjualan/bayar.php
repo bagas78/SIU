@@ -18,7 +18,7 @@
           <table id="example" class="table table-bordered table-hover" style="width: 100%;">
                 <thead>
                 <tr>
-                  <th>Nomor</th>
+                  <th>Nomor</th> 
                   <th>Supplier</th>
                   <th>Jatuh Tempo</th>
                   <th>Kekurangan</th>
@@ -105,7 +105,7 @@
 
 function auto(){
 
-    $.each($('.kekurangan'), function(index, val) {
+    $.each($('.kekurangan'), function(index, val) { 
        var val = $(this).text();
        if (val == '0') {
         $(this).closest('tr').find('.btn').attr('disabled', 'true');

@@ -17,7 +17,7 @@
           <i class="fa fa-times"></i></button>  
       </div>
 
-      <div hidden id="search" align="left">
+      <div hidden id="search" align="left"> 
         <div class="col-md-3 col-xs-11 row" style="margin-bottom: 0;">
           <input id="po" type="text" class="form-control" placeholder="-- Tarik transaksi PO --">
         </div>
@@ -45,6 +45,10 @@
             <div class="form-group">
               <label>Merk</label>
               <input type="text" name="merk" class="form-control" required id="merk">
+            </div>
+            <div class="form-group">
+              <label>Konversi <small class="text-danger">Hanya untuk jenis produk batang</small></label>
+              <input type="text" name="konversi" class="form-control text-number" id="konversi">
             </div>
           </div>
 

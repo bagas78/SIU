@@ -8,8 +8,8 @@
 
     <!-- Main content --> 
     <section class="content">
- 
-      <div class="box"> 
+  
+      <div class="box">   
         <div class="box-header with-border">
 
           <div class="box-tools pull-right">
@@ -17,7 +17,7 @@
               <i class="fa fa-minus"></i></button>
             <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
               <i class="fa fa-times"></i></button>
-          </div>
+          </div> 
         </div>
         <div class="box-body">
           <h4 align="center" class="tit">Antrean Pesanan (SO)</h4>
@@ -27,6 +27,8 @@
               <th>Nomor</th>
               <th>Pelanggan</th>
               <th>Tanggal</th>
+              <th>Print</th>
+              <th width="60">Proses</th>
               <th width="60">Action</th>
             </tr>
             </thead>
@@ -60,7 +62,8 @@
               <th>Nomor</th>
               <th>Shift</th>
               <th>Tanggal</th>
-              <th width="60">Action</th>
+              <th>Print</th>
+              <th width="30">Action</th>
             </tr>
             </thead>
             <tbody>
@@ -82,7 +85,7 @@
             "order":[], 
             "scrollX": true, 
             
-            "ajax": {
+            "ajax": { 
                 "url": "<?=site_url('produksi/so_get_data')?>",
                 "type": "GET"
             },
@@ -100,10 +103,23 @@
                             return "<span>"+moment(data).format("DD/MM/YYYY LT")+"</span>";
                           }
                         },
+                        { "data": "produksi_nomor",
+                        "render":  
+                        function( data ) {
+                            return "<a href='<?php echo base_url('penjualan/faktur_produksi/')?>"+data+"'><button class='btn btn-xs btn-warning'><i class='fa fa-file-text' title='cetak'></i> Antrian SO</button></a> ";
+                          }
+                        },
+                        { "data": "produksi_proses",
+                      "render": 
+                      function( data ) {
+                          return "<span hidden class='so_proses'>"+data+"</span><span class='so_icon'></span>";
+                        }
+                      },
                         { "data": "produksi_id",
                         "render": 
                         function( data ) {
-                            return "<a class='view' href='<?php echo base_url('produksi/proses_so/')?>"+data+"'><button class='btn btn-xs btn-primary'>Proses <i class='fa fa-angle-double-right'></i></button></a>";
+                            return "<a class='so_action_proses' href='<?php echo base_url('produksi/proses_so/')?>"+data+"'><button class='btn btn-xs btn-primary'>Proses <i class='fa fa-angle-double-right'></i></button></a>"+
+                            "<a class='so_action_view' href='<?php echo base_url('produksi/proses_view/')?>"+data+"'><button class='btn btn-xs btn-success'>View <i class='fa fa-angle-double-right'></i></button></a>";
                           }
                         },
                         
@@ -142,12 +158,17 @@
                             return "<span>"+moment(data).format("DD/MM/YYYY  LT")+"</span>";
                           }
                         },
+                        { "data": "produksi_nomor",
+                        "render":  
+                        function( data ) {
+                            return "<a href='<?php echo base_url('produksi/cetak3/')?>"+data+"'><button class='btn btn-xs btn-warning'><i class='fa fa-file-text' title='cetak'></i> Produksi detail</button></a> ";
+                          }
+                        },
                         { "data": "produksi_id",
                         "render": 
                         function( data ) {
                             return "<a class='view' href='<?php echo base_url('produksi/proses_view/')?>"+data+"'><button class='btn btn-xs btn-success'><i class='fa fa-eye'></i></button></a> "+
-                              "<button onclick=del('<?php echo base_url('produksi/proses_delete/')?>"+data+"') class='btn btn-xs btn-danger'><i class='fa fa-trash'></i></button> "+
-                              "<a class='view' href='<?php echo base_url('produksi/laporan/')?>"+data+"'><button class='btn btn-xs btn-warning'><i class='fa fa-file-text'></i></button></a>";
+                              "<button onclick=del('<?php echo base_url('produksi/proses_delete/')?>"+data+"') class='btn btn-xs btn-danger'><i class='fa fa-trash'></i></button> ";
                           }
                         },
                         
@@ -163,5 +184,30 @@ function filter($val){
   var table2 = $('#example2').DataTable();
   table2.search($val).draw();
 }
+
+function auto() { 
+
+    //ubah button so proses
+    $.each($('.so_proses'), function() {
+      
+       var proses = $(this);
+       var icon = $(this).closest('tr').find('.so_icon');
+       var i = $(this).text();
+       if (i == '1') {
+          proses.closest('tr').find('.so_action_proses').attr('hidden', true);
+          icon.html('<center><i class="fa fa-check"></i></center>');
+       }else{
+          proses.closest('tr').find('.so_action_view').attr('hidden', true);
+          icon.html('<center><i class="fa fa-refresh"></i></center>');
+       }
+
+    });
+
+    setTimeout(function() {
+        auto();
+    }, 100);
+  }
+
+  auto();  
 
 </script>

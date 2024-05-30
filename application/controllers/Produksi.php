@@ -2,20 +2,20 @@
 class Produksi extends CI_Controller{
 
 	function __construct(){
-		parent::__construct();
+		parent::__construct(); 
 		$this->load->model('m_produksi'); 
 		$this->load->model('m_produk');
-		$this->load->model('m_bahan');
-	}    
+		$this->load->model('m_bahan'); 
+	}     
 
 ///////////////// atribut //////////////////////////////////////////
 
-	function serverside($where,$model){
+	function serverside($where,$model){ 
 	    $data = $this->$model->get_datatables($where);
 		$total = $this->$model->count_all($where);
 		$filter = $this->$model->count_filtered($where);
 
-		$output = array( 
+		$output = array(  
 			"draw" => $_GET["draw"],
 			"recordsTotal" => $total,
 			"recordsFiltered" => $filter,
@@ -47,12 +47,14 @@ class Produksi extends CI_Controller{
 	    return $data;
 	}
 
-	function save($redirect, $so = 0)
+	function save($redirect, $proses, $so = 0, $so_tanggal = '')
 	{
 		$nomor = strip_tags(@$_POST['nomor']);
 		$grandtotal = strip_tags(str_replace(',', '', @$_POST['grandtotal']));
 		$set1 = array(
+					'produksi_proses' => $proses,
 					'produksi_so' => $so,
+					'produksi_so_tanggal' => $so_tanggal,
 					'produksi_pekerja' => json_encode(@$_POST['pekerja']),
 					'produksi_nomor' => $nomor,
 					'produksi_tanggal' => strip_tags(@$_POST['tanggal']),
@@ -84,44 +86,50 @@ class Produksi extends CI_Controller{
 		$merge = array_merge($set1,$arr);
 		$db = $this->query_builder->add('t_produksi',$merge);
 
-		//produk
-		$produk = @$_POST['produk'];
-		$jum_produk = count($produk);
-
-		for ($i = 0; $i < $jum_produk; ++$i) {
-
-			$set2 = array(
-						'produksi_produksi_nomor' => $nomor,
-						'produksi_produksi_produk' => strip_tags(@$produk[$i]),
-						'produksi_produksi_panjang' => strip_tags(str_replace(',', '', @$_POST['produk_panjang'][$i])),			
-					);	
-
-			$this->query_builder->add('t_produksi_produksi',$set2);
-		}
-
-		//bahan baku
-		$barang = @$_POST['bahan'];
-		$jum_barang = count($barang);
-		
-		for ($i = 0; $i < $jum_barang; ++$i) {
-
-			$set3 = array(
-						'produksi_barang_nomor' => $nomor,
-						'produksi_barang_barang' => strip_tags(@$barang[$i]),
-						'produksi_barang_panjang' => strip_tags(str_replace(',', '', @$_POST['panjang'][$i])),
-						'produksi_barang_stok' => strip_tags(str_replace(',', '', @$_POST['stok'][$i])),
-						'produksi_barang_harga' => strip_tags(str_replace(',', '', @$_POST['harga'][$i])),	
-						'produksi_barang_total' => strip_tags(str_replace(',', '', @$_POST['total'][$i])),	
-						'produksi_barang_berat' => strip_tags(str_replace(',', '', @$_POST['berat'][$i])),	
-					);	
-
-			$this->query_builder->add('t_produksi_barang',$set3);
-		}
-
 		if ($db == 1) {
+
+			//produk
+			$produk = @$_POST['produk'];
+			$jum_produk = count($produk);
+
+			for ($i = 0; $i < $jum_produk; ++$i) {
+
+				$set2 = array(
+							'produksi_produksi_nomor' => $nomor,
+							'produksi_produksi_produk' => strip_tags(@$produk[$i]),
+							'produksi_produksi_konversi' => strip_tags(str_replace(',', '', @$_POST['produk_konversi'][$i])),
+							'produksi_produksi_batang' => strip_tags(str_replace(',', '', @$_POST['produk_batang'][$i])),
+							'produksi_produksi_panjang' => strip_tags(str_replace(',', '', @$_POST['produk_panjang'][$i])),
+							'produksi_produksi_qty' => strip_tags(str_replace(',', '', @$_POST['produk_qty'][$i])),	
+							'produksi_produksi_panjang_total' => strip_tags(str_replace(',', '', @$_POST['produk_panjang_total'][$i])),			
+						);	
+
+				$this->query_builder->add('t_produksi_produksi',$set2);
+			}
+
+			//bahan baku
+			$barang = @$_POST['bahan'];
+			$jum_barang = count($barang);
 			
-			//update
+			for ($i = 0; $i < $jum_barang; ++$i) {
+
+				$set3 = array(
+							'produksi_barang_nomor' => $nomor,
+							'produksi_barang_barang' => strip_tags(@$barang[$i]),
+							'produksi_barang_panjang' => strip_tags(str_replace(',', '', @$_POST['panjang'][$i])),
+							'produksi_barang_stok' => strip_tags(str_replace(',', '', @$_POST['stok'][$i])),
+							'produksi_barang_harga' => strip_tags(str_replace(',', '', @$_POST['harga'][$i])),	
+							'produksi_barang_total' => strip_tags(str_replace(',', '', @$_POST['total'][$i])),	
+							'produksi_barang_berat' => strip_tags(str_replace(',', '', @$_POST['berat'][$i])),	
+						);	
+
+				$this->query_builder->add('t_produksi_barang',$set3);
+			}
+			
+			//update dan kartu stok
 			$this->stok->transaksi();
+			$this->kartu->add($nomor, 'produksi_keluar');
+			$this->kartu->add($nomor, 'produksi_masuk');
 
 			// jurnal
 			// $this->stok->jurnal($nomor, 9, 'debit', 'biaya produksi', $total);
@@ -135,11 +143,24 @@ class Produksi extends CI_Controller{
 		redirect(base_url('produksi/'.$redirect));
 	}
 
-	function update($redirect, $so = 0){
+	function update($redirect, $so = 0, $so_proses){
 
-		$nomor = strip_tags(@$_POST['nomor']);
+		//get id
+		$xnomor = strip_tags(@$_POST['nomor']);
+		$xdb = $this->query_builder->view_row("SELECT * FROM t_produksi WHERE produksi_nomor = '$xnomor'");
+		$id = $xdb['produksi_id'];
+
+		if ($so == 1 && $so_proses == 1) {
+			//SO jadi PR
+			$nomor = str_replace('SO', 'PR', $xnomor);
+		}else{
+			//tetap
+			$nomor = $xnomor;
+		}
+
 		$grandtotal = strip_tags(str_replace(',', '', @$_POST['grandtotal']));
 		$set1 = array(
+					'produksi_proses' => $so_proses,
 					'produksi_so' => $so,
 					'produksi_pekerja' => json_encode(@$_POST['pekerja']),
 					'produksi_nomor' => $nomor,
@@ -170,50 +191,56 @@ class Produksi extends CI_Controller{
 		}
 		
 		$merge = array_merge($set1,$arr);
-		$db = $this->query_builder->update('t_produksi',$merge,['produksi_nomor' => $nomor]);
-
-		//delete
-		$this->query_builder->delete('t_produksi_produksi', ['produksi_produksi_nomor' => $nomor]);
-		$this->query_builder->delete('t_produksi_barang', ['produksi_barang_nomor' => $nomor]);
-
-		//produk
-		$produk = @$_POST['produk'];
-		$jum_produk = count($produk);
-
-		for ($i = 0; $i < $jum_produk; ++$i) {
-
-			$set2 = array(
-						'produksi_produksi_nomor' => $nomor,
-						'produksi_produksi_produk' => strip_tags(@$produk[$i]),
-						'produksi_produksi_panjang' => strip_tags(str_replace(',', '', @$_POST['produk_panjang'][$i])),			
-					);	
-
-			$this->query_builder->add('t_produksi_produksi',$set2);
-		}
-
-		//bahan baku
-		$barang = @$_POST['bahan'];
-		$jum_barang = count($barang);
-		
-		for ($i = 0; $i < $jum_barang; ++$i) {
-
-			$set3 = array(
-						'produksi_barang_nomor' => $nomor,
-						'produksi_barang_barang' => strip_tags(@$barang[$i]),
-						'produksi_barang_panjang' => strip_tags(str_replace(',', '', @$_POST['panjang'][$i])),
-						'produksi_barang_berat' => strip_tags(str_replace(',', '', @$_POST['berat'][$i])),
-						'produksi_barang_stok' => strip_tags(str_replace(',', '', @$_POST['stok'][$i])),	
-						'produksi_barang_harga' => strip_tags(str_replace(',', '', @$_POST['harga'][$i])),
-						'produksi_barang_total' => strip_tags(str_replace(',', '', @$_POST['total'][$i])),		
-					);	
-
-			$this->query_builder->add('t_produksi_barang',$set3);
-		}
+		$db = $this->query_builder->update('t_produksi',$merge,['produksi_id' => $id]);
 
 		if ($db == 1) {
+
+			//delete
+			$this->query_builder->delete('t_produksi_produksi', ['produksi_produksi_nomor' => $nomor]);
+			$this->query_builder->delete('t_produksi_barang', ['produksi_barang_nomor' => $nomor]);
+
+			//produk
+			$produk = @$_POST['produk'];
+			$jum_produk = count($produk);
+
+			for ($i = 0; $i < $jum_produk; ++$i) {
+
+				$set2 = array(
+							'produksi_produksi_nomor' => $nomor,
+							'produksi_produksi_produk' => strip_tags(@$produk[$i]),
+							'produksi_produksi_konversi' => strip_tags(str_replace(',', '', @$_POST['produk_konversi'][$i])),
+							'produksi_produksi_batang' => strip_tags(str_replace(',', '', @$_POST['produk_batang'][$i])),
+							'produksi_produksi_panjang' => strip_tags(str_replace(',', '', @$_POST['produk_panjang'][$i])),
+							'produksi_produksi_qty' => strip_tags(str_replace(',', '', @$_POST['produk_qty'][$i])),	
+							'produksi_produksi_panjang_total' => strip_tags(str_replace(',', '', @$_POST['produk_panjang_total'][$i])),			
+						);	
+
+				$this->query_builder->add('t_produksi_produksi',$set2);
+			}
+
+			//bahan baku
+			$barang = @$_POST['bahan'];
+			$jum_barang = count($barang);
 			
-			//update
+			for ($i = 0; $i < $jum_barang; ++$i) {
+
+				$set3 = array(
+							'produksi_barang_nomor' => $nomor,
+							'produksi_barang_barang' => strip_tags(@$barang[$i]),
+							'produksi_barang_panjang' => strip_tags(str_replace(',', '', @$_POST['panjang'][$i])),
+							'produksi_barang_berat' => strip_tags(str_replace(',', '', @$_POST['berat'][$i])),
+							'produksi_barang_stok' => strip_tags(str_replace(',', '', @$_POST['stok'][$i])),	
+							'produksi_barang_harga' => strip_tags(str_replace(',', '', @$_POST['harga'][$i])),
+							'produksi_barang_total' => strip_tags(str_replace(',', '', @$_POST['total'][$i])),		
+						);	
+
+				$this->query_builder->add('t_produksi_barang',$set3);
+			}
+			
+			//update kartu stok
 			$this->stok->transaksi();
+			$this->kartu->add($nomor, 'produksi_keluar');
+			$this->kartu->add($nomor, 'produksi_masuk');
 
 			// jurnal
 			// $this->stok->jurnal($nomor, 9, 'debit', 'biaya produksi', $total);
@@ -231,10 +258,14 @@ class Produksi extends CI_Controller{
 		$where = ["{$table}_id" => $id];
 		$db = $this->query_builder->update("t_{$table}",$set,$where);
 
+		//get nomor
+		$get = $this->db->query("SELECT * FROM t_{$table} WHERE {$table}_id = '$id'")->row_array();
+
 		if ($db == 1) {
 
 			//update
 			$this->stok->transaksi();
+			$this->kartu->delete($get[$table.'_nomor']);
 
 			$this->session->set_flashdata('success','Data berhasil di hapus');
 		} else {
@@ -251,15 +282,15 @@ class Produksi extends CI_Controller{
 		$output = $this->query_builder->view("SELECT * FROM t_produksi AS a JOIN t_produksi_barang AS b ON a.produksi_nomor = b.produksi_barang_nomor WHERE a.produksi_nomor = '$nomor'");
 		echo json_encode($output);
 	}
-	function lasoran($id){
+	function laporan($id){
 
-		$data['title'] = 'lasoran';
+		$data['title'] = 'laporan';
 
 		$data['produk_data'] = $this->query_builder->view("SELECT * FROM t_produksi AS a LEFT JOIN t_produksi_produksi AS b ON a.produksi_nomor = b.produksi_produksi_nomor LEFT JOIN t_produk AS c ON b.produksi_produksi_produk = c.produk_id WHERE a.produksi_id = '$id'");
 
 		$data['bahan_data'] = $this->query_builder->view("SELECT * FROM t_produksi AS a JOIN t_produksi_barang AS b ON a.produksi_nomor = b.produksi_barang_nomor JOIN t_produksi AS c ON a.produksi_nomor = c.produksi_nomor  LEFT JOIN t_bahan AS d ON b.produksi_barang_barang = d.bahan_id LEFT JOIN t_gudang AS e ON a.produksi_gudang = e.gudang_id LEFT JOIN t_mesin AS f ON a.produksi_mesin = f.mesin_id LEFT JOIN t_produksi_produksi AS g ON a.produksi_nomor = g.produksi_produksi_nomor WHERE a.produksi_id = '$id'");
 
-		$this->load->view('produksi/lasoran', $data); 
+		$this->load->view('produksi/laporan', $data); 
 	}
 	function get_bahan($id, $gudang){
 
@@ -281,9 +312,9 @@ class Produksi extends CI_Controller{
 	}
 	function get_bahan_baku($nomor){
 
-		$data = $this->query_builder->view("SELECT * FROM t_produksi_barang as a JOIN t_produksi as b ON a.produksi_barang_nomor = b.produksi_nomor JOIN t_bahan as c ON a.produksi_barang_barang = c.bahan_id JOIN t_satuan as d ON c.bahan_satuan = d.satuan_id WHERE a.produksi_barang_nomor = '$nomor'");
+		$data = $this->query_builder->view("SELECT * FROM t_produksi_barang as a LEFT JOIN t_produksi as b ON a.produksi_barang_nomor = b.produksi_nomor LEFT JOIN t_bahan as c ON a.produksi_barang_barang = c.bahan_id LEFT JOIN t_satuan as d ON c.bahan_satuan = d.satuan_id WHERE a.produksi_barang_nomor = '$nomor'");
 
-		echo json_encode($data);
+		echo json_encode($data); 
 	}
 
 ////////////////////////////////////////////////
@@ -311,7 +342,10 @@ class Produksi extends CI_Controller{
 	function rotate_save(){
 		
 		$redirect = 'proses';
-		$this->update($redirect, $so = 0);
+		$proses = 1;
+		$so = 1;
+
+		$this->update($redirect, $so, $proses);
 	}
 ///////////////////////////////////////////////////
 
@@ -330,7 +364,8 @@ class Produksi extends CI_Controller{
 	function proses_get_data()
 	{
 		$model = 'm_produksi';
-		$where = array('produksi_hapus' => '0', 'produksi_so' => '0');
+		$where = array('produksi_hapus' => '0', 'produksi_proses' => '1');
+
 		$output = $this->serverside($where, $model);
 		echo json_encode($output);
 	}
@@ -360,18 +395,20 @@ class Produksi extends CI_Controller{
 	
 	function proses_save()
 	{
+		$proses = 1;
 		$redirect = 'proses';
+		$so = 0;
 		$nomor = strip_tags(@$_POST['nomor']);
 		
 		$cek = $this->query_builder->count("SELECT * FROM t_produksi WHERE produksi_nomor = '$nomor'");
 		if ($cek > 0) {
 			//update
-			$this->update($nomor, $redirect);
+			$this->update($redirect, $so, $proses);
 
 		} else {
 
 			//save
-			$this->save($redirect);
+			$this->save($redirect, $proses);
 		}
 	}
 
@@ -383,7 +420,8 @@ class Produksi extends CI_Controller{
 	}
 	function proses_edit($id){
 
-		$data = $this->edit($id);
+		$data = $this->add();
+		$data['data'] = $this->query_builder->view_row("SELECT * FROM t_produksi WHERE produksi_id = '$id'");
 
 		$data['url'] = 'proses';
 
@@ -404,12 +442,55 @@ class Produksi extends CI_Controller{
 		$data["title"] = 'proses';
 	    $this->load->view('v_template_admin/admin_header',$data);
 	    $this->load->view('produksi/form');
-	    $this->load->view('produksi/form_edit');
+	    $this->load->view('produksi/form_edit'); 
 	    $this->load->view('v_template_admin/admin_footer');
 	}
-	function proses_update($nomor){
+
+	function proses_update(){
 		$redirect = 'proses';
-		$this->update($nomor, $redirect);
+		$this->update($redirect);
+	}
+
+	// cetak produksi
+	function cetak($id){
+
+		$data = $this->add();
+		$data['data'] = $this->query_builder->view_row("SELECT * FROM t_produksi WHERE produksi_id = '$id'");
+
+		$data['url'] = 'proses';
+		$data['view'] = 1;
+
+		$data["title"] = 'proses';
+	    $this->load->view('v_template_admin/admin_header',$data);
+	    $this->load->view('produksi/form');
+	    $this->load->view('produksi/form_edit'); 
+	    $this->load->view('v_template_admin/admin_footer');
+	}
+	function cetak2($id){
+
+		$data = $this->add();
+		$data['data'] = $this->query_builder->view_row("SELECT * FROM t_produksi WHERE produksi_id = '$id'");
+
+		$data['url'] = 'proses';
+		$data['view'] = 1;
+
+		$data["title"] = 'proses';
+	    $this->load->view('produksi/produksi-cetak',$data);
+	}	
+
+	function cetak3($nomor){
+		$data['data_produksi'] = $this->query_builder->view_row("
+			SELECT * FROM t_produksi as A
+			LEFT JOIN t_mesin as B ON A.produksi_mesin = B.mesin_id
+			WHERE produksi_nomor = '$nomor'");
+		$data['data'] = $this->query_builder->view("
+			SELECT * FROM t_produksi_barang as a 
+			LEFT JOIN t_produksi as b ON a.produksi_barang_nomor = b.produksi_nomor 
+			LEFT JOIN t_bahan as c ON a.produksi_barang_barang = c.bahan_id 
+			LEFT JOIN t_satuan as d ON c.bahan_satuan = d.satuan_id 
+			WHERE a.produksi_barang_nomor = '$nomor'");
+
+		$this->load->view('produksi/produksi-cetak3',$data);
 	}
 
 }

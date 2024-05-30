@@ -26,6 +26,7 @@
                   <th>Nomor</th>
                   <th>Supplier</th>
                   <th>Jatuh Tempo</th>
+                  <th>Total</th>
                   <th>Pelunasan</th>
                   <th>Keterangan</th>
                   <th width="1">Action</th>
@@ -72,6 +73,12 @@
                         "render": 
                         function( data ) {
                             return "<span>"+moment(data).format("DD/MM/YYYY")+"</span>";
+                          }
+                        },
+                        { "data": "pembelian_grandtotal",
+                        "render": 
+                        function( data ) {
+                            return "<span>"+number_format(data)+"</span>";
                           }
                         },
                         { "data": "pembelian_pelunasan",

@@ -1,3 +1,5 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style type="text/css">
   .tit{
     font-size: 20px;
@@ -8,11 +10,11 @@
     font-weight: 800;
   }
 </style>
-
+ 
 <!-- Main content -->  
 <section class="content"> 
 
-  <div class="box">
+  <div class="box"> 
     <div class="box-header with-border">
 
       <div class="box-tools pull-right">
@@ -77,7 +79,9 @@
     </div>
     <div class="box-body">
 
-      <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+      <!-- <div id="chartContainer" style="height: 300px; width: 100%;"></div> -->
+      <h3 align="center">Grafik Pembelian | Penjualan <b><?=($filter == 1)? date('M Y'):'Tahun '.date('Y')?></b></h3>
+      <canvas id="myChart"></canvas>
 
     </div>
   </div>
@@ -107,12 +111,12 @@
                         { "data": "berat",
                         "render":
                         function(data) {
-                          return "<span>"+number_format(data)+"</span>";
+                          return "<span class='berat'>"+number_format(data)+"</span>";
                         }},
                         { "data": "panjang",
                         "render":
                         function(data) {
-                          return "<span>"+number_format(data)+"</span>";
+                          return "<span class='panjang'>"+number_format(data)+"</span>";
                         }}
                     ],
         });
@@ -143,7 +147,7 @@
                         { "data": "panjang",
                         "render":
                         function(data) {
-                          return "<span>"+number_format(data)+"</span>";
+                          return "<span class='panjang'>"+number_format(data)+"</span>";
                         }}
                         
                     ],
@@ -151,100 +155,161 @@
 
     });
 
+function auto() { 
+
+    //replace .00
+     $.each($('.berat, .panjang'), function(index, val) {
+        
+        var val = $(this).text();
+        $(this).text(val.replaceAll('.00', ''));
+
+     });
+
+    setTimeout(function() {
+        auto();
+    }, 100);
+  }
+
+  auto(); 
+
 </script>
 
 <script>
-window.onload = function () {
+  const ctx = document.getElementById('myChart');
 
-var options = {
-  theme: "light2",
-  exportEnabled: false,
-  animationEnabled: true,
-  title:{
-    text: "Grafik Pembelian | Penjualan Tahun <?=date('Y')?>"
-  },
-  subtitles: [{
-    text: ""
-  }],
-  axisX: {
-    title: ""
-  },
-  axisY: {
-    title: "",
-    titleFontColor: "#4F81BC",
-    lineColor: "#4F81BC",
-    labelFontColor: "#4F81BC",
-    tickColor: "#4F81BC"
-  },
-  axisY2: {
-    title: "",
-    titleFontColor: "#C0504E",
-    lineColor: "#C0504E",
-    labelFontColor: "#C0504E",
-    tickColor: "#C0504E"
-  },
-  axisY3: {
-    title: "",
-    titleFontColor: "#C0504E",
-    lineColor: "#C0504E",
-    labelFontColor: "#C0504E",
-    tickColor: "#C0504E"
-  },
-  toolTip: {
-    shared: true
-  },
-  legend: {
-    cursor: "pointer",
-    itemclick: toggleDataSeries
-  },
-  data: [{
-    type: "spline",
-    name: "Pembelian",
-    showInLegend: true,
-    xValueFormatString: "<?=(@$filter == 1)?'DD MMMM YYYY':'MMMM YYYY' ?>",
-    yValueFormatString: "Rp #,##0.#",
-    dataPoints: [
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: [
 
-      <?php foreach($pembelian_data as $p): ?>
+      <?php if ($filter == 2): ?>
+        
+        //bulanan
+        'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
 
-        { x: new Date(<?=$p['tahun'].','.$p['bulan'].','.$p['tanggal']?>),  y: <?=$p['total']?> },
+      <?php else: ?>
 
-      <?php endforeach ?>
-    
-    ]
-  },
-  {
-    type: "spline",
-    name: "Penjualan",
-    axisYType: "secondary",
-    showInLegend: true,
-    xValueFormatString: "<?=(@$filter == 1)?'DD MMMM YYYY':'MMMM YYYY' ?>",
-    yValueFormatString: "Rp #,##0.#",
-    dataPoints: [
-      
-      <?php foreach($penjualan_data as $p): ?>
+        //harian
+        <?php for ($i=1; $i < $hari + 1; $i++):?>
 
-        { x: new Date(<?=$p['tahun'].','.$p['bulan'].','.$p['tanggal']?>),  y: <?=$p['total']?> },
+          <?php echo $i.','; ?>
 
-      <?php endforeach ?>
+        <?php endfor ?>
+        
+      <?php endif ?>
 
-    ]
-  }]
-};
+      ],
+      datasets: [{
+        label: 'Pembelian',
+        data: [
+                
+                <?php if ($filter == 2): ?>
 
-$("#chartContainer").CanvasJSChart(options);
+                  //bulanan
+                  <?php for ($i=1; $i < 13; $i++):?>
 
-function toggleDataSeries(e) {
-  if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-    e.dataSeries.visible = false;
-  } else {
-    e.dataSeries.visible = true;
-  }
-  e.chart.render();
-}
+                    <?php foreach ($pembelian_data as $v): ?>
+                      
+                      <?php if ($v['bulan'] == $i): ?>
+                      
+                        <?=$v['total'].','; ?>
 
-}
+                      <?php else: ?>
+                        
+                        <?='0'.','; ?>
 
+                      <?php endif ?>
+
+                    <?php endforeach ?>
+
+                  <?php endfor ?>
+
+                <?php else: ?>
+
+                  //harian
+                  <?php for ($i=1; $i < $hari + 1; $i++):?>
+
+                    <?php foreach ($pembelian_data as $v): ?>
+
+                      <?php if ($v['tanggal'] == $i): ?>
+                      
+                        <?=$v['total'].','; ?>
+
+                      <?php else: ?>
+                        
+                        <?='0'.','; ?>
+
+                      <?php endif ?>
+
+                    <?php endforeach ?>
+
+                  <?php endfor ?>
+
+                <?php endif ?>
+
+              ],
+        borderWidth: 1
+      },
+      {
+        label: 'Penjualan',
+        data: [
+                
+                <?php if ($filter == 2): ?>
+
+                  //bulanan
+                  <?php for ($i=1; $i < 13; $i++):?>
+
+                    <?php foreach ($penjualan_data as $v): ?>
+                      
+                      <?php if ($v['bulan'] == $i): ?>
+                      
+                        <?=$v['total'].','; ?>
+
+                      <?php else: ?>
+                        
+                        <?='0'.','; ?>
+
+                      <?php endif ?>
+
+                    <?php endforeach ?>
+
+                  <?php endfor ?>
+
+                <?php else: ?>
+
+                  //harian
+                  <?php for ($i=1; $i < $hari + 1; $i++):?>
+
+                    <?php foreach ($penjualan_data as $v): ?>
+
+                      <?php if ($v['tanggal'] == $i): ?>
+                      
+                        <?=$v['total'].','; ?>
+
+                      <?php else: ?>
+                        
+                        <?='0'.','; ?>
+
+                      <?php endif ?>
+
+                    <?php endforeach ?>
+
+                  <?php endfor ?>
+
+                <?php endif ?>
+
+              ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
 </script>
 
 

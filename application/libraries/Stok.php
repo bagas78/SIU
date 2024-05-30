@@ -1,21 +1,21 @@
  <?php
 class Stok{ 
-  protected $sql;
+  protected $sql; 
   function __construct(){
         $this->sql = &get_instance();
   } 
   function cek($table, $where){
-    $this->sql->db->where($where);
+    $this->sql->db->where($where); 
     return $this->sql->db->get($table)->num_rows(); 
   }
 
   /////////////////////////////////////////// atribut /////////////////////////////////////////////////
- 
-  function pembelian(){  
-    //sum stok bahan update
-      $pembelian = $this->sql->db->query("SELECT SUM(b.pembelian_barang_berat) AS berat, SUM(b.pembelian_barang_panjang) AS panjang, b.pembelian_barang_barang AS bahan, a.pembelian_gudang AS gudang, SUM(b.pembelian_barang_total) AS total, SUM(b.pembelian_barang_ekspedisi) AS ekspedisi, a.pembelian_hapus AS hapus FROM t_pembelian AS a JOIN t_pembelian_barang AS b ON a.pembelian_nomor = b.pembelian_barang_nomor WHERE a.pembelian_po = 0 AND a.pembelian_hapus = 0 GROUP BY a.pembelian_gudang, b.pembelian_barang_barang")->result_array();
+  
+  function pembelian(){     
+    //sum stok bahan update 
+      $pembelian = $this->sql->db->query("SELECT SUM(b.pembelian_barang_berat_cek) AS berat, SUM(b.pembelian_barang_panjang_cek) AS panjang, b.pembelian_barang_barang AS bahan, a.pembelian_gudang AS gudang, SUM(b.pembelian_barang_total) AS total, SUM(b.pembelian_barang_ekspedisi) AS ekspedisi, a.pembelian_hapus AS hapus FROM t_pembelian AS a JOIN t_pembelian_barang AS b ON a.pembelian_nomor = b.pembelian_barang_nomor WHERE a.pembelian_proses = 1 AND a.pembelian_hapus = 0 GROUP BY a.pembelian_gudang, b.pembelian_barang_barang")->result_array();
 
-      $bahan_baku = $this->sql->db->query("SELECT a.produksi_hapus AS hapus, produksi_gudang AS gudang ,b.produksi_barang_barang AS bahan, SUM(b.produksi_barang_panjang) AS panjang, ROUND(SUM(b.produksi_barang_berat * b.produksi_barang_panjang), 2) AS berat FROM t_produksi AS a JOIN t_produksi_barang AS b ON a.produksi_nomor = b.produksi_barang_nomor WHERE a.produksi_so = 0 AND a.produksi_hapus = 0 GROUP BY b.produksi_barang_barang, a.produksi_gudang")->result_array();
+      $bahan_baku = $this->sql->db->query("SELECT a.produksi_hapus AS hapus, produksi_gudang AS gudang ,b.produksi_barang_barang AS bahan, SUM(b.produksi_barang_panjang) AS panjang, ROUND(SUM(b.produksi_barang_berat * b.produksi_barang_panjang), 2) AS berat FROM t_produksi AS a JOIN t_produksi_barang AS b ON a.produksi_nomor = b.produksi_barang_nomor WHERE a.produksi_proses = 1 AND a.produksi_hapus = 0 GROUP BY b.produksi_barang_barang, a.produksi_gudang")->result_array();
 
       //pembelian update stok produk
       
@@ -37,11 +37,15 @@ class Stok{
         if ($hapus != null && $hapus == 0) {
 
           //atribute
-          $hpp = round(($total + $ekspedisi) / $berat, 2);
+          if ($berat > 0) {
+            $hpp = ($total + $ekspedisi) / $berat;
+          }else{
+            $hpp = 0;
+          }
 
           //cek panjang 0
           if ($panjang != 0) {
-            $permeter = round($berat / $panjang, 2);
+            $permeter = $berat / $panjang;
           }else{
             $permeter = 0;
           } 
@@ -95,7 +99,7 @@ class Stok{
 
   function produksi(){
 
-    $produksi = $this->sql->db->query("SELECT SUM(b.produksi_produksi_panjang) AS panjang, b.produksi_produksi_produk AS produk, a.produksi_hapus AS hapus, a.produksi_gudang AS gudang, SUM(a.produksi_grandtotal) AS total FROM t_produksi AS a JOIN t_produksi_produksi AS b ON a.produksi_nomor = b.produksi_produksi_nomor WHERE a.produksi_so = 0 AND a.produksi_hapus = 0 GROUP BY a.produksi_gudang, b.produksi_produksi_produk")->result_array();
+    $produksi = $this->sql->db->query("SELECT SUM(b.produksi_produksi_panjang_total) AS panjang, b.produksi_produksi_produk AS produk, a.produksi_hapus AS hapus, a.produksi_gudang AS gudang, SUM(a.produksi_grandtotal) AS total FROM t_produksi AS a JOIN t_produksi_produksi AS b ON a.produksi_nomor = b.produksi_produksi_nomor WHERE a.produksi_hapus = 0 AND a.produksi_proses = 1 GROUP BY a.produksi_gudang, b.produksi_produksi_produk")->result_array();
 
     //kurangi penjualan
 
@@ -145,7 +149,7 @@ class Stok{
 
   function penjualan()
   {
-    $db = $this->sql->db->query("SELECT a.penjualan_hapus AS hapus, a.penjualan_gudang AS gudang ,b.penjualan_barang_barang AS produk, b.penjualan_barang_panjang AS panjang FROM t_penjualan AS a JOIN t_penjualan_barang AS b ON a.penjualan_nomor = b.penjualan_barang_nomor AND a.penjualan_so = 0 AND a.penjualan_hapus = 0 GROUP BY b.penjualan_barang_barang, a.penjualan_gudang, a.penjualan_nomor")->result_array();
+    $db = $this->sql->db->query("SELECT a.penjualan_hapus AS hapus, a.penjualan_gudang AS gudang ,b.penjualan_barang_barang AS produk, b.penjualan_barang_panjang_total AS panjang FROM t_penjualan AS a JOIN t_penjualan_barang AS b ON a.penjualan_nomor = b.penjualan_barang_nomor AND a.penjualan_proses = 1 AND a.penjualan_hapus = 0 GROUP BY b.penjualan_barang_barang, a.penjualan_gudang, a.penjualan_nomor")->result_array();
 
       foreach ($db as $value) {
        
@@ -156,9 +160,11 @@ class Stok{
 
         if ($hapus != null && $hapus == 0) {
 
-          //kurangi stok produk
+            //kurangi stok produk
+          /*
           $this->sql->db->query("UPDATE t_produk_gudang SET produk_gudang_panjang = produk_gudang_panjang - {$panjang} WHERE produk_gudang_produk = {$produk} AND produk_gudang_gudang = {$gudang}"); 
-
+          */
+          $this->sql->db->query("UPDATE t_produk_gudang SET produk_gudang_panjang = produk_gudang_panjang - {$panjang} WHERE produk_gudang_produk = {$produk} AND produk_gudang_gudang = 0"); 
         }
       }
 
@@ -171,6 +177,30 @@ class Stok{
     $this->pembelian();
     $this->produksi(); 
     $this->penjualan();
+  }
+
+  // hydev
+  function jurnal($nomor, $akun, $type, $keterangan, $nominal, $tanggal = '') {
+
+    if (@$tanggal) {
+      $tgl = $tanggal;
+    } else {
+      $tgl = date('Y-m-d');
+    }
+
+    $set = array(
+                  'jurnal_nomor' => $nomor,
+                  'jurnal_akun' => $akun,
+                  'jurnal_keterangan' => $keterangan,
+                  'jurnal_type' => $type,
+                  'jurnal_nominal' => $nominal,
+                  'jurnal_tanggal' => $tgl,
+                );
+
+    $this->sql->db->set($set);
+    $this->sql->db->insert('t_jurnal');
+
+    return;
   }
 
 }

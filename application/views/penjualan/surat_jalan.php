@@ -17,8 +17,12 @@
   	<script src="<?php echo base_url() ?>assets/js/number_format.js"></script>
 
   	<style type="text/css">
+  		body {
+  			font-size: 12px;
+  		}
   		.box{
-  			padding: 3%;
+  			/* padding: 3%; */
+  			padding: 0.5%;
   		}
   		.tit{ 
   			border-width: 2px;
@@ -34,6 +38,9 @@
 		table .r {
 		  text-align: right;
 		}
+		p {
+			margin: 0;
+		}
   	</style>
 
 </head>
@@ -42,136 +49,77 @@
 	<div class="box">
 
 		<div class="col-md-6 col-xs-6">
-			<h5><?=strtoupper($set['logo_nama'])?></h5>
-			<p><?=strtoupper($set['logo_alamat'])?></p>
+			<h5>Nama Customer : <?=@$data[0]['kontak_nama']?></h5>
+			<p><?=@$data[0]['kontak_alamat']?>, Telp : <?=@$data[0]['kontak_tlp']?></p>
 			<p>Telp : <?=$set['logo_telp']?></p>
 		</div>
 
 		<div class="col-md-6 col-xs-6" style="text-align: right;">
-			<p><?=@$data[0]['penjualan_nomor']?></p>
-			<p><?=date_format(date_create(@$data[0]['penjualan_tanggal']), 'd M Y')?></p>
+			<h3><b>SURAT JALAN</b></h3>
+			<p>Nomor : <?=@$data[0]['penjualan_nomor']?></p>
+			<p>Tanggal : <?=date_format(date_create(@$data[0]['penjualan_tanggal']), 'd M Y')?></p>
 			<p><?=@$data[0]['user_name']?></p>
+			<p>Ekspedisi : <?=@$data[0]['ekspedisi_nama']?> ( <?=@$data[0]['ekspedisi_kode']?> )</p>
 		</div>	
-
-		<div class="col-md-12 col-xs-12" align="center">
-			<span class="tit">SURAT JALAN</span>
-			<br/><br/>
-		</div>	
-
-		<table class="table table-borderless">
-			<tr>
-				<td style="border-top: 0;">Nama Customer : <?=@$data[0]['kontak_nama']?></td>
-			</tr>
-			<tr>
-				<td style="border-top: 0;"><?=@$data[0]['kontak_alamat']?>, Telp : <?=@$data[0]['kontak_tlp']?></td>
-			</tr>
-			<tr>
-				<td style="border-top: 0;">Ekspedisi : <?=@$data[0]['ekspedisi_nama']?> ( <?=@$data[0]['ekspedisi_kode']?> )</td>
-			</tr>
-		</table>	
 		
 		<table class="table table-responsive table-borderless">
 			<thead>
 				<tr>
 					<th width="70">No</th>
 					<th>Produk</th>
+					
 					<th class="r">Panjang</th>
-					<th class="r">Potongan</th>
-					<th class="r">Harga</th>
-					<th class="r">Subtotal</th>
+					<th class="r">Qty</th>
 				</tr>
 			</thead>
 			<tbody>
 				<?php $i = 1; ?>
 				<?php foreach (@$data as $val): ?>
 
+					<?php
+						$qty2 = @$val['penjualan_barang_batang'] + @$val['penjualan_barang_qty'];
+					?>
+
 					<tr>
 						<td><?=$i?></td>
 						<td><?=@$val['produk_nama']?></td>
-						<td class="r"><?=number_format(@$val['penjualan_barang_qty'])?> Mtr</td>
-						<td class="r"><span class="potongan"><?=number_format(@$val['penjualan_barang_potongan'])?></span> Mtr</td>
-						<td class="r">Rp. <span class="harga"><?=number_format(@$val['penjualan_barang_harga'])?></span></td>
-						<td class="r">Rp. <span class="subtotal"><?=number_format(@$val['penjualan_barang_subtotal'])?></span></td>
+
+						<td class="r">
+						<?php echo (@$val['penjualan_barang_batang'] == 0) ? $val['penjualan_barang_panjang'] . " Mtr" : '0'; ?>
+						</td>
+
+						<td class="r"><?=@$qty2 ?></td>
 					</tr>
 				
 				<?php $i++ ?>
 				<?php endforeach ?>
-
-				<tr>
-					<td colspan="4"></td>
-					<td class="r">Potongan</td>
-					<td class="r">Rp. <span id="total_potongan"></span></td>
-				</tr>
-				<tr>
-					<td colspan="4" style="border-top: 0;">Barang sudah diterima dengan baik dan dengan jumlah yang benar, Terima kasih.</td>
-					<td class="r" style="border-top: 0;">PPN <?=@$data[0]['penjualan_ppn']?>%</td>
-					<td class="r" style="border-top: 0;">Rp. <span id="ppn"></span></td>
-				</tr>
-				<tr>
-					<td colspan="4" style="border-top: 0;">Nama Security :</td>
-					<td class="r" style="border-top: 0;">Total Akhir</td>
-					<td class="r" style="border-top: 0;">Rp. <span id="total_akhir"></span></td>
-				</tr>
-				<tr>
-					<td colspan="4" style="border-top: 0;">Nama Sopir :</td>
-				</tr>
-
 			</tbody>
 		</table>
 
-		<div class="clearfix"></div>
+		<table class="table">
+			<tr>
+				<td colspan="2" style="border-top: 0;"></td>
+				<td colspan="2" style="border-top: 0;"><b>Barang sudah diterima dengan baik dan dengan jumlah yang benar, Terima kasih.</b></td>
 
-		<div class="col-md-4 col-xs-4">
-			<center style="float: left;">
-			<p>Penerima</p>
-			<br/><br/><br/>
-			<p>( ___________________  )</p>
-			</center>
-		</div>
+			</tr>
 
-		<div class="col-md-4 col-xs-4">
-			<center>
-			<p>Yang Menyerahkan</p>
-			<br/><br/><br/>
-			<p>( ___________________  )</p>
-			</center>
-		</div>
+			<tr>
+				<td width="50%" colspan="2" style="border-top: 0;">Nama Security :</td>
+				<td style="border-top: 0;">Penerima:</td>
+				<td style="border-top: 0;">Yang menyerahkan:</td>
+			</tr>
+			<tr>
+				<td colspan="2" style="border-top: 0;">Nama Sopir :</td>
+				<td style="border-top: 0;">Nama</td>
+				<td style="border-top: 0;">Nama</td>
+			</tr>
+		</table>
 
 	</div>
 
 </body>
 </html>
-
 <script type="text/javascript">
-	
-	var total = 0;
-	var sum = 0;
-	$.each($('.subtotal'), function() {
-		 
-		 total += Number($(this).text().replace(/,/g, ''));
-		 sum += Number($(this).closest('tr').find('.qty').text().replace(/,/g, '')) * Number($(this).closest('tr').find('.harga').text().replace(/,/g, ''));
-		 
-	});
-
-	//potongan
-	var potongan = 0;
-	$.each($('.potongan'), function() {
-		 
-		 potongan += Number($(this).text().replace(/,/g, '')) * Number($(this).closest('tr').find('.harga').text().replace(/,/g, ''));
-		 
-	});
-
-	$('#total_potongan').text(potongan);
-
-	//ppn
-	var ppn = (<?=@$data[0]['penjualan_ppn']?>) * total / 100;
-	$('#ppn').text(number_format(ppn));
-
-	//total akhir
-	var akhir = number_format(ppn + total);
-	$('#total_akhir').text(akhir);
-
-	
 	// print
 	window.print();
     window.onafterprint = back;
@@ -179,5 +127,4 @@
     function back() {
         window.history.back();
     }
-
 </script>

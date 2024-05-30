@@ -4,7 +4,12 @@ class Login extends CI_Controller{
   function __construct(){
     parent::__construct();
   }
-  function index(){
+  function index($sesi = ''){
+
+    if ($sesi == 1) {
+      $this->session->set_flashdata('gagal_sesi', 'Sesi aplikasi telah habis, silahkan login kembali');
+    }
+
     $data['data'] = $this->query_builder->view_row("SELECT * FROM t_logo");
     $this->load->view('login',$data);
   }

@@ -99,4 +99,25 @@ class M_bahan extends CI_Model {
 		return $this->db->count_all_results();
 	}
 
+	// 
+	function get_data_hpp($id_bahan)
+	{
+		$sql = "
+			SELECT 
+				b.pembelian_barang_barang AS bahan, 
+				b.pembelian_barang_nomor AS nomor,
+			    b.pembelian_barang_berat AS berat, 
+			    b.pembelian_barang_panjang AS panjang, 
+			    b.pembelian_barang_total AS total,
+			    b.pembelian_barang_ekspedisi AS ekspedisi,
+			    a.pembelian_gudang AS gudang,
+			    c.bahan_nama,
+			    b.pembelian_barang_harga AS harga
+			FROM t_pembelian AS a 
+			JOIN t_pembelian_barang AS b ON a.pembelian_nomor = b.pembelian_barang_nomor 
+			JOIN t_bahan AS c ON b.pembelian_barang_barang = c.bahan_id
+			WHERE a.pembelian_hapus = 0 AND b.pembelian_barang_barang = '{$id_bahan}'
+		";
+		return $this->db->query($sql)->result();		
+	}
 }

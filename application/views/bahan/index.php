@@ -8,7 +8,7 @@
  
             <div align="left" class="bahan_add row"> 
 
-              <div class="col-md-2">
+              <div class="col-md-2"> 
                 <a href="<?= base_url('bahan/add') ?>"><button class="btn btn-primary form-control"><i class="fa fa-plus"></i> Tambah</button></a>    
               </div>
               <div class="col-md-2 row">
@@ -59,6 +59,34 @@
       </div>
       <!-- /.box -->
 
+      <style type="text/css">
+        table#hpp tr td {
+          border: 1px solid black; border-collapse: collapse; padding: 0.5em 0.75em;
+        }
+      </style>
+
+      <div id="dialog" title="HPP Bahan" style="max-width: 600px;">
+        <table id="hpp" class="innerTable" style="border: 1px solid black; border-collapse: collapse;">
+          <thead>
+              <tr class="infoHead">
+                  <td>No Pembelian</td>
+                  <td>Nama Bahan</td>
+                  <td>Harga Bahan</td>                  
+                  <td>Berat</td>
+                  <td>Expedisi</td>
+              </tr>               
+          </thead>
+          <tbody>
+              <tr hidden>
+                  <td>xxxx</td>
+                  <td>xxxx</td>
+                  <td>xxxx</td>
+                  <td>xxxx</td>
+              </tr>
+          </tbody>
+        </table>
+      </div>
+
 <script type="text/javascript">
     var table;
     $(document).ready(function() {
@@ -86,12 +114,12 @@
                         { "data": "berat",
                         "render":
                         function(data) {
-                          return "<span>"+number_format(data)+"</span>";
+                          return "<span class='berat'>"+number_format(data)+"</span>";
                         }},
                         { "data": "panjang",
                         "render":
                         function(data) {
-                          return "<span>"+number_format(data)+"</span>";
+                          return "<span class='panjang'>"+number_format(data)+"</span>";
                         }},
                         { "data": "bahan_harga",
                         "render":
@@ -99,10 +127,10 @@
                             return "<span class='harga'>"+number_format(data)+"</span>"
                           }
                         },
-                        { "data": "hpp",
+                        { "data": {hpp : "hpp", bahan_id : "bahan_id"},
                         "render":
                           function(data) {
-                            return "<span class='harga'>"+number_format(data)+"</span>"
+                            return "<button onclick='myFunction("+data.bahan_id+")'><span class='harga'>"+number_format(data.hpp)+"</span></button>"
                           }
                         },
                         { "data": "bahan_kategori"},
@@ -140,6 +168,14 @@ function auto(){
           $(this).removeClass('kode');
        }
 
+       //replace .00
+       $.each($('.berat, .panjang'), function(index, val) {
+          
+          var val = $(this).text();
+          $(this).text(val.replaceAll('.00', ''));
+
+       });
+
     });
 
     setTimeout(function() {
@@ -148,5 +184,85 @@ function auto(){
   }
 
   auto();
+
+</script>
+
+<script>
+  // script hpp dialog
+  function myFunction(id) {
+    $.ajax({
+        url : '<?=site_url('bahan/tes');?>',
+        type : 'GET',
+        data : {
+            'bahan_id' : id
+        },
+        dataType:'json',
+        success : function(data) {     
+          /*         
+            alert('Data: '+data);
+           */
+
+          $( "#dialog" ).dialog({
+            width: 500,
+            close: function( event, ui ) {
+                 console.log('closed');
+                 $( "#hpp tbody tr" ).remove();
+             },
+          });
+
+          var sumBerat = 0;
+          var sumExpedisi = 0;
+
+          let json = data;
+          for(let i = 0; i < json.length; i++) {
+              let obj = json[i];
+
+              console.log(obj.bahan);
+
+              sumBerat += parseFloat(json[i].berat);;
+              sumExpedisi += round(json[i].ekspedisi, 2);
+
+              var hargaBahan = round(obj.harga, 2);
+
+              $( "#hpp tbody" ).append( "<tr>" +
+              "<td>" + obj.nomor + "</td>" +
+              "<td>" + obj.bahan_nama + "</td>" +
+              "<td>" + obj.harga + "</td>" +              
+              "<td>" + obj.berat + "</td>" +
+              "<td>" + round(obj.ekspedisi, 2) + "</td>" +
+              "</tr>" 
+               );
+          };
+          $( "#hpp tbody" ).append( 
+              "<tr>" +
+              "<td colspan='3'></td>" +
+              "<td>" + sumBerat + "</td>" +
+              "<td>" + sumExpedisi + "</td>" +
+              "</tr>"
+               );
+          $( "#hpp tbody" ).append( 
+              "<tr>" +
+              "<td colspan='5'>HPP = Harga Bahan + (SUM Expsedisi / SUM Berat)</td>" +
+              "</tr>"
+               );
+          $( "#hpp tbody" ).append( 
+              "<tr>" +
+              "<td colspan='5'>HPP = " + hargaBahan + " + ( " + sumExpedisi + " / " + sumBerat + ")</td>" +
+              "</tr>"
+               );
+          $( "#hpp tbody" ).append( 
+              "<tr>" +
+              "<td colspan='5'>HPP = " + round(hargaBahan+(sumExpedisi/sumBerat ), 2) + "</td>" +
+              "</tr>"
+               );
+
+        },
+        error : function(request,error)
+        {
+            alert("Request: "+JSON.stringify(request));
+        }
+    });
+  };
+
 
 </script>

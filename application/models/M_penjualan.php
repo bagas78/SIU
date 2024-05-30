@@ -2,7 +2,7 @@
 
 class M_penjualan extends CI_Model { 
 
-	//nama tabel
+	//nama tabel 
 	var $table = 't_penjualan'; 
 
 	//kolom yang di tampilkan
@@ -10,7 +10,7 @@ class M_penjualan extends CI_Model {
 
 	//kolom yang di tampilkan setelah seacrh
 	var $column_search = array('penjualan_nomor','kontak_nama','penjualan_jatuh_tempo','penjualan_status'); 
- 
+  
 	//urutan 
 	var $order = array('penjualan_id' => 'desc');  
 
@@ -35,7 +35,7 @@ class M_penjualan extends CI_Model {
 				if($i===0) // first loop
 				{
 					$this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
-					$this->db->like($item, $_GET['search']['value']);
+					$this->db->like($item, str_replace(['SO', 'PJ'], '', $_GET['search']['value']));
 				}
 				else
 				{
@@ -67,6 +67,8 @@ class M_penjualan extends CI_Model {
 		if($_GET['length'] != -1)
 		$this->db->where($where);
 		$this->db->join('t_kontak', 't_penjualan.penjualan_pelanggan = t_kontak.kontak_id');
+		$this->db->join('t_penjualan_barang', 't_penjualan_barang.penjualan_barang_nomor = t_penjualan.penjualan_nomor');
+		$this->db->group_by('penjualan_nomor');
 		$this->db->limit($_GET['length'], $_GET['start']);
 		$query = $this->db->get();
 		return $query->result();
@@ -76,7 +78,9 @@ class M_penjualan extends CI_Model {
 	{
 		$this->_get_datatables_query();
 		$this->db->join('t_kontak', 't_penjualan.penjualan_pelanggan = t_kontak.kontak_id');
+		$this->db->join('t_penjualan_barang', 't_penjualan_barang.penjualan_barang_nomor = t_penjualan.penjualan_nomor');
 		$this->db->where($where);
+		$this->db->group_by('penjualan_nomor');
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
@@ -85,7 +89,9 @@ class M_penjualan extends CI_Model {
 	{
 		$this->db->from($this->table);
 		$this->db->join('t_kontak', 't_penjualan.penjualan_pelanggan = t_kontak.kontak_id');
+		$this->db->join('t_penjualan_barang', 't_penjualan_barang.penjualan_barang_nomor = t_penjualan.penjualan_nomor');
 		$this->db->where($where);
+		$this->db->group_by('penjualan_nomor');
 		return $this->db->count_all_results();
 	}
 

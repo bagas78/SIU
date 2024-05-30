@@ -13,6 +13,7 @@ class Produk extends CI_Controller{
 		    $data['title'] = 'Master Produk';
 
 		    $data['gudang_data'] = $this->query_builder->view("SELECT * FROM t_gudang WHERE gudang_hapus = 0");
+		    $data['produk_data'] = $this->query_builder->view("SELECT * FROM t_produk WHERE produk_hapus = 0");
 		    
 		    $this->load->view('v_template_admin/admin_header',$data);
 		    $this->load->view('produk/index');
@@ -31,7 +32,7 @@ class Produk extends CI_Controller{
 		$total = $this->m_produk->count_all($where);
 		$filter = $this->m_produk->count_filtered($where);
 
-		$output = array(
+		$output = array( 
 			"draw" => $_GET['draw'],
 			"recordsTotal" => $total,
 			"recordsFiltered" => $filter,
@@ -69,6 +70,7 @@ class Produk extends CI_Controller{
 							'produk_kode' => $kode,
 							'produk_nama' => strip_tags($_POST['nama']),
 							'produk_merk' => strip_tags($_POST['merk']),
+							'produk_konversi' => strip_tags($_POST['koversi']),
 							'produk_ketebalan' => strip_tags($_POST['ketebalan']),
 							'produk_keterangan' => strip_tags($_POST['keterangan']),
 							'produk_colly' => strip_tags($_POST['colly']),
@@ -116,6 +118,7 @@ class Produk extends CI_Controller{
 							'produk_kode' => strip_tags($_POST['kode']),
 							'produk_nama' => strip_tags($_POST['nama']),
 							'produk_merk' => strip_tags($_POST['merk']),
+							'produk_konversi' => strip_tags($_POST['konversi']),
 							'produk_ketebalan' => strip_tags($_POST['ketebalan']),
 							'produk_keterangan' => strip_tags($_POST['keterangan']),
 							'produk_colly' => strip_tags($_POST['colly']),
@@ -147,6 +150,26 @@ class Produk extends CI_Controller{
 			$this->session->set_flashdata('success','Data berhasil di hapus');
 		} else {
 			$this->session->set_flashdata('gagal','Data gagal di hapus');
+		}
+		
+		redirect(base_url('produk'));
+	}
+	function harga(){
+
+		//value
+		$harga = strip_tags($_POST['harga']);
+		$gudang = strip_tags($_POST['gudang']);
+		$produk = strip_tags($_POST['produk']);
+
+		//update
+		$set = ['produk_gudang_harga' => $harga];
+		$where = ['produk_gudang_gudang' => $gudang, 'produk_gudang_produk' => $produk];
+		$db = $this->query_builder->update('t_produk_gudang',$set,$where);
+		
+		if ($db == 1) {
+			$this->session->set_flashdata('success','Data berhasil di rubah');
+		} else {
+			$this->session->set_flashdata('gagal','Data gagal di rubah');
 		}
 		
 		redirect(base_url('produk'));

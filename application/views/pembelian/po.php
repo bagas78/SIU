@@ -63,10 +63,11 @@
                         { "data": "pembelian_jatuh_tempo",
                         "render": 
                         function( data ) {
-                            return "<span>"+moment(data).format("DD/MM/YYYY")+"</span>";
+                            if (data == '0000-00-00') {var j = '-';}else{var j = moment(data).format("DD/MM/YYYY");}
+                            return "<span>"+j+"</span>";
                           }
                         },
-                        { "data": "pembelian_status",
+                        { "data": "pembelian_status", 
                         "render": 
                         function( data ) {
                             if (data == 'lunas') {var s = 'Lunas';} else {var s = 'Belum Lunas';}

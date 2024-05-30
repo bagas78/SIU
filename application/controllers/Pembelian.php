@@ -5,7 +5,7 @@ class Pembelian extends CI_Controller{
 		parent::__construct();
 		$this->load->model('m_pembelian');
 		$this->load->model('m_pembelian_umum');
-		$this->load->model('m_bahan');
+		$this->load->model('m_bahan');  
 	}   
 
 ///////////////////////// pembelian //////////////////////////////////////////////////
@@ -22,7 +22,7 @@ class Pembelian extends CI_Controller{
 			"data" => $data,
 		);
 
-		return $output;
+		return $output; 
 	} 
 	function add(){
 
@@ -51,10 +51,16 @@ class Pembelian extends CI_Controller{
 		$where = ["{$table}_id" => $id];
 		$db = $this->query_builder->update("t_{$table}",$set,$where);
 
+		//get nomor
+		$get = $this->db->query("SELECT * FROM t_{$table} WHERE {$table}_id = '$id'")->row_array();
+		$nomor = $get[$table.'_nomor'];
+
 		if ($db == 1) {
 			
-			//update stok bahan
+			//update library
 			$this->stok->transaksi();
+			$this->kartu->delete($nomor);
+			$this->saldo_stok->delete($nomor);
 
 			//jurnal
 			// if ($table == 'pembelian') {
@@ -85,33 +91,35 @@ class Pembelian extends CI_Controller{
 		echo json_encode($db);
 	}
 
-	function save($po, $redirect, $po_tanggal = '')
+	function save($po, $proses, $redirect, $po_tanggal = '')
 	{
 		//pembelian
 		$user = $this->session->userdata('id');
 		$nomor = strip_tags($_POST['nomor']);
 		$status = strip_tags($_POST['status']);
-		$grandtotal = strip_tags(str_replace('.', '', $_POST['grandtotal']));
-		$ekspedisi = strip_tags($_POST['ekspedisi_total']);
-		$subtotal = strip_tags(str_replace('.', '', $_POST['subtotal']));
+		$grandtotal = strip_tags(str_replace(',', '', $_POST['grandtotal']));
+		$ekspedisi = strip_tags(str_replace(',', '', $_POST['ekspedisi_total']));
+		$subtotal = strip_tags(str_replace(',', '', $_POST['subtotal']));
+		$pembayaran = strip_tags($_POST['pembayaran']);
 		$koof = $ekspedisi / $subtotal;
 
 		$set1 = array( 
 						'pembelian_user' => $user,
+						'pembelian_proses' => $proses,
 						'pembelian_po' => $po,
 						'pembelian_po_tanggal' => $po_tanggal,
 						'pembelian_nomor' => $nomor,
 						'pembelian_tanggal' => strip_tags($_POST['tanggal']),
-						'pembelian_pembayaran' => strip_tags($_POST['pembayaran']),
+						'pembelian_pembayaran' => $pembayaran,
 						'pembelian_supplier' => strip_tags($_POST['supplier']),
-						'pembelian_ekspedisi' => strip_tags($_POST['ekspedisi']),
+						'pembelian_ekspedisi' => strip_tags(str_replace(',', '', $_POST['ekspedisi'])),
 						'pembelian_gudang' => strip_tags($_POST['gudang']),
 						'pembelian_jatuh_tempo' => strip_tags($_POST['jatuh_tempo']),
 						'pembelian_status' => $status,
 						'pembelian_keterangan' => strip_tags($_POST['keterangan']),
 						'pembelian_subtotal' => $subtotal,
 						'pembelian_ekspedisi_total' => $ekspedisi,
-						'pembelian_ppn' => strip_tags(str_replace('.', '', $_POST['ppn'])),
+						'pembelian_ppn' => strip_tags($_POST['ppn']),
 						'pembelian_grandtotal' => $grandtotal, 
 					);
 
@@ -141,8 +149,8 @@ class Pembelian extends CI_Controller{
 		for ($i = 0; $i < count($barang); ++$i) {
 
 			//atribute
-			$berat = strip_tags(str_replace('.', '', $_POST['berat'][$i]));
-			$panjang = strip_tags(str_replace('.', '', $_POST['panjang'][$i]));
+			$berat = strip_tags($_POST['berat'][$i]);
+			$panjang = strip_tags($_POST['panjang'][$i]);
 			$ekspedisi_total = $koof * $berat;
 
 			$set2 = array(
@@ -150,8 +158,8 @@ class Pembelian extends CI_Controller{
 						'pembelian_barang_barang' => strip_tags($_POST['barang'][$i]),
 						'pembelian_barang_berat' => $berat,
 						'pembelian_barang_panjang' => $panjang,
-						'pembelian_barang_harga' => strip_tags(str_replace('.', '', $_POST['harga'][$i])),
-						'pembelian_barang_total' => strip_tags(str_replace('.', '', $_POST['total'][$i])),
+						'pembelian_barang_harga' => strip_tags(str_replace(',', '', $_POST['harga'][$i])),
+						'pembelian_barang_total' => strip_tags(str_replace(',', '', $_POST['total'][$i])),
 						'pembelian_barang_ekspedisi' => $ekspedisi_total,
 					);	
 
@@ -160,8 +168,15 @@ class Pembelian extends CI_Controller{
 
 		if ($db == 1) {
 			
-			//update stok bahan
+			//update library
+			$this->partial_stok->pembelian();
 			$this->stok->transaksi();
+			$this->kartu->add($nomor, 'pembelian');
+
+			if ($status == 'lunas') {
+				
+				$this->saldo_stok->add($nomor, 'pembelian_bahan');
+			}
 
 			// jurnal
 			// if ($po == 0) {				
@@ -216,18 +231,20 @@ class Pembelian extends CI_Controller{
 		$db = $this->query_builder->view("SELECT * FROM t_pembelian_barang WHERE pembelian_barang_nomor = '$nomor'");
 		echo json_encode($db);
 	}
-	function update($po, $redirect){
+	function update($po, $proses, $redirect){
 		$nomor = strip_tags($_POST['nomor']);
-		$grandtotal = strip_tags(str_replace('.', '', $_POST['grandtotal']));
 		$status = strip_tags($_POST['status']);
-		$ekspedisi = strip_tags($_POST['ekspedisi_total']);
-		$subtotal = strip_tags(str_replace('.', '', $_POST['subtotal']));
+		$grandtotal = strip_tags(str_replace(',', '', $_POST['grandtotal']));
+		$ekspedisi = strip_tags(str_replace(',', '', $_POST['ekspedisi_total']));
+		$subtotal = strip_tags(str_replace(',', '', $_POST['subtotal']));
+		$pembayaran = strip_tags($_POST['pembayaran']);
 		$koof = $ekspedisi / $subtotal;
 
-		$set1 = array(
+		$set1 = array(	
+						'pembelian_proses' => $proses,
 						'pembelian_po' => $po,
 						'pembelian_tanggal' => strip_tags($_POST['tanggal']),
-						'pembelian_pembayaran' => strip_tags($_POST['pembayaran']),
+						'pembelian_pembayaran' => $pembayaran,
 						'pembelian_supplier' => strip_tags($_POST['supplier']),
 						'pembelian_ekspedisi' => strip_tags($_POST['ekspedisi']),
 						'pembelian_gudang' => strip_tags($_POST['gudang']),
@@ -236,7 +253,7 @@ class Pembelian extends CI_Controller{
 						'pembelian_keterangan' => strip_tags($_POST['keterangan']),
 						'pembelian_subtotal' => $subtotal,
 						'pembelian_ekspedisi_total' => $ekspedisi,
-						'pembelian_ppn' => strip_tags(str_replace('.', '', $_POST['ppn'])),
+						'pembelian_ppn' => strip_tags($_POST['ppn']),
 						'pembelian_grandtotal' => $grandtotal, 
 					);
 
@@ -272,8 +289,8 @@ class Pembelian extends CI_Controller{
 		for ($i = 0; $i < $jum; ++$i) {
 
 			//atribute
-			$berat = strip_tags(str_replace('.', '', $_POST['berat'][$i]));
-			$panjang = strip_tags(str_replace('.', '', $_POST['panjang'][$i]));
+			$berat = strip_tags($_POST['berat'][$i]);
+			$panjang = strip_tags($_POST['panjang'][$i]);
 			$ekspedisi_total = $koof * $berat;
 
 			$set2 = array(
@@ -281,8 +298,8 @@ class Pembelian extends CI_Controller{
 						'pembelian_barang_barang' => strip_tags($_POST['barang'][$i]),
 						'pembelian_barang_berat' => $berat,
 						'pembelian_barang_panjang' => $panjang,
-						'pembelian_barang_harga' => strip_tags(str_replace('.', '', $_POST['harga'][$i])),
-						'pembelian_barang_total' => strip_tags(str_replace('.', '', $_POST['total'][$i])),
+						'pembelian_barang_harga' => strip_tags(str_replace(',', '', $_POST['harga'][$i])),
+						'pembelian_barang_total' => strip_tags(str_replace(',', '', $_POST['total'][$i])),
 						'pembelian_barang_ekspedisi' => $ekspedisi_total,
 					);	
 
@@ -291,8 +308,15 @@ class Pembelian extends CI_Controller{
 
 		if ($db == 1) {
 			
-			//update stok
+			//update library
+			$this->partial_stok->pembelian();
 			$this->stok->transaksi();
+			$this->kartu->add($nomor,'pembelian');
+
+			if ($status == 'lunas') {
+				
+				$this->saldo_stok->add($nomor, 'pembelian_bahan');
+			}
 
 			//jurnal
 			// if ($po == 0) {
@@ -335,7 +359,7 @@ class Pembelian extends CI_Controller{
 
 		$data['title'] = 'laporan';
 
-		$data['data'] = $this->query_builder->view("SELECT * FROM t_pembelian as a JOIN t_pembelian_barang as b ON a.pembelian_nomor = b.pembelian_barang_nomor JOIN t_kontak as c ON a.pembelian_supplier = c.kontak_id JOIN t_bahan as d ON b.pembelian_barang_barang = d.bahan_id JOIN t_user as e ON a.pembelian_user = e.user_id JOIN t_satuan as f ON d.bahan_satuan = f.satuan_id WHERE a.pembelian_hapus = 0 AND a.pembelian_id = '$id'");
+		$data['data'] = $this->query_builder->view("SELECT * FROM t_pembelian AS a LEFT JOIN t_pembelian_barang as b ON a.pembelian_nomor = b.pembelian_barang_nomor LEFT JOIN t_kontak as c ON a.pembelian_supplier = c.kontak_id LEFT JOIN t_bahan as d ON b.pembelian_barang_barang = d.bahan_id LEFT JOIN t_user as e ON a.pembelian_user = e.user_id LEFT JOIN t_satuan as f ON d.bahan_satuan = f.satuan_id WHERE a.pembelian_hapus = 0 AND a.pembelian_id = '$id'");
 
 		$this->load->view('pembelian/laporan', $data);
 	}
@@ -395,9 +419,10 @@ class Pembelian extends CI_Controller{
 	function po_save(){
 		
 		$po = 1;
+		$proses = 0;
 		$redirect = 'po';
 		$po_tanggal = date('Y-m-d');
-		$this->save($po, $redirect, $po_tanggal);
+		$this->save($po, $proses, $redirect, $po_tanggal);
 	}
 	function po_edit($id){
 		
@@ -427,8 +452,9 @@ class Pembelian extends CI_Controller{
 	function po_update(){
 
 		$po = 1;
+		$proses = 1;
 		$redirect = 'po';
-		$this->update($po, $redirect);
+		$this->update($po, $proses, $redirect);
 	}
 	function po_proses($id){
 
@@ -446,7 +472,8 @@ class Pembelian extends CI_Controller{
 	function rotate_save(){
 		
 		$redirect = 'utama';
-		$this->update($po = 0, $redirect);
+		$proses = 1;
+		$this->update($po = 0, $proses, $redirect);
 	}
 
 
@@ -497,21 +524,22 @@ class Pembelian extends CI_Controller{
 	function utama_save()
 	{
 		$po = 0;
+		$proses = 1;
 		$redirect = 'utama';
 		$where = strip_tags($_POST['nomor']);
 
 		$cek = $this->query_builder->count("SELECT * FROM t_pembelian WHERE pembelian_nomor = '$where'");
 		if ($cek > 0) {
 			// update
-			$this->update($po, $redirect);
+			$this->update($po, $proses, $redirect);
 
 		} else {
 			// new
-			$this->save($po, $redirect);
+			$this->save($po, $proses, $redirect);
 		}
 
 	}
-	function utama_edit($id){
+	function utama_edit($id){ 
 		
 		$active = 'utama';
 		$data = $this->edit($id, $active);
@@ -539,8 +567,9 @@ class Pembelian extends CI_Controller{
 	function utama_update(){
 
 		$po = 0;
+		$proses = 1;
 		$redirect = 'utama';
-		$this->update($po, $redirect);
+		$this->update($po, $proses, $redirect);
 	}
 	function utama_delete($id){
 		
@@ -598,18 +627,21 @@ class Pembelian extends CI_Controller{
 		//pembelian umum
 		$user = $this->session->userdata('id');
 		$nomor = strip_tags($_POST['nomor']);
-		$total = strip_tags(str_replace('.', '', $_POST['total']));
+		$total = strip_tags(str_replace(',', '', $_POST['total']));
+		$pembayaran = strip_tags($_POST['pembayaran']);
+		$status = strip_tags($_POST['status']);
+
 		$set1 = array(
 						'pembelian_umum_user' => $user,
 						'pembelian_umum_nomor' => $nomor,
 						'pembelian_umum_gudang' => strip_tags($_POST['gudang']),
 						'pembelian_umum_tanggal' => strip_tags($_POST['tanggal']),
-						'pembelian_umum_pembayaran' => strip_tags($_POST['pembayaran']),
+						'pembelian_umum_pembayaran' => $pembayaran,
 						'pembelian_umum_jatuh_tempo' => strip_tags($_POST['jatuh_tempo']),
-						'pembelian_umum_status' => strip_tags($_POST['status']),
+						'pembelian_umum_status' => $status,
 						'pembelian_umum_keterangan' => strip_tags($_POST['keterangan']),
-						'pembelian_umum_qty_akhir' => strip_tags(str_replace('.', '', $_POST['qty_akhir'])),
-						'pembelian_umum_ppn' => strip_tags(str_replace('.', '', $_POST['ppn'])),
+						'pembelian_umum_qty_akhir' => strip_tags($_POST['qty_akhir']),
+						'pembelian_umum_ppn' => strip_tags($_POST['ppn']),
 						'pembelian_umum_total' => $total, 
 					);
 
@@ -636,23 +668,27 @@ class Pembelian extends CI_Controller{
 		//barang
 		$barang = $_POST['barang'];
 		$jum = count($barang);
-
-		print_r($jum);
 		
 		for ($i = 0; $i < $jum; ++$i) {
 			$set2 = array(
 						'pembelian_umum_barang_nomor' => $nomor,
 						'pembelian_umum_barang_barang' => strip_tags($_POST['barang'][$i]),
-						'pembelian_umum_barang_qty' => strip_tags(str_replace('.', '', $_POST['qty'][$i])),
-						'pembelian_umum_barang_potongan' => strip_tags(str_replace('.', '', $_POST['potongan'][$i])),
-						'pembelian_umum_barang_harga' => strip_tags(str_replace('.', '', $_POST['harga'][$i])),
-						'pembelian_umum_barang_subtotal' => strip_tags(str_replace('.', '', $_POST['subtotal'][$i])),
+						'pembelian_umum_barang_qty' => strip_tags($_POST['qty'][$i]),
+						'pembelian_umum_barang_potongan' => strip_tags($_POST['potongan'][$i]),
+						'pembelian_umum_barang_harga' => strip_tags($_POST['harga'][$i]),
+						'pembelian_umum_barang_subtotal' => strip_tags($_POST['subtotal'][$i]),
 					);	
 
 			$this->query_builder->add('t_pembelian_umum_barang',$set2);
 		}
 
 		if ($db == 1) {
+
+			if ($status == 'lunas') {
+				
+				//update library
+				$this->saldo_stok->add($nomor, 'pembelian_umum');
+			}
 			
 			$this->session->set_flashdata('success','Data berhasil di tambah');
 		} else {
@@ -711,15 +747,18 @@ class Pembelian extends CI_Controller{
 	}	
 	function umum_update($nomor){
 
-		$total = strip_tags(str_replace('.', '', $_POST['total']));
+		$total = strip_tags(str_replace(',', '', $_POST['total']));
+		$pembayaran = strip_tags($_POST['pembayaran']);
+		$status = strip_tags($_POST['status']);
+
 		$set1 = array(
 						'pembelian_umum_tanggal' => strip_tags($_POST['tanggal']),
-						'pembelian_umum_pembayaran' => strip_tags($_POST['pembayaran']),
+						'pembelian_umum_pembayaran' => $pembayaran,
 						'pembelian_umum_jatuh_tempo' => strip_tags($_POST['jatuh_tempo']),
-						'pembelian_umum_status' => strip_tags($_POST['status']),
+						'pembelian_umum_status' => $status,
 						'pembelian_umum_keterangan' => strip_tags($_POST['keterangan']),
-						'pembelian_umum_qty_akhir' => strip_tags(str_replace('.', '', $_POST['qty_akhir'])),
-						'pembelian_umum_ppn' => strip_tags(str_replace('.', '', $_POST['ppn'])),
+						'pembelian_umum_qty_akhir' => strip_tags($_POST['qty_akhir']),
+						'pembelian_umum_ppn' => strip_tags($_POST['ppn']),
 						'pembelian_umum_total' => $total, 
 					);
 
@@ -756,16 +795,22 @@ class Pembelian extends CI_Controller{
 			$set2 = array(
 						'pembelian_umum_barang_nomor' => $nomor,
 						'pembelian_umum_barang_barang' => strip_tags($_POST['barang'][$i]),
-						'pembelian_umum_barang_qty' => strip_tags(str_replace('.', '', $_POST['qty'][$i])),
-						'pembelian_umum_barang_potongan' => strip_tags(str_replace('.', '', $_POST['potongan'][$i])),
-						'pembelian_umum_barang_harga' => strip_tags(str_replace('.', '', $_POST['harga'][$i])),
-						'pembelian_umum_barang_subtotal' => strip_tags(str_replace('.', '', $_POST['subtotal'][$i])),
+						'pembelian_umum_barang_qty' => strip_tags($_POST['qty'][$i]),
+						'pembelian_umum_barang_potongan' => strip_tags($_POST['potongan'][$i]),
+						'pembelian_umum_barang_harga' => strip_tags($_POST['harga'][$i]),
+						'pembelian_umum_barang_subtotal' => strip_tags($_POST['subtotal'][$i]),
 					);	
 
 			$this->query_builder->add('t_pembelian_umum_barang',$set2);
 		}
 
 		if ($db == 1) {
+
+			if ($status == 'lunas') {
+				
+				//update library
+				$this->saldo_stok->add($nomor, 'pembelian_umum');
+			}
 
 			$this->session->set_flashdata('success','Data berhasil di rubah');
 		} else {
@@ -778,7 +823,14 @@ class Pembelian extends CI_Controller{
 		
 		$db = $this->query_builder->update("t_pembelian_umum",['pembelian_umum_hapus' => 1],['pembelian_umum_id' => $id]);
 
+		//get nomor
+		$get = $this->db->query("SELECT * FROM t_pembelian_umum WHERE pembelian_umum_id = '$id'")->row_array();
+		$nomor = $get['pembelian_umum_nomor'];
+
 		if ($db == 1) {
+
+			//update library
+			$this->saldo_stok->delete($nomor);
 
 			$this->session->set_flashdata('success','Data berhasil di hapus');
 		} else {
@@ -835,6 +887,9 @@ class Pembelian extends CI_Controller{
 
 			//pembelian bahan
 
+			$get = $this->query_builder->view_row("SELECT * FROM t_pembelian WHERE pembelian_id = '$id'");
+			$nomor = $get['pembelian_nomor'];
+
 			$set = ['pembelian_status' => 'lunas', 'pembelian_pelunasan' => $tanggal, 'pembelian_pelunasan_keterangan' => $keterangan];
 			$where = ['pembelian_id' => $id];
 
@@ -844,6 +899,7 @@ class Pembelian extends CI_Controller{
 				
 				//update stok bahan
 				$this->stok->transaksi();
+				$this->saldo_stok->add($nomor, 'pembelian_bahan');
 
 				$this->session->set_flashdata('success','Berhasil di bayar');
 			} else {
@@ -852,6 +908,9 @@ class Pembelian extends CI_Controller{
 		}else{
 
 			//pembelian umum
+
+			$get = $this->query_builder->view_row("SELECT * FROM t_pembelian_umum WHERE pembelian_umum_id = '$id'");
+			$nomor = $get['pembelian_umum_nomor'];
 
 			$set = ['pembelian_umum_status' => 'l', 'pembelian_umum_pelunasan' => $tanggal, 'pembelian_umum_pelunasan_keterangan' => $keterangan];
 			$where = ['pembelian_umum_id' => $id];
@@ -862,6 +921,7 @@ class Pembelian extends CI_Controller{
 				
 				//update stok bahan
 				$this->stok->transaksi();
+				$this->saldo_stok->add($nomor, 'pembelian_umum');
 
 				$this->session->set_flashdata('success','Berhasil di bayar');
 			} else {
@@ -895,7 +955,8 @@ class Pembelian extends CI_Controller{
 	function bayar_update(){
 
 		$po = 0;
+		$proses = 1;
 		$redirect = 'bayar';
-		$this->update($po, $redirect);
+		$this->update($po, $proses, $redirect);
 	}
 }

@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title><?= strtoupper(@$title) ?> | <?=@$set['logo_nama'] ?></title> 
 
-	<!-- Bootstrap 3.3.7 -->  
+	<!-- Bootstrap 3.3.7 -->   
   	<link rel="stylesheet" href="<?php echo base_url() ?>adminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css"> 
 
   	<!-- jQuery 3 -->
@@ -18,9 +18,9 @@
 
   	<style type="text/css">
   		.box{
-  			padding: 3%;
+  			padding: 0.5%; 
   		}
-  		.tit{ 
+  		.tit{  
   			border-width: 2px;
 		    border-style: solid;
 		    padding: 0.5%;
@@ -34,6 +34,13 @@
 		table .r {
 		  text-align: right;
 		}
+		p {
+			margin: 0;
+		}
+		.table > tfoot {
+			vertical-align: bottom;
+			border-top: 2px solid #ddd;
+		}
   	</style>
 
 </head>
@@ -41,31 +48,26 @@
 
 	<div class="box">
 
-		<div class="col-md-6 col-xs-6">
+		<div class="col-md-4 col-xs-4">
 			<h5><?=strtoupper($set['logo_nama'])?></h5>
 			<p><?=strtoupper($set['logo_alamat'])?></p>
 			<p>Telp : <?=$set['logo_telp']?></p>
+			<p>Tanggal : <?=date_format(date_create(@$data[0]['penjualan_tanggal']), 'd M Y')?></p>
+			<p><?=@$data[0]['user_name']?></p>
+			<p>Jatuh Tempo : <?php if ($data[0]['penjualan_jatuh_tempo'] != '0000-00-00') { @$d = date_create($data[0]['penjualan_jatuh_tempo']); echo date_format($d, 'd M Y'); } else { echo '-'; } ?></p>
 		</div>
 
-		<div class="col-md-6 col-xs-6" style="text-align: right;">
-			<p><?=@$data[0]['penjualan_nomor']?></p>
-			<p><?=date_format(date_create(@$data[0]['penjualan_tanggal']), 'd M Y')?></p>
-			<p><?=@$data[0]['user_name']?></p>
+		<div class="col-md-4 col-xs-4 text-center">
+			<h5><u>NOTA PENJUALAN</u></h5>
+			<p>Nomor : <?=@$data[0]['penjualan_nomor']?></p>
+		</div>
+
+		<div class="col-md-4 col-xs-4">
+			<h5>Kepada:</h5>
+			<p><?=@$data[0]['kontak_nama']?></p>
+			<p><?=@$data[0]['kontak_alamat']?>, Telp : <?=@$data[0]['kontak_tlp']?></p>
 		</div>	
 
-		<div class="col-md-12 col-xs-12" align="center">
-			<span class="tit">FAKTUR PENJUALAN</span>
-			<br/><br/>
-		</div>	
-
-		<table class="table table-borderless">
-			<tr>
-				<td style="border-top: 0;">Nama Customer : <?=@$data[0]['kontak_nama']?></td>
-			</tr>
-			<tr>
-				<td style="border-top: 0;"><?=@$data[0]['kontak_alamat']?>, Telp : <?=@$data[0]['kontak_tlp']?></td>
-			</tr>
-		</table>	
 		
 		<table class="table table-responsive table-borderless">
 			<thead>
@@ -73,6 +75,7 @@
 					<th width="70">No</th>
 					<th>Produk</th>
 					<th class="r">Panjang</th>
+					<th class="r">Qty</th>
 					<th class="r">Harga</th>
 					<th class="r">Total</th>
 				</tr>
@@ -81,49 +84,48 @@
 				<?php $i = 1; ?>
 				<?php foreach (@$data as $val): ?>
 
+					<?php
+						$qty2 = @$val['penjualan_barang_batang'] + @$val['penjualan_barang_qty'];
+					?>
+
 					<tr>
 						<td><?=$i?></td>
 						<td><?=@$val['produk_nama']?></td>
-						<td class="r"><?=number_format(@$val['penjualan_barang_panjang'])?> Mtr</td>
-						<td class="r">Rp. <span class="harga"><?=number_format(@$val['penjualan_barang_harga'])?></span></td>
-						<td class="r">Rp. <span class="subtotal"><?=number_format(@$val['penjualan_barang_total'])?></span></td>
+
+						<td class="r">
+						<?php echo (@$val['penjualan_barang_batang'] == 0) ? $val['penjualan_barang_panjang'] . " Mtr" : '0'; ?>
+						</td>
+	
+						<td class="r"><?=@$qty2 ?></td>
+						<td class="r">Rp. <span class="harga"><?=number_format(str_replace(',', '', @$val['penjualan_barang_harga']))?></span></td>
+						<td class="r">Rp. <span class="subtotal"><?=number_format(str_replace(',', '', @$val['penjualan_barang_total']))?></span></td>
 					</tr>
 				
 				<?php $i++ ?>
-				<?php endforeach ?>
+				<?php endforeach ?>				
 
+			</tbody>
+			<tfoot>
 				<tr>
-					<td colspan="3" style="border-top: 0;">Jatuh Tempo : <?php if ($data[0]['penjualan_jatuh_tempo'] != '0000-00-00') { @$d = date_create($data[0]['penjualan_jatuh_tempo']); echo date_format($d, 'd M Y'); } else { echo '-'; } ?></td>
-					<td class="r" style="border-top: 0;">PPN <?=@$data[0]['penjualan_ppn']?>%</td>
-					<td class="r" style="border-top: 0;">Rp. <span id="ppn"></span></td>
-				</tr>
-				<tr>
-					<td colspan="3" style="border-top: 0;">Keterangan : <?=@$data[0]['penjualan_keterangan']?></td>
+					<td colspan="4" style="border-top: 0;">Keterangan : <?=@$data[0]['penjualan_keterangan']?></td>
 					<td class="r" style="border-top: 0;">Grand Total</td>
 					<td class="r" style="border-top: 0;">Rp. <span id="total_akhir"></span></td>
 				</tr>
-
-			</tbody>
+				<tr>
+					<td colspan="2" style="border-top: 0;"><center>Penerima</center></td>
+					<td colspan="2" style="border-top: 0;"><center><?=strtoupper($set['logo_nama'])?></center></td>
+					<td class="r" style="border-top: 0;">Produk Total</td>
+					<td class="r" style="border-top: 0;">Rp. <span id="produk_total">0</span></td>
+				</tr>
+				<tr>
+					<td colspan="2" style="border-top: 0;"><center>_____________</center></td>
+					<td colspan="2" style="border-top: 0;"><center>_____________</center></td>
+					<td class="r" style="border-top: 0;">PPN <?=@$data[0]['penjualan_ppn']?>%</td>
+					<td class="r" style="border-top: 0;">Rp. <span id="ppn"></span></td>
+				</tr>
+				
+			</tfoot>
 		</table>
-
-		<div class="clearfix"></div>
-
-		<div class="col-md-4 col-xs-4">
-			<center style="float: left;">
-			<p>Penerima</p>
-			<br/><br/><br/>
-			<p>( ___________________  )</p>
-			</center>
-		</div>
-
-		<div class="col-md-4 col-xs-4">
-			<center>
-			<p><?=strtoupper($set['logo_nama'])?></p>
-			<br/><br/><br/>
-			<p>( ___________________  )</p>
-			</center>
-		</div>
-
 	</div>
 
 </body>
@@ -143,10 +145,13 @@
 
 	//ppn
 	var ppn = (<?=@$data[0]['penjualan_ppn']?>) * total / 100;
-	$('#ppn').text(number_format(ppn));
-
+	
 	//total akhir
-	var akhir = number_format(ppn + total);
+	var akhir = number_format(total);
+	
+	//hasil
+	$('#produk_total').text(number_format(total - ppn));
+	$('#ppn').text(number_format(ppn));
 	$('#total_akhir').text(akhir);
 
 	

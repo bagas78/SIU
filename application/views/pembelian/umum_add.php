@@ -115,25 +115,25 @@
               <td>
                 <input required type="text" name="barang[]" class="barang form-control" placeholder="Nama Barang">
               </td>
-              <td><input type="number" name="harga[]" class="harga form-control" required min="0" placeholder="Harga Barang" step="any"></td>
-              <td><input type="number" name="qty[]" class="qty form-control" value="1" min="1" step="any">
+              <td><input type="text" name="harga[]" class="harga form-control text-number" required min="0" placeholder="Harga Barang" step="any"></td>
+              <td><input type="text" name="qty[]" class="qty form-control text-number" value="1" min="1" step="any">
               </td>
-              <td><input min="0" type="number" name="potongan[]" class="potongan form-control" value="0" required step="any"></td>
-              <td><input readonly="" type="text" name="subtotal[]" class="subtotal form-control" required value="0" min="0" step="any"></td>
+              <td><input min="0" type="text" name="potongan[]" class="potongan form-control text-number" value="0" required step="any"></td>
+              <td><input readonly="" type="text" name="subtotal[]" class="subtotal form-control text-number" required value="0" min="0" step="any"></td>
               <td><button type="button" onclick="$(this).closest('tr').remove()" class="remove btn btn-danger btn-sm">-</button></td>
             </tr>
 
             <tr>
               <td colspan="3"></td>
               <td align="right">Qty Akhir</td>
-              <td><input id="qty_akhir" readonly="" type="text" name="qty_akhir" class="form-control"></td>
+              <td><input id="qty_akhir" readonly="" type="text" name="qty_akhir" class="form-control text-number"></td>
             </tr>
 
             <tr>
               <td colspan="3"></td>
               <td align="right">PPN ( % )</td>
               <td>
-                <input readonly="" id="ppn" type="text" name="ppn" class="form-control" value="<?=$ppn['pajak_persen']?>">
+                <input readonly="" id="ppn" type="text" name="ppn" class="form-control text-number" value="<?=$ppn['pajak_persen']?>">
               </td>
               <td><input class="check" type="checkbox" checked="" style="-webkit-transform: scale(1.5);margin-top: 10px;"></td>
             </tr>
@@ -141,7 +141,7 @@
             <tr>
               <td colspan="3"></td>
               <td align="right">Total Akhir</td>
-              <td><input id="total" readonly="" type="text" name="total" class="form-control" value="0" min="0"></td>
+              <td><input id="total" readonly="" type="text" name="total" class="form-control text-number" value="0" min="0"></td>
             </tr>
 
             <tr>
@@ -217,15 +217,15 @@ $('#previewImg').attr('src', '<?=base_url('assets/gambar/camera.png')?>');
     $.each($('.qty'), function(index, val) {
        var i = index+1;
 
-       var harga = $('#copy:nth-child('+i+') > td:nth-child(2) > input').val();
-       var qty = $('#copy:nth-child('+i+') > td:nth-child(3) > input').val();
-       var diskon = $('#copy:nth-child('+i+') > td:nth-child(4) > input').val();
+       var harga = $('#copy:nth-child('+i+') > td:nth-child(2) > input').val().replaceAll(',','');
+       var qty = $('#copy:nth-child('+i+') > td:nth-child(3) > input').val().replaceAll(',','');
+       var diskon = $('#copy:nth-child('+i+') > td:nth-child(4) > input').val().replaceAll(',','');
        var sub = '#copy:nth-child('+i+') > td:nth-child(5) > input';
 
        var potongan = (Number(diskon) / 100) * (Number(harga) * Number(qty));
 
        var subtotal = Number(qty) * Number(harga) - potongan;
-       num_qty += Number($(this).val());
+       num_qty += Number($(this).val().replaceAll(',',''));
 
        //subtotal
        $(sub).val(number_format(subtotal));
@@ -239,7 +239,7 @@ $('#previewImg').attr('src', '<?=base_url('assets/gambar/camera.png')?>');
     var num_total = 0;
     $.each($('.subtotal'), function(index, val) {
         
-      num_total += Number($(this).val().replace('.', ''));
+      num_total += Number($(this).val().replaceAll(',', ''));
     });
 
     //total akhir

@@ -27,6 +27,7 @@
                 <tr>
                   <th>Nomor</th> 
                   <th>Supplier</th>
+                  <th>Tanggal</th>
                   <th>Jatuh Tempo</th>
                   <th>Status</th>
                   <th width="60">Action</th>
@@ -67,9 +68,10 @@
                 <tr>
                   <th>Nomor</th> 
                   <th>Supplier</th>
+                  <th>Tanggal</th>
                   <th>Jatuh Tempo</th>
                   <th>Status</th>
-                  <th width="60">Action</th>
+                  <th width="90">Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -101,6 +103,12 @@
             "columns": [                               
                         { "data": "pembelian_nomor"},
                         { "data": "kontak_nama"},
+                        { "data": "pembelian_tanggal",
+                        "render": 
+                        function( data ) {
+                            return "<span>"+moment(data).format("DD/MM/YYYY")+"</span>";
+                          }
+                        },
                         { "data": "pembelian_jatuh_tempo",
                         "render": 
                         function( data ) {
@@ -144,6 +152,12 @@
             "columns": [                               
                         { "data": "pembelian_nomor"},
                         { "data": "kontak_nama"},
+                        { "data": "pembelian_tanggal",
+                        "render": 
+                        function( data ) {
+                            return "<span>"+moment(data).format("DD/MM/YYYY")+"</span>";
+                          }
+                        },
                         { "data": "pembelian_jatuh_tempo",
                         "render": 
                         function( data ) {
@@ -162,7 +176,7 @@
                         "render": 
                         function( data ) {
                             return "<a href='<?php echo base_url('pembelian/'.@$url.'_view/')?>"+data+"'><button class='btn btn-xs btn-success'><i class='fa fa-eye'></i></button></a> "+
-                            "<a hidden href='<?php echo base_url('pembelian/'.@$url.'_edit/')?>"+data+"'><button class='btn btn-xs btn-primary pembelian_bahan_add'><i class='fa fa-edit'></i></button></a> "+
+                            "<a href='<?php echo base_url('pembelian/'.@$url.'_edit/')?>"+data+"'><button class='btn btn-xs btn-primary pembelian_bahan_add'><i class='fa fa-edit'></i></button></a> "+
                             "<button onclick=del('<?php echo base_url('pembelian/'.@$url.'_delete/')?>"+data+"') class='btn btn-xs btn-danger pembelian_bahan_del'><i class='fa fa-trash'></i></button> "+
                             "<a href='<?php echo base_url('pembelian/laporan/')?>"+data+"'><button class='btn btn-xs btn-warning'><i class='fa fa-file-text'></i></button></a> ";
                           }

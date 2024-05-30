@@ -1,14 +1,23 @@
+<style type="text/css">
+  .tit{
+    background: black;
+    padding: 0.5%;
+    color: white;
+  }
+</style>
 
     <!-- Main content --> 
     <section class="content">
  
       <!-- Default box -->
-      <div class="box">  
+      <div class="box"> 
         <div class="box-header with-border">
  
-            <div align="left" class="penjualan_po_add">
+            <div align="left" class="penjualan_produk_add">
               <a href="<?= base_url('penjualan/'.@$url.'_add') ?>"><button class="btn-tambah btn btn-primary"><i class="fa fa-plus"></i> Tambah</button></a>
-            </div>
+               <button onclick="filter('lunas')" class="btn-lunas btn btn-default"><i class="fa fa-filter"></i> Lunas</button>
+              <button onclick="filter('belum')" class="btn-belum btn btn-default"><i class="fa fa-filter"></i> Belum Lunas</button>
+            </div> 
 
           <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
@@ -18,14 +27,17 @@
           </div> 
         </div>
         <div class="box-body">
-          
           <table id="example" class="table table-bordered table-hover" style="width: 100%;">
                 <thead>
                 <tr>
                   <th>Nomor</th>
                   <th>Pelanggan</th>
                   <th>Tanggal</th>
-                  <th width="20">Action</th>
+                  <th>Jatuh Tempo</th>
+                  <th>Status</th>
+                  <th width="20">Print</th>
+                  <th width="20">Proses</th>
+                  <th width="60">Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -40,6 +52,7 @@
       <!-- /.box -->
 
 <script type="text/javascript">
+
     var table;
     $(document).ready(function() {
         //datatables
@@ -48,26 +61,55 @@
             "processing": true, 
             "serverSide": true,
             "order":[], 
-            "scrollX": true,  
+            // "scrollX": true,  
             
             "ajax": {
                 "url": "<?=site_url('penjualan/so_get_data')?>",
                 "type": "GET"
             },
             "columns": [                               
-                        { "data": "produksi_nomor"},
+                        { "data": "penjualan_nomor"},
                         { "data": "kontak_nama"},
-                        { "data": "produksi_tanggal",
+                        { "data": "penjualan_tanggal",
                         "render": 
                         function( data ) {
-                            return "<span>"+moment(data).format("DD/MM/YYYY LT")+"</span>";
+                            return "<span>"+moment(data).format("DD/MM/YYYY")+"</span>";
                           }
                         },
-                        { "data": "produksi_id",
+                        { "data": "penjualan_jatuh_tempo",
+                        "render": 
+                        function( data ) {
+                            if (data == '0000-00-00') {var j = '-';}else{var j = moment(data).format("DD/MM/YYYY");}
+                            return "<span>"+j+"</span>";
+                          }
+                        },
+                        { "data": "penjualan_status",
+                        "render": 
+                        function( data ) {
+                            if (data == 'lunas') {var s = 'Lunas';} else {var s = 'Belum Lunas';}
+                            return "<span>"+s+"</span>";
+                          }
+                        },
+                        { "data": "penjualan_id",
                         "render":  
                         function( data ) {
-                            return "<a href='<?php echo base_url('penjualan/so_view/')?>"+data+"'><button class='btn btn-xs btn-success'><i class='fa fa-eye'></i></button></a> "+
-                             "<button onclick=del('<?php echo base_url('penjualan/so_delete/')?>"+data+"') class='btn btn-xs btn-danger penjualan_so_del'><i class='fa fa-trash'></i></button> ";
+                            return "<a href='<?php echo base_url('penjualan/faktur_so/')?>"+data+"'><button class='btn btn-xs btn-warning'><i class='fa fa-file-text' title='cetak faktur penjualan'></i> Faktur SO</button></a> ";
+                          }
+                        },
+                        { "data": "penjualan_proses",
+                          "render": 
+                          function( data ) {
+                              if (data == 1) {var s = '<center><i class="fa fa-check"></i></center>';} else {var s = '<center><i class="fa fa-refresh"></i></center>';}
+                              return "<span>"+s+"</span>";
+                            }
+                        },
+                        { "data": "penjualan_id",
+                        "render":  
+                        function( data ) {
+                            return "<a href='<?php echo base_url('penjualan/'.@$url.'_view/')?>"+data+"'><button class='btn btn-xs btn-success'><i class='fa fa-eye'></i></button></a> "+
+                            "<a href='<?php echo base_url('penjualan/'.@$url.'_edit/')?>"+data+"'><button class='btn btn-xs btn-primary penjualan_produk_add'><i class='fa fa-edit'></i></button></a> "+
+                            "<button onclick=del('<?php echo base_url('penjualan/'.@$url.'_delete/')?>"+data+"') class='btn btn-xs btn-danger penjualan_produk_del'><i class='fa fa-trash'></i></button> "+
+                            "<a <?=(@$url == 'packing')? '':'hidden'?> href='<?php echo base_url('penjualan/surat/')?>"+data+"'><button class='btn btn-xs btn-info'><i class='fa fa-truck'></i></button></a>";
                           }
                         },
                         
@@ -76,4 +118,9 @@
 
         });
 
+function filter($val){
+
+  var table = $('#example').DataTable();
+  table.search($val).draw();
+}
 </script>

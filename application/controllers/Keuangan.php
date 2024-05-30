@@ -134,6 +134,23 @@ class Keuangan extends CI_Controller{
 		
 		redirect(base_url('keuangan/saldo'));
 	}
+	function saldo_awal_add(){
+
+		$nominal = strip_tags($_POST['nominal']);
+		$keterangan = "Saldo Awal";
+		$nomor = 'SAL-'.date(time());
+		$tgl = strip_tags($_POST['tggl_saldo_awal']);
+
+		//kredit
+		$this->stok->jurnal($nomor, 7 ,'kredit' , $keterangan, $nominal, $tgl);
+
+		//debit
+		$this->stok->jurnal($nomor, 1 ,'debit', 'kas ( penyesuaian saldo )', $nominal, $tgl);
+
+		$this->session->set_flashdata('success','Data berhasil di tambah');
+		
+		redirect(base_url('keuangan/saldo'));
+	}
 
 	// laba rugi
 	function laba_rugi($d = '')

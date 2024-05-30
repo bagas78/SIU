@@ -1,119 +1,226 @@
-<style type="text/css">
-  .small{
-    background: grey;
-    color: white;
-    padding: 5px 10px;
-    text-align: center;
-  }
-  .tit{
-    padding: 0.5%;
-    font-size: large;
-    background: black;
-    color: white;
-    margin-bottom: 15px;
-  }
-</style> 
+<!--alert-->
+<script src="<?php echo base_url('assets/') ?>sweetalert/sweet-alert.js"></script>
 
-<!-- Main content --> 
-<section class="content">
+<style type="text/css">
+  .mb-7{ 
+    margin-bottom: 7%;
+  }
+  .readonly{
+    /*pointer-events: none;*/
+    background: #EEEEEE;
+  } 
+  .readonly::-webkit-outer-spin-button,
+  .readonly::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }  
+</style> 
    
-  <!-- Default box -->  
+<!-- Main content -->  
+<section class="content">
+
+  <!-- Default box -->       
   <div class="box"> 
-    <div class="box-header with-border">  
+    <div class="box-header with-border"> 
 
       <div class="back" align="left" hidden>
         <a href="<?= @$_SERVER['HTTP_REFERER'] ?>"><button class="btn btn-danger"><i class="fa fa-arrow-left"></i> Kembali</button></a>
       </div>
- 
-      <div class="box-tools pull-right"> 
+
+      <div class="box-tools pull-right">
         <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
           <i class="fa fa-minus"></i></button>
         <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
-          <i class="fa fa-times"></i></button>
+          <i class="fa fa-times"></i></button>  
       </div>
 
     </div>
-
     <div class="box-body">
+
       <form method="post" enctype="multipart/form-data" class="bg-alice">
-        <div class="row">
+
+        <div class="row"> 
+
           <div class="col-md-3">
             <div class="form-group">
-              <label>Nomor Sales Order</label>
+              <label>Nomor Transaksi</label>
               <input type="text" name="nomor" class="form-control" required id="nomor">
             </div>
             <div class="form-group">
-              <label>Tanggal Sales Order</label>
-              <input type="datetime-local" name="tanggal" class="form-control" required id="tanggal">
+              <label>Tanggal Transaksi</label>
+              <input type="date" name="tanggal" class="form-control" required id="tanggal">
             </div>
-            <div class="form-group">
-              <label>Gudang</label>
-              <select name="gudang" class="form-control select2" required id="gudang">
-                <option value="" hidden>-- Pilih --</option>
-                <?php foreach ($gudang_data as $g): ?>
-                  <option value="<?= $g['gudang_id']?>"><?= $g['gudang_nama']?></option>
-                <?php endforeach ?>
-              </select>
-            </div>
-          </div>
-          <div class="col-md-5"> 
             <div class="form-group">
               <label>Pelanggan</label>
               <select name="pelanggan" class="form-control select2" required id="pelanggan">
                 <option value="" hidden>-- Pilih --</option>
-                <?php foreach ($kontak_data as $k): ?>
-                  <option value="<?= $k['kontak_id']?>"><?= $k['kontak_nama']?></option>
+                <?php foreach ($kontak_data as $s): ?>
+                  <option value="<?= $s['kontak_id']?>"><?= $s['kontak_nama']?></option>
                 <?php endforeach ?>
               </select>
             </div>
             <div class="form-group">
-              <label>Keterangan</label>
-              <textarea name="keterangan" class="form-control textarea" style="height: 105px;" id="keterangan"></textarea>
+              <label>Ambil Sendiri</label>
+              <select name="ambil" class="form-control select2" required id="ambil">
+                <option value="" hidden>-- Pilih --</option>
+                <option value="iya">Iya</option>
+                <option value="tidak">Tidak</option>
+              </select>
             </div>
           </div>
 
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Status Pembayaran</label>
+              <select name="status" class="form-control" required id="status">
+                <option value="" hidden>-- Pilih --</option>
+                <option value="lunas">Lunas</option>
+                <option value="belum">Belum Lunas</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Jatuh Tempo</label>
+              <input type="date" name="jatuh_tempo" class="form-control" required id="jatuh_tempo">
+            </div>
+            <div class="form-group">
+              <label>Pembayaran</label>
+              <select name="pembayaran" class="form-control select2" required id="pembayaran">
+                <option value="" hidden>-- Pilih --</option>
+                <option value="tunai" hidden>Tunai</option>
+                <?php foreach ($rekening_data as $r): ?>
+                  <option value="<?= $r['rekening_id']?>"><?= $r['rekening_nama']?></option>
+                <?php endforeach ?>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Gudang</label>
+              <select name="gudang" class="form-control select2" id="gudang">
+                <option value="" hidden>-- Pilih --</option>
+                <?php foreach ($gudang_data as $gd): ?>
+                  <option value="<?= $gd['gudang_id']?>"><?= $gd['gudang_nama']?></option>
+                <?php endforeach ?>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+
+            <div class="form-group">
+              <label>Keterangan</label>
+              <textarea name="keterangan" class="form-control textarea" style="height: 110px;" id="keterangan"></textarea>
+            </div>
+
+          </div>
+          <div class="col-md-2">
+            <div class="form-group">
+
+              <label>Lampiran Photo</label>
+              <img id="previewImg" onclick="clickFile()" style="width: 100%;">
+              <input style="visibility: hidden;" id="file" type="file" name="lampiran" onchange="previewFile(this)">
+          
+            </div>
+          </div>
         </div>
 
-        <div class="clearfix"></div><br/>
+        <div class="clearfix"></div>
 
-        <center class="tit"><span>Produk</span></center>
+        <div id="form-produk">
 
-        <table class="table table-responsive table-borderless">
-          <thead>
-            <tr>
-              <th>Produk</th>           
-              <th>Panjang <span class="stn">Mtr</span></th>
-              <th width="1"><button type="button" onclick="clone()" class="add btn btn-success btn-sm"><i class="fa fa-plus"></i></button></th>
-            </tr>
-          </thead>
-          <tbody id="paste">
+          <table class="table table-responsive table-borderless">
+            <thead>
+              <tr>
+                <th width="200">Produk</th>
+                <th width="150">Stok <span class="stn">Mtr</span></th>
+                <th width="150">Konversi <span class="stn">Mtr</span></th>
+                <th width="150">Batang <span class="stn">Btg</span></th>
+                <th width="150">Panjang <span class="stn">text</span></th>
+                <th width="150">Qty <span class="stn">text</span></th>
+                <th width="150">Panjang <span class="stn">Mtr</span></th>
+                <th width="150">Harga <span class="stn">Rp</span></th>
+                <th width="150">Total <span class="stn">Rp</span></th>
+                <th><button type="button" onclick="clone()" class="add btn btn-success btn-sm"><i class="fa fa-plus"></i></button></th>
+              </tr>
+            </thead>
+            <tbody id="paste">
 
-             <tr id="copy">
-              <td>
-                <select required id="produk" class="produk form-control" name="produk[]">
-                  <option value="" hidden>-- Pilih --</option>
-                  <?php foreach ($produk_data as $p): ?>
-                    <option value="<?=@$p['produk_id']?>"><?=@$p['produk_nama']?></option>
-                  <?php endforeach ?>
-                </select>
-              </td>
+               <tr id="copy">
+                <td>
+                  <select required id="produk" class="produk form-control" name="barang[]">
+                    <option value="" hidden>-- Pilih --</option>
+                    <?php foreach ($produk_data as $b): ?>
+                      <option value="<?=@$b['produk_id']?>"><?=@$b['produk_nama']?></option>
+                    <?php endforeach ?>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" name="stok[]" class="stok form-control" min="0" readonly="" value="0" step="any">
+                </td>
+                <td>
+                  <input readonly type="text" name="konversi[]" class="konversi form-control text-number" value="0" min="1" >
+                </td>
+                <td>
+                  <input readonly type="text" name="batang[]" class="batang form-control text-number" value="0" min="1" >
+                </td>
 
-              <td>
-                <input type="number" name="produk_panjang[]" class="produk_panjang form-control" required value="0" min="0">
-              </td>
-              
-              <td><button type="button" class="remove btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></td>
-            </tr>
 
-            <tr class="save">
-              <td colspan="7" align="right">
-                <button type="submit" class="btn btn-primary">Simpan <i class="fa fa-check"></i></button>
-                <a href="<?= @$_SERVER['HTTP_REFERER'] ?>"><button type="button" class="btn btn-danger">Batal <i class="fa fa-times"></i></button></a>
-              </td>
-            </tr>
+                <!--panjang total -->
+                <td>
+                  <input type="text" name="panjang[]" class="panjang form-control" value="0" min="1" step="any">
+                </td>
 
-          </tbody>
-        </table>
+                <td>
+                  <input type="text" name="qty[]" class="qty form-control" value="0" min="1" step="any">
+                </td>
+
+                <!--panjang X qty -->
+                <td>
+                  <input type="text" name="panjang_total[]" class="panjang_total form-control" value="0" min="1" step="any">
+                </td>
+
+                <td>
+                  <input type="text" name="harga[]" class="harga form-control" value="0" min="1" step="any">
+                </td>
+                <td><input type="text" name="total[]" class="total form-control readonly" value="0" min="1" step="any"></td>
+
+                <!--hidden-->
+                <td hidden>
+                  <input type="text" name="hps[]" class="hps form-control readonly">
+                </td>
+
+                <td><button type="button" onclick="$(this).closest('tr').remove()" class="remove btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></td>
+              </tr>
+
+              <tr>
+                <td colspan="6"></td>
+                <td align="right"><b>Subtotal</b> <span class="stn">Mtr</span></td>
+                <td colspan="2"><input id="subtotal" readonly="" type="text" name="subtotal" class="form-control"></td>
+              </tr>
+
+              <tr>
+                <td colspan="6"></td>
+                <td align="right"><b>PPN</b> <span class="stn">&#160;%&#160;</span></td>
+                <td colspan="2">
+                  <input readonly="" id="ppn" type="text" name="ppn" class="form-control" value="<?=$ppn['pajak_persen']?>">
+                </td>
+                <td><input class="check" type="checkbox" checked="" style="-webkit-transform: scale(1.5);margin-top: 10px;"></td>
+              </tr>
+
+              <tr>
+                <td colspan="6"></td>
+                <td align="right"><b>Grand Total</b> <span class="stn">Rp</span></td>
+                <td colspan="2"><input id="grandtotal" readonly="" type="text" name="grandtotal" class="form-control" value="0" min="0"></td>
+              </tr>
+
+              <tr class="save">
+                <td colspan="8" align="right">
+                  <button type="submit" class="btn btn-primary">Simpan <i class="fa fa-check"></i></button>
+                  <a href="<?= @$_SERVER['HTTP_REFERER'] ?>"><button type="button" class="btn btn-danger">Batal <i class="fa fa-times"></i></button></a>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+        </div>
 
       </form>
 
@@ -136,66 +243,321 @@
 $('form').attr('action', '<?=base_url('penjualan/so_save')?>');
 $('#nomor').val('<?=@$nomor?>');
 $('#tanggal').val('<?=date('Y-m-d')?>');
+$('#previewImg').attr('src', '<?=base_url('assets/gambar/camera.png')?>');
 
+//status
+$(document).on('change', '#status', function() {
 
-  $(document).on('change', '.produk', function() {
+  var val = $(this).val();
 
+  if (val == 'lunas') {
+
+    //status lunas jatuh tempo tidak perlu
+    $('#jatuh_tempo').removeAttr('required');
+    $('#jatuh_tempo').attr('readonly', true);
+
+  }else{
+
+    //kembalikan
+    $('#jatuh_tempo').removeAttr('readonly');
+    $('#jatuh_tempo').attr('required', true);
+
+  }
+
+});
+
+$(document).on('keyup', '.batang , .panjang, .qty', function() {
+
+  //konversi * batang
+  var batang = Number($(this).closest('tr').find('.batang').val());
+  var konversi = Number($(this).closest('tr').find('.konversi').val());
+
+  if (konversi != 0) {
+
+    $(this).closest('tr').find('.panjang').val(batang * konversi);
+    $(this).closest('tr').find('.panjang_total').val(batang * konversi);
+    $(this).closest('tr').find('.qty').attr('readonly', true);
+  } else {
+    $(this).closest('tr').find('.qty').removeAttr('readonly');
+    //panjang * qty
+    var panjang = Number($(this).closest('tr').find('.panjang').val());
+    var qty = Number($(this).closest('tr').find('.qty').val());
+    $(this).closest('tr').find('.panjang_total').val(round(panjang * qty, 3));
+  }
+});
+
+//gudang
+$(document).on('blur focus change', '#gudang', function() {
+
+  $("#form-produk").load(location.href + " #form-produk");
+
+});
+
+//get barang
+$(document).on('change', '#produk', function() {
     var id = $(this).val();
+    var text = $(this).text();
     var index = $(this).closest('tr').index();
-    var arr = new Array(); 
-    var stok = $(this).closest('tr').find('.stok_produk');
-    var produk = $(this);
+    var target = $(this).closest('tr');
+    var gudang = $('#gudang').val();
 
-   /////// cek exist barang ///////////
-    $.each($('.produk'), function(idx, val) {
+    /////// cek exist barang ///////////
+    // var arr = new Array(); 
+    // $.each($('.produk'), function(idx, val) {
         
-        if (index != idx)
-        arr.push($(this).val());
+    //     if (index != idx)
+    //     arr.push($(this).val());
 
-    });
+    // });
 
-    if (id != '') {
+    // if (id != '') {
 
-      if ($.inArray(id, arr) != -1) {
-        var i = index + 1;
+    //   if ($.inArray(id, arr) != -1) {
+    //     var i = index + 1;
 
-        alert_sweet('Produk sudah ada');
-
-        //empty
-        produk.val('').change();
+    //     alert_sweet('Produk sudah ada');
         
-      }
+    //     target.find('select').val('').change();
+    //     target.find('.stok').val(0);
+    //     target.find('.panjang').val(0);
+    //     target.find('.harga').val(0);
+    //     target.find('.hps').val(0);
+        
+    //   } else {
+
+        if (gudang != '') {
+
+          $.get('<?=base_url('penjualan/get_produk/')?>'+id+'/'+gudang, function(data) {
+          
+            var val = $.parseJSON(data);
+
+            var stok = val['produk_gudang_panjang'];
+            var hps = val['produk_gudang_hps'];
+
+            //0
+            target.find('.konversi').val(0);
+            target.find('.batang').val(0);
+            target.find('.panjang').val(0);
+            target.find('.qty').val(0);
+            target.find('.panjang_total').val(0);
+            target.find('.stok').val(0);
+            target.find('.hps').val(0);
+            target.find('.harga').val('');
+
+            //cek row stok
+            if (stok) {
+
+              target.find('.stok').val(val['produk_gudang_panjang'].replaceAll('.00',''));
+              target.find('.hps').val(val['produk_gudang_hps']);
+              target.find('.harga').val(val['produk_gudang_harga']);
+            }
+            
+
+            //cek konversi
+            var konversi = val['produk_konversi'];
+            if (konversi == '') {
+
+              //spandex
+              target.find('.batang').attr('readonly', true);
+              target.find('.panjang').removeAttr('readonly');
+              
+            }else{
+
+              //hollow
+              target.find('.batang').removeAttr('readonly');
+              target.find('.panjang').attr('readonly', true);
+              target.find('.konversi').val(konversi);
+            }
+
+
+          });
+      //   }else{
+
+      //     alert_sweet('Gudang belum di pilih');
+
+      //     target.find('select').val('').change();
+      //     target.find('.stok').val(0);
+      //     target.find('.panjang').val(0);
+      //     target.find('.harga').val(0);
+      //     target.find('.hps').val(0);
+      //   }
+      
+      // }
       ////// end exist barang ///////////
     }
 
-  });
+});
 
-  //copy paste
-  function clone(){
-    //paste
-    $('#paste').prepend($('#copy').clone());
+
+//copy paste
+function clone(){
+  //paste
+  $('#paste').prepend($('#copy').clone());
+
+  //blank new input
+  $('#copy').find('select').val('');
+  $('#copy').find('.stok').val(0);
+  $('#copy').find('.panjang').val(0);
+  $('#copy').find('.harga').val(0);
+  $('#copy').find('.total').val(0);
+  $('#copy').find('.hps').val(0);
+  $('#copy').find('.konversi').val(0);
+  $('#copy').find('.batang').val(0);
+  $('#copy').find('.qty').val(0);
+}
+
+//foto preview
+function clickFile(){
+  $('#file').click();
+}
+function previewFile(input){
+    var file = $("#file").get(0).files[0];
+
+    if(file){
+        var reader = new FileReader();
+
+        reader.onload = function(){
+            $("#previewImg").attr("src", reader.result);
+        }
+
+        reader.readAsDataURL(file);
+    }
+}
+
+//submit validation
+$('form').on('submit', function() {
     
-    //blank new input
-    $('#copy').find('select').val('');
-    $('#copy').find('.panjang').val(0);
-  }
+    var err = 0;
+    $.each($('.produk'), function(index, val) {
+       
+       var stok = $(this).closest('tr').find('.stok').val();
+       var panjang = $(this).closest('tr').find('.panjang_total').val();
 
-  //remove
-  $(document).on('click', '.remove', 'tr a.remove', function(e) {
-    e.preventDefault();
-    $(this).closest('tr').remove();
+       if (Number(stok) < Number(panjang)) {
+
+        err += 1;
+
+       } else {
+        // tetep tanya masuk proses produksi
+        err += 1;
+       }
+
+    });
+
+    if (err != 0) {
+
+      swal({
+        // title: "Terdapat Produk Yang Lebih",
+        title: "Proses produksi",
+        text: "Akan masuk ke pesanan produksi",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          
+          //save database
+          var url = $('form').prop('action');
+
+          $.ajax({   
+              type: "POST",
+              data : $(this).serialize(),
+              url: url,   
+              success: function(data){
+
+                  window.location.replace("<?=base_url('penjualan/so')?>");                      
+              }   
+          });            
+          
+        }
+
+      });
+      
+      return false;
+    }else{
+
+      return true;
+    }
+
+});
+
+function auto(){
+
+  //border none
+  $('td').css('border-top', 'none');
+  
+  //total
+  var sum_total = 0;
+  $.each($('.panjang'), function(index, val) {
+
+    var target = $(this).closest('tr');
+
+    // var panjang = Number(target.find('.panjang_total').val().replaceAll('.', ''));
+    var panjang = Number(target.find('.panjang_total').val());
+    var harga = Number(target.find('.harga').val().replaceAll('.', '').replaceAll(',', ''));
+
+    // hydev: jika batang != 0 total rumunsnya berikut
+    var hyBatang = Number(target.find('.batang').val());
+
+    if (hyBatang != 0) {
+      var total = hyBatang * harga; 
+    } else {
+      var total = panjang * harga; 
+    }    
+    
+    totalRp = total;
+    
+    total = total.toFixed();
+    
+    // sum_total += total;
+    sum_total += totalRp;
+
+    // sum_total += number_format(total);
+    
+    
+
+    //total
+    target.find('.total').val(number_format(total));
+
   });
 
-  function auto() { 
+  //subtotal
+  let sum_total2 = new Intl.NumberFormat().format(sum_total);
+  $('#subtotal').val(number_format(sum_total2));
 
-    //border none
-    $('td').css('border-top', 'none');
+  //grand total
+  var sum_subtotal = 0;
+  $.each($('.total'), function(index, val) {
+      
+    sum_subtotal += Number($(this).val().replaceAll('.', '').replaceAll(',', ''));
+  });
 
-    setTimeout(function() {
-        auto();
-    }, 100);
-  }
+  //total akhir
+  // var ppn = (Number($('#ppn').val()) * Number(sum_subtotal) / 100);
+  // var grandtotal = ppn + sum_subtotal;
 
-  auto();  
+  var grandtotal = sum_subtotal;
+  $('#grandtotal').val(number_format(grandtotal));
+
+  setTimeout(function() {
+      auto();
+  }, 100);
+}
+
+auto();
+
+//ppn
+$(document).on('change', '.check', function() {
+    
+    if(this.checked) {
+      //on    
+      $('#ppn').val('<?=$ppn['pajak_persen']?>');
+    }else{
+      //off
+      $('#ppn').val(0);
+    }
+
+});
 
 </script>

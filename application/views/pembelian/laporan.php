@@ -12,11 +12,11 @@
 
   	<!-- jQuery 3 -->
   	<script src="<?php echo base_url() ?>adminLTE/bower_components/jquery/dist/jquery.min.js"></script>
-
+ 
   	<!--number format-->
   	<script src="<?php echo base_url() ?>assets/js/number_format.js"></script>
 
-  	<style type="text/css">
+  	<style type="text/css"> 
   		.box{
   			padding: 3%;
   		}
@@ -65,7 +65,7 @@
 		
 			<div class="col-md-12" style="margin-bottom: 3%;">
 				
-				<table>
+				<table> 
 					<tr>
 						<td style="padding-bottom: 4%;">Nama &nbsp;&nbsp;&nbsp;</td>
 						<td style="padding-bottom: 4%;" colspan="4">: <?=@$data[0]['kontak_nama'].' ( '.@$data[0]['kontak_tlp'].' )'?></td>
@@ -100,7 +100,7 @@
 								<td><?=@$val['bahan_nama']?></td>
 								<td class="r"><span class="number berat"><?=@$val['pembelian_barang_berat']?></span> Kg</td>
 								<td class="r"><span class="number"><?=@$val['pembelian_barang_panjang']?></span> Mtr</td>
-								<td class="r"><span class="number"><?=@$val['pembelian_barang_berat'] / @$val['pembelian_barang_panjang']?></span> Kg</td>
+								<td class="r"><span class="number"><?=round(@$val['pembelian_barang_berat'] / @$val['pembelian_barang_panjang'], 3)?></span> Kg</td>
 								<td class="r">
 									Rp. <span class="number"><?=@$val['pembelian_barang_harga']?><span class="number">
 								</td>
@@ -112,10 +112,15 @@
 						<?php $i++ ?>
 						<?php endforeach ?>
 
-						<tr>
+						<!-- <tr>
 							<td colspan="5"></td>
 							<td class="r">Berat Total</td>
 							<td class="r" ><span class="number" id="berat_total"></span> Kg</td>
+						</tr> -->
+						<tr>
+							<td colspan="5"></td>
+							<td class="r">Produk Total</td>
+							<td class="r" >Rp. <span class="number" id="produk_total"></span></td>
 						</tr>
 						<tr>
 							<td style="border-top: 0;" colspan="5"></td>
@@ -169,21 +174,23 @@
 	var num = 0;
 	$.each(total, function(index, val) {
 		 
-		 num += Number($(this).text().replaceAll('.', ''));
+		 num += Number($(this).text().replaceAll(',', ''));
 		 
 	});
 
-	var ekspedisi = Number($('#ekspedisi').text().replaceAll('.', ''));
-	var ppn = (<?=@$data[0]['pembelian_ppn']?>) * num / 100;
-	var grandtotal = ppn + num + ekspedisi;
+	var ekspedisi = Number($('#ekspedisi').text().replaceAll(',', ''));
+	var ppn = ('<?=@$data[0]['pembelian_ppn']?>') * num / 100;
+	var grandtotal = num + ekspedisi;
 
+	//hasil
+	$('#produk_total').text(number_format((grandtotal - ppn).toFixed(3).replaceAll('.000', '')));
 	$('#ppn').text(ppn);
-	$('#total_akhir').text(number_format(grandtotal));
+	$('#total_akhir').text(number_format(grandtotal.toFixed(3).replaceAll('.000', '')));
 
 	//berat total
 	var sum_berat = 0;
 	$.each($('.berat'), function() {
-		 sum_berat += Number($(this).text().replaceAll('.', ''));
+		 sum_berat += Number($(this).text().replaceAll(',', ''));
 	});
 
 	$('#berat_total').text(sum_berat);
@@ -191,7 +198,7 @@
 	//number format
 	$.each($('.number'), function() {
 		 
-		 var val = Number($(this).text().replaceAll('.', ''));
+		 var val = Number($(this).text().replaceAll(',', ''));
 		 $(this).text(number_format(val));
 	});
 	

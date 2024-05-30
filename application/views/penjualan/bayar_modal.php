@@ -9,7 +9,7 @@
 }  
 </style>
 
-<div class="modal fade">
+<div class="modal fade"> 
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -18,7 +18,7 @@
         <h4 class="modal-title">Pembayaran Piutang</h4>
       </div>
       <div class="modal-body">
-
+ 
         <form role="form" method="post" enctype="multipart/form-data">
           <div class="box-body">
             <div class="form-group">

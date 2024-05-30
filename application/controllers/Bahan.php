@@ -123,7 +123,7 @@ class Bahan extends CI_Controller{
 		if ($db == 1) {
 			
 			//update stok bahan
-			$this->stok->update_bahan();
+			$this->stok->transaksi();
 
 			$this->session->set_flashdata('success','Data berhasil di hapus');
 		} else {
@@ -131,5 +131,20 @@ class Bahan extends CI_Controller{
 		}
 
 		redirect(base_url('bahan'));
+	}
+
+	function tes()
+	{
+		$bahan_id = $_GET['bahan_id'];
+		
+		// kirim ke model, ambil data
+		$result = $this->m_bahan->get_data_hpp($bahan_id);
+
+		// $output = '{"name":"John", "age":'.$bahan_id.', "car":"Toyota"}';
+		// echo json_encode($result);
+		// echo $result;
+
+		$out = array_values($result);
+		echo json_encode($out);
 	}
 }

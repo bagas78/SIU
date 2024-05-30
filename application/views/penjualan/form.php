@@ -1,23 +1,24 @@
+
 <style type="text/css">
   .mb-7{
     margin-bottom: 7%;
   }
   .readonly{
     /*pointer-events: none;*/
-    background: #EEEEEE;
+    background: #EEEEEE; 
   } 
   .readonly::-webkit-outer-spin-button,
   .readonly::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
-  }
+  }  
 </style> 
-  
-<!-- Main content --> 
+   
+<!-- Main content -->  
 <section class="content">
 
-  <!-- Default box -->      
-  <div class="box"> 
+  <!-- Default box -->        
+  <div class="box">  
     <div class="box-header with-border"> 
 
       <div class="back" align="left" hidden>
@@ -36,12 +37,15 @@
 
       <form method="post" enctype="multipart/form-data" class="bg-alice">
 
+        <!-- hidden-->
+        <input type="hidden" name="so_proses" class="form-control" id="so_proses">
+        
         <div class="row"> 
 
           <div class="col-md-3">
             <div class="form-group">
               <label>Nomor Transaksi</label>
-              <input readonly="" type="text" name="nomor" class="form-control" required id="nomor">
+              <input type="text" name="nomor" class="form-control" required id="nomor">
             </div>
             <div class="form-group">
               <label>Tanggal Transaksi</label>
@@ -104,6 +108,7 @@
             <div class="form-group">
               <label>Keterangan</label>
               <textarea name="keterangan" class="form-control textarea" style="height: 110px;" id="keterangan"></textarea>
+
             </div>
 
           </div>
@@ -126,10 +131,14 @@
             <thead>
               <tr>
                 <th width="200">Produk</th>
-                <th>Stok <span class="stn">Mtr</span></th>
-                <th>Panjang <span class="stn">Mtr</span></th>
-                <th>Harga <span class="stn">Rp</span></th>
-                <th>Total <span class="stn">Rp</span></th>
+                <th width="150">Stok <span class="stn">Mtr</span></th>
+                <th width="150">Konversi <span class="stn">Mtr</span></th>
+                <th width="150">Batang <span class="stn">Btg</span></th>
+                <th width="150">Panjang <span class="stn">text</span></th>
+                <th width="150">Qty <span class="stn">text</span></th>
+                <th width="150">Panjang <span class="stn">Mtr</span></th>
+                <th width="150">Harga <span class="stn">Rp</span></th>
+                <th width="150">Total <span class="stn">Rp</span></th>
                 <th><button type="button" onclick="clone()" class="add btn btn-success btn-sm"><i class="fa fa-plus"></i></button></th>
               </tr>
             </thead>
@@ -148,42 +157,63 @@
                   <input type="text" name="stok[]" class="stok form-control" min="0" readonly="" value="0" step="any">
                 </td>
                 <td>
-                  <input type="number" name="panjang[]" class="panjang form-control" value="0" min="1" step="any">
+                  <input readonly type="text" name="konversi[]" class="konversi form-control" value="0" min="1" >
                 </td>
                 <td>
-                  <input type="number" name="harga[]" class="harga form-control" value="0" min="1" step="any">
+                  <input readonly type="text" name="batang[]" class="batang form-control" value="0" min="1" >
+                </td>
+
+
+                <!--panjang total -->
+                <td>
+                  <input type="text" name="panjang[]" class="panjang form-control" value="0" min="1" step="any">
+                </td>
+                
+                <td>
+                  <input type="text" name="qty[]" class="qty form-control"  value="0" min="1" step="any">
+                </td>
+
+                <!--panjang X qty -->
+                <td>
+                  <input type="text" name="panjang_total[]" class="panjang_total form-control" value="0" min="1" step="any">
+                </td>
+
+                <td>
+                  <input type="text" name="harga[]" class="harga form-control" value="0" min="1" step="any">
                 </td>
                 <td><input type="text" name="total[]" class="total form-control readonly" value="0" min="1" step="any"></td>
 
                 <!--hidden-->
-                <input type="hidden" name="hps[]" class="hps form-control readonly">
+                <td hidden>
+                  <input type="text" name="hps[]" class="hps form-control readonly">
+                </td>
 
                 <td><button type="button" onclick="$(this).closest('tr').remove()" class="remove btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></td>
               </tr>
 
               <tr>
-                <td colspan="3"></td>
+                <td colspan="6"></td>
                 <td align="right"><b>Subtotal</b> <span class="stn">Mtr</span></td>
-                <td><input id="subtotal" readonly="" type="text" name="subtotal" class="form-control"></td>
+                <td colspan="2"><input id="subtotal" readonly="" type="text" name="subtotal" class="form-control"></td>
               </tr>
 
               <tr>
-                <td colspan="3"></td>
+                <td colspan="6"></td>
                 <td align="right"><b>PPN</b> <span class="stn">&#160;%&#160;</span></td>
-                <td>
+                <td colspan="2">
                   <input readonly="" id="ppn" type="text" name="ppn" class="form-control" value="<?=$ppn['pajak_persen']?>">
                 </td>
                 <td><input class="check" type="checkbox" checked="" style="-webkit-transform: scale(1.5);margin-top: 10px;"></td>
               </tr>
 
               <tr>
-                <td colspan="3"></td>
+                <td colspan="6"></td>
                 <td align="right"><b>Grand Total</b> <span class="stn">Rp</span></td>
-                <td><input id="grandtotal" readonly="" type="text" name="grandtotal" class="form-control" value="0" min="0"></td>
+                <td colspan="2"><input id="grandtotal" readonly="" type="text" name="grandtotal" class="form-control" value="0" min="0"></td>
               </tr>
 
               <tr class="save">
-                <td colspan="5" align="right">
+                <td colspan="9" align="right">
                   <button type="submit" class="btn btn-primary">Simpan <i class="fa fa-check"></i></button>
                   <a href="<?= @$_SERVER['HTTP_REFERER'] ?>"><button type="button" class="btn btn-danger">Batal <i class="fa fa-times"></i></button></a>
                 </td>
@@ -226,7 +256,7 @@ $(document).on('change', '#status', function() {
 
     //status lunas jatuh tempo tidak perlu
     $('#jatuh_tempo').removeAttr('required');
-    $('#jatuh_tempo').attr('readonly', true);
+    $('#jatuh_tempo').val('').attr('readonly', true);
 
   }else{
 
@@ -235,6 +265,24 @@ $(document).on('change', '#status', function() {
     $('#jatuh_tempo').attr('required', true);
 
   }
+
+});
+
+$(document).on('keyup', '.batang , .panjang, .qty', function() {
+
+  //konversi * batang
+  var batang = Number($(this).closest('tr').find('.batang').val().replaceAll(',',''));
+  var konversi = Number($(this).closest('tr').find('.konversi').val());
+
+  if (konversi != 0) {
+
+    $(this).closest('tr').find('.panjang').val(batang * konversi);
+  }
+  
+  //panjang * qty
+  var panjang = Number($(this).closest('tr').find('.panjang').val().replaceAll(',',''));
+  var qty = Number($(this).closest('tr').find('.qty').val().replaceAll(',',''));
+  $(this).closest('tr').find('.panjang_total').val(round(panjang * qty, 3));
 
 });
 
@@ -254,40 +302,69 @@ $(document).on('change', '#produk', function() {
     var gudang = $('#gudang').val();
 
     /////// cek exist barang ///////////
-    var arr = new Array(); 
-    $.each($('.produk'), function(idx, val) {
+    // var arr = new Array(); 
+    // $.each($('.produk'), function(idx, val) {
         
-        if (index != idx)
-        arr.push($(this).val());
+    //     if (index != idx)
+    //     arr.push($(this).val());
 
-    });
+    // });
 
-    if (id != '') {
+    // if (id != '') {
 
-      if ($.inArray(id, arr) != -1) {
-        var i = index + 1;
+    //   if ($.inArray(id, arr) != -1) {
+    //     var i = index + 1;
 
-        alert_sweet('Produk sudah ada');
+    //     alert_sweet('Produk sudah ada');
         
-        target.find('select').val('').change();
-        target.find('.stok').val(0);
-        target.find('.panjang').val(0);
-        target.find('.harga').val(0);
-        target.find('.hps').val(0);
+    //     target.find('select').val('').change();
+    //     target.find('.stok').val(0);
+    //     target.find('.panjang').val(0);
+    //     target.find('.harga').val(0);
+    //     target.find('.hps').val(0);
         
-      } else {
+    //   } else {
 
         if (gudang != '') {
 
           $.get('<?=base_url('penjualan/get_produk/')?>'+id+'/'+gudang, function(data) {
           
             var val = $.parseJSON(data);
+
+            //0
+            target.find('.konversi').val(0);
+            target.find('.batang').val(0);
+            target.find('.panjang').val(0);
+            target.find('.qty').val(0);
+            target.find('.panjang_total').val(0);
+            target.find('.stok').val(0);
+            target.find('.hps').val(0);
+            target.find('.harga').val('');
               
             if (val != null) {
 
-              target.find('.stok').val(val['produk_gudang_panjang']);
-              target.find('.harga').val(val['produk_gudang_harga']);
+              target.find('.stok').val(val['produk_gudang_panjang'].replaceAll('.00',''));
               target.find('.hps').val(val['produk_gudang_hps']);
+              target.find('.harga').val(val['produk_gudang_harga']);
+              
+
+              //cek konversi
+              var konversi = val['produk_konversi'];
+              if (konversi == '') {
+
+                //spandex
+                target.find('.batang').attr('readonly', true);
+                target.find('.panjang').removeAttr('readonly');
+
+              }else{
+
+                //hollow
+                target.find('.batang').removeAttr('readonly');
+                target.find('.panjang').attr('readonly', true);
+                target.find('.konversi').val(konversi);
+
+              }
+
             }else{
 
               target.find('select').val('').change();
@@ -295,23 +372,25 @@ $(document).on('change', '#produk', function() {
               target.find('.panjang').val(0);
               target.find('.harga').val(0);
               target.find('.hps').val(0);
+              target.find('.konversi').val(0);
 
               alert_sweet('Produk tidak tersedia di gudang yang di pilih');
             }
 
           });
-        }else{
+      //   }else{
 
-          alert_sweet('Gudang belum di pilih');
+      //     alert_sweet('Gudang belum di pilih');
 
-          target.find('select').val('').change();
-          target.find('.stok').val(0);
-          target.find('.panjang').val(0);
-          target.find('.harga').val(0);
-          target.find('.hps').val(0);
-        }
+      //     target.find('select').val('').change();
+      //     target.find('.stok').val(0);
+      //     target.find('.panjang').val(0);
+      //     target.find('.harga').val(0);
+      //     target.find('.hps').val(0);
+      //     target.find('.konversi').val(0);
+      //   }
       
-      }
+      // }
       ////// end exist barang ///////////
     }
 
@@ -330,6 +409,9 @@ function clone(){
   $('#copy').find('.harga').val(0);
   $('#copy').find('.total').val(0);
   $('#copy').find('.hps').val(0);
+  $('#copy').find('.konversi').val(0);
+  $('#copy').find('.batang').val(0);
+  $('#copy').find('.qty').val(0);
 }
 
 //foto preview
@@ -357,11 +439,13 @@ $('form').on('submit', function() {
     $.each($('.produk'), function(index, val) {
        
        var stok = $(this).closest('tr').find('.stok').val();
-       var panjang = $(this).closest('tr').find('.panjang').val();
+       var panjang = $(this).closest('tr').find('.panjang_total').val();
 
        if (Number(stok) < Number(panjang)) {
 
-        err += 1;
+        // err += 1;
+        // disable cek stok
+        err = 0;
 
        }
 
@@ -383,17 +467,30 @@ function auto(){
   //border none
   $('td').css('border-top', 'none');
   
+  //total
   var sum_total = 0;
   $.each($('.panjang'), function(index, val) {
 
     var target = $(this).closest('tr');
 
-    var panjang = Number(target.find('.panjang').val().replaceAll('.', ''));
-    var harga = Number(target.find('.harga').val().replaceAll('.', ''));
+    // var panjang = Number(target.find('.panjang_total').val().replaceAll('.', ''));
+    var panjang = Number(target.find('.panjang_total').val());
+    var harga = Number(target.find('.harga').val().replaceAll(',', ''));
 
-    var total = panjang * harga; 
+    // hydev: jika batang != 0 total rumunsnya berikut
+    var hyBatang = Number(target.find('.batang').val());
+
+    if (hyBatang != 0) {
+      var total = hyBatang * harga; 
+    } else {
+      var total = panjang * harga; 
+    }  
     
-    sum_total += total;
+    totalRp = total;
+
+    total = total.toFixed(3).replaceAll('.000', '');
+    
+    sum_total += totalRp;
 
     //total
     target.find('.total').val(number_format(total));
@@ -401,19 +498,24 @@ function auto(){
   });
 
   //subtotal
-  $('#subtotal').val(number_format(sum_total));
+  $('#subtotal').val(number_format(sum_total.toFixed(3).replaceAll('.000', '')));
+  // $('#subtotal').val(number_format(sum_total));
 
   //grand total
   var sum_subtotal = 0;
   $.each($('.total'), function(index, val) {
       
-    sum_subtotal += Number($(this).val().replaceAll('.', ''));
+    sum_subtotal += Number($(this).val().replaceAll(',', ''));
   });
 
+  console.log('hydev:' + sum_subtotal);
+
   //total akhir
-  var ppn = (Number($('#ppn').val()) * Number(sum_subtotal) / 100);
-  var grandtotal = ppn + sum_subtotal;
-  $('#grandtotal').val(number_format(grandtotal));
+  // var ppn = (Number($('#ppn').val()) * Number(sum_subtotal) / 100);
+  // var grandtotal = ppn + sum_subtotal;
+
+  var grandtotal = sum_subtotal;
+  $('#grandtotal').val(number_format(grandtotal.toFixed(3).replaceAll('.000', '')));
 
   setTimeout(function() {
       auto();

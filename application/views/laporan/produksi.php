@@ -4,7 +4,7 @@
  
       <!-- Default box -->
       <div class="box">  
-        <div class="box-header with-border">
+        <div class="box-header with-border"> 
 
           <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
@@ -91,10 +91,8 @@ $(document).ready(function() {
  //produksi
  var p = 0;
  $.each($('.produksi_qty'), function(index, val) {
-    var parse = parseInt($(this).text());
+    var parse = Number($(this).text());
     p += parse;
-
-    $(this).text(number_format(parse));
  });
 
  $('#tot_produksi').text(number_format(p));

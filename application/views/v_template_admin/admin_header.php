@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="<?php echo base_url() ?>assets/icon/font-awesome/css/font-awesome.min.css"> 
   <link rel="stylesheet" href="<?php echo base_url() ?>assets/icon/Ionicons/css/ionicons.min.css">
   
-  <!-- Theme style -->   
+  <!-- Theme style -->    
   <link rel="stylesheet" href="<?php echo base_url() ?>assets/themes/AdminLTE.css">
   <link rel="stylesheet" href="<?php echo base_url() ?>assets/themes/skins/_all-skins.css">
   <link rel="stylesheet" href="<?php echo base_url() ?>assets/themes/material/material-icon.css">
@@ -55,6 +55,7 @@
 
   <!--number format-->
   <script src="<?php echo base_url() ?>assets/js/number_format.js"></script>
+  <script src="<?php echo base_url() ?>assets/js/round.js"></script>
 
   <!--date format-->
   <script src="<?php echo base_url() ?>assets/js/moment.js"></script>
@@ -131,7 +132,7 @@
     top: 50%;
     left: 37.5vw;
     transform: translateY(-50%);
-    background-color: #107687;
+    background-color: #107687; 
     padding: 5px 30px 5px 30px;
     border-radius: 50px;
  }
@@ -163,8 +164,7 @@ thead{
 }
 
 .bg-alice{
-  /* background: aliceblue; */
-  background: #ffe1e4;
+  background: aliceblue; 
   padding: 2%;
   margin: 0;
 }
@@ -368,6 +368,12 @@ thead{
                 <span class="multi-li">Pembayaran Hutang</span>
               </a>
             </li>
+            <li class="pembelian_partial">
+              <a href="<?php echo base_url('partial') ?>">
+                <i class="material-icons">more_horiz</i>
+                <span class="multi-li">Partial Stok</span>
+              </a>
+            </li>
             
           </ul>
         </li>
@@ -457,25 +463,25 @@ thead{
                 <span class="multi-li">Produksi</span>
               </a>
             </li>
-            <li class="laporan_pembelian bahan">
+            <li class="laporan_pembelian">
               <a href="<?= base_url('laporan/pembelian_bahan') ?>">
                 <i class="material-icons">more_horiz</i>
                 <span class="multi-li">Pembelian Bahan</span>
               </a>
             </li>
-            <li class="laporan_pembelian bahan">
+            <li class="laporan_pelunasan_pembelian">
               <a href="<?= base_url('laporan/pembelian_umum') ?>">
                 <i class="material-icons">more_horiz</i>
                 <span class="multi-li">Pembelian Umum</span>
               </a>
             </li>
-            <li class="laporan_hutang_bahan">
+            <li class="laporan_pelunasan_hutang_bahan">
               <a href="<?= base_url('laporan/pelunasan_bahan') ?>">
                 <i class="material-icons">more_horiz</i>
                 <span class="multi-li">Pelunasan Bahan</span>
               </a>
             </li>
-            <li class="laporan_hutang_umum">
+            <li class="laporan_pelunasan_hutang_umum">
               <a href="<?= base_url('laporan/pelunasan_umum') ?>">
                 <i class="material-icons">more_horiz</i>
                 <span class="multi-li">Pelunasan Umum</span>
@@ -488,10 +494,28 @@ thead{
                 <span class="multi-li">Penjualan</span>
               </a>
             </li>
-            <li class="laporan_piutang">
+            <li class="laporan_pelunasan_piutang">
               <a href="<?= base_url('laporan/pelunasan_piutang') ?>">
                 <i class="material-icons">more_horiz</i>
                 <span class="multi-li">Pelunasan Piutang</span>
+              </a>
+            </li>
+            <li class="laporan_hutang_bahan">
+              <a href="<?= base_url('laporan/hutang_bahan') ?>">
+                <i class="material-icons">more_horiz</i>
+                <span class="multi-li">Hutang Bahan</span>
+              </a>
+            </li>
+            <li class="laporan_hutang_umum">
+              <a href="<?= base_url('laporan/hutang_umum') ?>">
+                <i class="material-icons">more_horiz</i>
+                <span class="multi-li">Hutang Umum</span>
+              </a>
+            </li>
+            <li class="laporan_piutang">
+              <a href="<?= base_url('laporan/piutang') ?>">
+                <i class="material-icons">more_horiz</i>
+                <span class="multi-li">Piutang</span>
               </a>
             </li>
             
@@ -508,6 +532,18 @@ thead{
           </a>
           <ul class="treeview-menu">
 
+            <li class="kartustok">
+              <a href="<?php echo base_url('kartustok') ?>">
+                <i class="material-icons">more_horiz</i>
+                <span class="multi-li">Kartu Stok</span>
+              </a>
+            </li>
+            <li class="saldo">
+              <a href="<?php echo base_url('saldo') ?>">
+                <i class="material-icons">more_horiz</i>
+                <span class="multi-li">Saldo</span>
+              </a>
+            </li>
             <li class="coa">
               <a href="<?php echo base_url('keuangan/coa') ?>">
                 <i class="material-icons">more_horiz</i>
@@ -536,12 +572,6 @@ thead{
               <a href="<?php echo base_url('keuangan/buku_besar') ?>">
                 <i class="material-icons">more_horiz</i>
                 <span class="multi-li">Buku Besar</span>
-              </a>
-            </li>
-            <li class="penyesuaian">
-              <a href="<?php echo base_url('keuangan/saldo') ?>">
-                <i class="material-icons">more_horiz</i>
-                <span class="multi-li">Penyesuaian Saldo</span>
               </a>
             </li>
             

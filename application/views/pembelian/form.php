@@ -5,17 +5,17 @@
 </style>
 
 <!-- Main content --> 
-<section class="content"> 
+<section class="content">  
  
-  <!-- Default box -->  
-  <div class="box"> 
+  <!-- Default box -->   
+  <div class="box">  
     <div class="box-header with-border">  
 
       <div class="back" align="left" hidden>
         <a href="<?= @$_SERVER['HTTP_REFERER'] ?>"><button class="btn btn-danger"><i class="fa fa-arrow-left"></i> Kembali</button></a>
       </div> 
- 
-      <div class="box-tools pull-right"> 
+  
+      <div class="box-tools pull-right">   
         <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
           <i class="fa fa-minus"></i></button>
         <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
@@ -139,13 +139,13 @@
                 </select>
               </td>
               <td>
-                <input type="number" name="berat[]" class="berat form-control" value="0" min="0" step="any">
+                <input type="text" name="berat[]" class="berat form-control" value="0" min="1" step="any">
               </td>
               <td>
-                <input type="number" name="panjang[]" class="panjang form-control" value="0" min="0" step="any">
+                <input type="text" name="panjang[]" class="panjang form-control" value="0" step="any">
               </td>
               <td>
-                <input type="number" name="harga[]" class="harga form-control" required value="0" min="0" step="any">
+                <input type="text" name="harga[]" class="harga form-control" required value="0" min="1" step="any">
               </td>
               <td>
                 <input readonly="" type="text" name="total[]" class="total form-control" required value="0" min="0">
@@ -165,7 +165,7 @@
               <td colspan="3"></td>
               <td align="right"><b>Ekspedisi</b> <span class="stn">Rp</span></td>
               <td>
-                <input min="0" type="number" name="ekspedisi_total" class="ekspedisi form-control" value="0" required step="any" id="ekspedisi_total">
+                <input min="0" type="text" name="ekspedisi_total" class="ekspedisi form-control" value="0" required step="any" id="ekspedisi_total">
               </td>
             </tr>
 
@@ -173,7 +173,7 @@
               <td colspan="3"></td>
               <td align="right"><b>PPN</b> <span class="stn">&#160;%&#160;</span></td>
               <td>
-                <input readonly="" id="ppn" type="text" name="ppn" class="form-control" value="<?=$ppn['pajak_persen']?>">
+                <input readonly="" id="ppn" type="text" name="ppn" class="form-control text-number" value="<?=$ppn['pajak_persen']?>">
               </td>
               <td><input class="check" type="checkbox" checked="" style="-webkit-transform: scale(1.5);margin-top: 10px;"></td>
             </tr>
@@ -226,7 +226,7 @@ $('#previewImg').attr('src', '<?=base_url('assets/gambar/camera.png')?>');
         var i = (index + 1);
         
         //get
-        target.closest('tr').find('.harga').val(number_format(val['bahan_harga']));
+        target.closest('tr').find('.harga').val(val['bahan_harga']);
 
       });
   });
@@ -240,7 +240,7 @@ $(document).on('change', '#status', function() {
 
     //status lunas jatuh tempo tidak perlu
     $('#jatuh_tempo').removeAttr('required');
-    $('#jatuh_tempo').attr('readonly', true);
+    $('#jatuh_tempo').val('').attr('readonly', true);
 
   }else{
 
@@ -296,33 +296,33 @@ $(document).on('change', '#status', function() {
        var i = index+1;
        var target = $(this).closest('tr');
 
-       var berat = target.find('.berat').val().replaceAll('.', '');
-       var harga = target.find('.harga').val().replaceAll('.', '');
+       var berat = target.find('.berat').val();
+       var harga = target.find('.harga').val().replaceAll(',', '');
 
        //perhitungan
        var total = Number(berat) * Number(harga);
        sum_berat += Number($(this).val());
 
        //total number format
-       target.find('.total').val(number_format(total));
+       target.find('.total').val(number_format(total.toFixed(3).replaceAll('.000', '')));
 
     });
 
     //subtotal
-    $('#subtotal').val(number_format(sum_berat));
+    $('#subtotal').val(sum_berat);
 
     //total akhir
     var sum_total = 0;
     $.each($('.total'), function(index, val) {
         
-      sum_total += Number($(this).val().replaceAll('.', ''));
+      sum_total += Number($(this).val().replaceAll(',', ''));
     });
 
     //total akhir
-    var ekspedisi = Number($('#ekspedisi_total').val().replaceAll('.', ''));
-    var ppn = (Number($('#ppn').val()) * Number(sum_total) / 100);
-    var grandtotal = ppn + sum_total + ekspedisi;
-    $('#grandtotal').val(number_format(grandtotal));
+    var ekspedisi = Number($('#ekspedisi_total').val().replaceAll(',', ''));
+
+    var grandtotal =sum_total + ekspedisi;
+    $('#grandtotal').val(number_format(grandtotal.toFixed(3).replaceAll('.000', '')));
 
     setTimeout(function() {
         auto();
