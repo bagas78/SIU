@@ -2,13 +2,13 @@
 if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 class Partial extends CI_Controller
-{
+{ 
     public function __construct()
     {
         parent::__construct();
         $this->load->model('m_partial');
     }
-    public function index()
+    public function index() 
     {
         $data['title'] = 'Partial Stok';
     	$this->load->view('v_template_admin/admin_header',$data);
@@ -31,7 +31,7 @@ class Partial extends CI_Controller
         );
 
         echo json_encode($output);
-    } 
+    }
     function proses($id){
 
        //data
@@ -66,36 +66,37 @@ class Partial extends CI_Controller
     }
     function save(){
 
-        $nomor = strip_tags(@$_POST['nomor']);
-        $berat = $_POST['berat'];
-        $panjang = $_POST['panjang'];
         $id = @$_POST['id'];
         
-        for ($i = 0; $i < count($berat); ++$i) {
+        for ($i = 0; $i < count($id); ++$i) {
+
+            $nomor = strip_tags(@$_POST['nomor'][$i]);
+            $berat = strip_tags(@$_POST['berat'][$i]);
+            $panjang = strip_tags(@$_POST['panjang'][$i]);            
+            $barang = strip_tags(@$_POST['barang'][$i]);
 
             $set = array(
                     'pembelian_partial_nomor' => $nomor,
-                    'pembelian_partial_join' => strip_tags($id[$i]),
-                    'pembelian_partial_barang' => strip_tags(@$_POST['barang'][$i]),
-                    'pembelian_partial_berat' => strip_tags(@$berat[$i]),
-                    'pembelian_partial_panjang' => strip_tags(@$panjang[$i]), 
+                    'pembelian_partial_join' => $id[$i],
+                    'pembelian_partial_barang' => $barang,
+                    'pembelian_partial_berat' => $berat,
+                    'pembelian_partial_panjang' => $panjang, 
                 );
 
             $db = $this->query_builder->add('t_pembelian_partial',$set);
-        }
-
-        if ($db == 1) {
 
             //update stok bahan & kartu stok
             $this->partial_stok->pembelian();
             $this->stok->transaksi();
             $this->kartu->add($nomor, 'pembelian');
+        }
 
+        if ($db == 1) {
             $this->session->set_flashdata('success', 'Data berhasil di simpan');
         }else{
             $this->session->set_flashdata('gagal', 'Data gagal di simpan');
         }
 
-        redirect(base_url('partial'));
+        redirect(base_url('pembelian/utama'));
     }
 }

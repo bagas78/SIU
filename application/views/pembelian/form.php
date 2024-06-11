@@ -12,7 +12,7 @@
     <div class="box-header with-border">  
 
       <div class="back" align="left" hidden>
-        <a href="<?= @$_SERVER['HTTP_REFERER'] ?>"><button class="btn btn-danger"><i class="fa fa-arrow-left"></i> Kembali</button></a>
+        <a href="<?= @$_SERVER['HTTP_REFERER'] ?>"><button class="btn btn-danger"><i class="fa fa-arrow-left"></i> Kembali</button></a> 
       </div> 
   
       <div class="box-tools pull-right">   
@@ -120,6 +120,7 @@
           <thead>
             <tr>
               <th width="300">Bahan</th>
+              <th width="300">Kode Item</th>
               <th width="200">Berat <span class="stn">Kg</span></th>
               <th width="200">Panjang <span class="stn">Mtr</span></th>
               <th width="200">Harga <span class="stn">Rp</span></th>
@@ -139,6 +140,9 @@
                 </select>
               </td>
               <td>
+                <input required type="text" name="kode[]" class="kode form-control">
+              </td>
+              <td>
                 <input type="text" name="berat[]" class="berat form-control" value="0" min="1" step="any">
               </td>
               <td>
@@ -156,13 +160,13 @@
             </tr>
 
             <tr>
-              <td colspan="3"></td>
+              <td colspan="4"></td>
               <td align="right"><b>Subtotal</b> <span class="stn">Kg</span></td>
               <td><input id="subtotal" readonly="" type="text" name="subtotal" class="form-control"></td>
             </tr>
 
             <tr>
-              <td colspan="3"></td>
+              <td colspan="4"></td>
               <td align="right"><b>Ekspedisi</b> <span class="stn">Rp</span></td>
               <td>
                 <input min="0" type="text" name="ekspedisi_total" class="ekspedisi form-control" value="0" required step="any" id="ekspedisi_total">
@@ -170,7 +174,7 @@
             </tr>
 
             <tr>
-              <td colspan="3"></td>
+              <td colspan="4"></td>
               <td align="right"><b>PPN</b> <span class="stn">&#160;%&#160;</span></td>
               <td>
                 <input readonly="" id="ppn" type="text" name="ppn" class="form-control text-number" value="<?=$ppn['pajak_persen']?>">
@@ -179,13 +183,13 @@
             </tr>
 
             <tr>
-              <td colspan="3"></td>
+              <td colspan="4"></td>
               <td align="right"><b>Grand Total</b> <span class="stn">Rp</span></td>
               <td><input id="grandtotal" readonly="" type="text" name="grandtotal" class="form-control" value="0" min="0"></td>
             </tr>
 
             <tr class="save">
-              <td colspan="5" align="right">
+              <td colspan="6" align="right">
                 <button type="submit" class="btn btn-primary">Simpan <i class="fa fa-check"></i></button>
                 <a href="<?= @$_SERVER['HTTP_REFERER'] ?>"><button type="button" class="btn btn-danger">Batal <i class="fa fa-times"></i></button></a>
               </td>

@@ -5,7 +5,7 @@
       <!-- Default box --> 
       <div class="box"> 
         <div class="box-header with-border">
- 
+  
             <div align="left" class="bahan_add row"> 
 
               <div class="col-md-2"> 
@@ -48,7 +48,7 @@
                   <th>Harga <span class="stn">Rp</span></th>
                   <th>Hpp <span class="stn">Rp</span></th>
                   <th>Kategori</th>
-                  <th width="40">Action</th>
+                  <th width="60">Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -138,7 +138,8 @@
                         "render": 
                         function(data) {
                             return "<div class='action'><a href='<?= base_url('bahan/edit/')?>"+data+"'><button class='btn btn-xs btn-primary bahan_add'><i class='fa fa-edit'></i></button></a> "+
-                            "<button onclick=del('<?= base_url('bahan/delete/')?>"+data+"') class='btn btn-xs btn-danger bahan_del'><i class='fa fa-trash'></i></button></div>";
+                            "<button onclick=del('<?= base_url('bahan/delete/')?>"+data+"') class='btn btn-xs btn-danger bahan_del'><i class='fa fa-trash'></i></button> "+
+                            "<a href= '<?=base_url('bahan/list/')?>"+data+"'><button class='btn btn-xs btn-info bahan_list'><i class='fa fa-list-ul '></i></button></a></div>";
                           }
                         },
                         

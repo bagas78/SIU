@@ -11,16 +11,19 @@ class Stok{
 
   /////////////////////////////////////////// atribut /////////////////////////////////////////////////
   
-  function pembelian(){     
+  function pembelian(){      
     //sum stok bahan update 
       $pembelian = $this->sql->db->query("SELECT SUM(b.pembelian_barang_berat_cek) AS berat, SUM(b.pembelian_barang_panjang_cek) AS panjang, b.pembelian_barang_barang AS bahan, a.pembelian_gudang AS gudang, SUM(b.pembelian_barang_total) AS total, SUM(b.pembelian_barang_ekspedisi) AS ekspedisi, a.pembelian_hapus AS hapus FROM t_pembelian AS a JOIN t_pembelian_barang AS b ON a.pembelian_nomor = b.pembelian_barang_nomor WHERE a.pembelian_proses = 1 AND a.pembelian_hapus = 0 GROUP BY a.pembelian_gudang, b.pembelian_barang_barang")->result_array();
 
       $bahan_baku = $this->sql->db->query("SELECT a.produksi_hapus AS hapus, produksi_gudang AS gudang ,b.produksi_barang_barang AS bahan, SUM(b.produksi_barang_panjang) AS panjang, ROUND(SUM(b.produksi_barang_berat * b.produksi_barang_panjang), 2) AS berat FROM t_produksi AS a JOIN t_produksi_barang AS b ON a.produksi_nomor = b.produksi_barang_nomor WHERE a.produksi_proses = 1 AND a.produksi_hapus = 0 GROUP BY b.produksi_barang_barang, a.produksi_gudang")->result_array();
 
+      $item = $this->sql->db->query("SELECT b.pembelian_barang_kode AS kode, SUM(b.pembelian_barang_berat_cek) AS berat, SUM(b.pembelian_barang_panjang_cek) AS panjang, b.pembelian_barang_barang AS bahan, a.pembelian_hapus AS hapus, a.pembelian_gudang AS gudang FROM t_pembelian AS a JOIN t_pembelian_barang AS b ON a.pembelian_nomor = b.pembelian_barang_nomor WHERE a.pembelian_proses = 1 AND a.pembelian_hapus = 0 GROUP BY a.pembelian_gudang, b.pembelian_barang_barang, b.pembelian_barang_kode")->result_array();
+
       //pembelian update stok produk
       
       //stok 0
       $this->sql->db->query("UPDATE t_bahan_gudang SET bahan_gudang_berat = 0, bahan_gudang_panjang = 0, bahan_gudang_hpp = 0, bahan_gudang_berat_permeter = 0");
+      $this->sql->db->query("UPDATE t_bahan_item SET bahan_item_berat = 0, bahan_item_panjang = 0");
       
       foreach (@$pembelian as $pb) {
 
@@ -71,6 +74,47 @@ class Stok{
             //update
             $this->sql->db->where(['bahan_gudang_gudang' => $gudang, 'bahan_gudang_bahan' => $bahan]);
             $this->sql->db->update('t_bahan_gudang');
+
+          }
+
+        }
+
+      }
+
+      //bahan item
+      foreach (@$item as $it) {
+
+        $bahan = $it['bahan'];
+        $berat = $it['berat'];
+        $panjang = $it['panjang'];
+        $gudang = $it['gudang'];
+        $hapus = $it['hapus'];
+        $kode = $it['kode'];
+
+        $cek = $this->sql->db->query("SELECT * FROM t_bahan_item WHERE bahan_item_bahan = '$bahan' AND bahan_item_gudang = '$gudang'")->num_rows();
+
+        if ($hapus != null && $hapus == 0) {
+
+          $set = array(
+                  'bahan_item_bahan' => $bahan,
+                  'bahan_item_gudang' => $gudang,
+                  'bahan_item_berat' => $berat,
+                  'bahan_item_panjang' => $panjang,
+                  'bahan_item_kode' => $kode,
+            );
+
+          $this->sql->db->set($set);  
+
+          if ($cek == 0) {
+
+            // insert
+            $this->sql->db->insert('t_bahan_item');
+
+          }else{
+
+            //update
+            $this->sql->db->where(['bahan_item_kode' => $kode,'bahan_item_gudang' => $gudang, 'bahan_item_bahan' => $bahan]);
+            $this->sql->db->update('t_bahan_item');
 
           }
 

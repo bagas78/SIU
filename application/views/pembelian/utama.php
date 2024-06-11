@@ -6,7 +6,7 @@
   }
 </style>
 
-    <!-- Main content --> 
+    <!-- Main content -->  
     <section class="content">
 
       <!-- Default box -->
@@ -49,9 +49,29 @@
         <div class="box-header with-border"> 
  
             <div align="left" class="pembelian_bahan_add">
-              <a href="<?= base_url('pembelian/'.@$url.'_add') ?>"><button class="btn btn-primary"><i class="fa fa-plus"></i> Tambah</button></a>
-               <button onclick="filter('lunas')" class="btn btn-default"><i class="fa fa-filter"></i> Lunas</button>
-              <button onclick="filter('belum')" class="btn btn-default"><i class="fa fa-filter"></i> Belum Lunas</button>
+
+              <div class="row">
+                
+                <div class="col-md-4">
+                
+                   <a href="<?= base_url('pembelian/'.@$url.'_add') ?>"><button class="btn btn-primary"><i class="fa fa-plus"></i> Tambah</button></a>
+                   <button onclick="filter('lunas')" class="btn btn-default"><i class="fa fa-filter"></i> Lunas</button>
+                  <button onclick="filter('belum')" class="btn btn-default"><i class="fa fa-filter"></i> Belum Lunas</button>
+                
+                </div>
+                <div class="col-md-4 row">
+                  <form method="POST" action="<?=base_url('pembelian/utama/partial')?>">
+                    <div class="col-md-10 col-xs-10">
+                      <input type="text" name="kode" class="form-control" placeholder="kode item">
+                    </div>
+                    <div class="col-md-1 row">
+                      <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                    </div>
+                  </form>
+                </div>
+
+              </div>
+
             </div>
 
           <div class="box-tools pull-right">

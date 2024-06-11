@@ -15,7 +15,7 @@
   if ('<?=@$data['pembelian_lampiran']?>' != '') {
     $('#previewImg').attr('src', '<?=base_url('assets/gambar/pembelian/'.@$data['pembelian_lampiran'])?>');
   }
-
+ 
   //get pembelian
   $.ajax({
       url: "<?=base_url('pembelian/get_pembelian/'.$data['pembelian_nomor'])?>",
@@ -45,9 +45,10 @@
 
           //insert value
           $('#copy:nth-child('+i+') > td:nth-child(1) > select').val(val.pembelian_barang_barang);
-          $('#copy:nth-child('+i+') > td:nth-child(2) > input').val(val.pembelian_barang_berat);
-          $('#copy:nth-child('+i+') > td:nth-child(3) > input').val(val.pembelian_barang_panjang);
-          $('#copy:nth-child('+i+') > td:nth-child(4) > input').val(number_format(val.pembelian_barang_harga));
+          $('#copy:nth-child('+i+') > td:nth-child(2) > input').val(val.pembelian_barang_kode);
+          $('#copy:nth-child('+i+') > td:nth-child(3) > input').val(val.pembelian_barang_berat);
+          $('#copy:nth-child('+i+') > td:nth-child(4) > input').val(val.pembelian_barang_panjang);
+          $('#copy:nth-child('+i+') > td:nth-child(5) > input').val(number_format(val.pembelian_barang_harga));
 
           //ppn 0
           if (<?=@$data['pembelian_ppn']?> == 0) {

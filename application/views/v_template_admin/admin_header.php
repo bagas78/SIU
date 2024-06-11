@@ -368,12 +368,12 @@ thead{
                 <span class="multi-li">Pembayaran Hutang</span>
               </a>
             </li>
-            <li class="pembelian_partial">
+           <!--  <li class="pembelian_partial">
               <a href="<?php echo base_url('partial') ?>">
                 <i class="material-icons">more_horiz</i>
                 <span class="multi-li">Partial Stok</span>
               </a>
-            </li>
+            </li> -->
             
           </ul>
         </li>

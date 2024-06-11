@@ -1,6 +1,6 @@
 <?php
 class Pembelian extends CI_Controller{
-
+ 
 	function __construct(){ 
 		parent::__construct();
 		$this->load->model('m_pembelian');
@@ -156,6 +156,7 @@ class Pembelian extends CI_Controller{
 			$set2 = array(
 						'pembelian_barang_nomor' => $nomor,
 						'pembelian_barang_barang' => strip_tags($_POST['barang'][$i]),
+						'pembelian_barang_kode' => strip_tags($_POST['kode'][$i]),
 						'pembelian_barang_berat' => $berat,
 						'pembelian_barang_panjang' => $panjang,
 						'pembelian_barang_harga' => strip_tags(str_replace(',', '', $_POST['harga'][$i])),
@@ -296,6 +297,7 @@ class Pembelian extends CI_Controller{
 			$set2 = array(
 						'pembelian_barang_nomor' => $nomor,
 						'pembelian_barang_barang' => strip_tags($_POST['barang'][$i]),
+						'pembelian_barang_kode' => strip_tags($_POST['kode'][$i]),
 						'pembelian_barang_berat' => $berat,
 						'pembelian_barang_panjang' => $panjang,
 						'pembelian_barang_harga' => strip_tags(str_replace(',', '', $_POST['harga'][$i])),
@@ -479,7 +481,7 @@ class Pembelian extends CI_Controller{
 
 ////////// pembelian bahan ///////////////////////////////////
 
-	function utama()
+	function utama($x = '')
 	{
 		if ( $this->session->userdata('login') == 1) {
 
@@ -487,9 +489,24 @@ class Pembelian extends CI_Controller{
 			$data["title"] = $active; 
 			$data['url'] = $active;
 		    
-		    $this->load->view('v_template_admin/admin_header',$data);
-		    $this->load->view('pembelian/utama');
-		    $this->load->view('v_template_admin/admin_footer');
+		    if ($x == '') {
+		    	
+		    	$this->load->view('v_template_admin/admin_header',$data);
+		    	$this->load->view('pembelian/utama');
+		    	$this->load->view('v_template_admin/admin_footer');
+
+		    }else{
+
+		    	//partial stok
+
+		    	$kode = strip_tags(@$_POST['kode']);
+			
+				$data['data'] = $this->query_builder->view("SELECT * FROM t_pembelian as a JOIN t_pembelian_barang AS b ON a.pembelian_nomor = b.pembelian_barang_nomor JOIN t_bahan AS c ON b.pembelian_barang_barang = c.bahan_id WHERE b.pembelian_barang_kode = '$kode' AND b.pembelian_barang_berat_cek < b.pembelian_barang_berat AND b.pembelian_barang_panjang_cek < b.pembelian_barang_panjang AND a.pembelian_hapus = 0 AND a.pembelian_proses = 1");
+			    
+			    $this->load->view('v_template_admin/admin_header',$data);
+			    $this->load->view('pembelian/partial');
+			    $this->load->view('v_template_admin/admin_footer');
+		    }
 
 		} else {
 			redirect(base_url('login'));
@@ -959,4 +976,42 @@ class Pembelian extends CI_Controller{
 		$redirect = 'bayar';
 		$this->update($po, $proses, $redirect);
 	}
+
+	///////////////////////// partial stok //////////////////////
+
+	function partial_save(){
+        
+        $berat = @$_POST['berat'];
+
+        for ($i = 0; $i < count($berat); ++$i) {
+
+            $nomor = strip_tags(@$_POST['nomor'][$i]);
+            $panjang = strip_tags(@$_POST['panjang'][$i]);            
+            $barang = strip_tags(@$_POST['barang'][$i]);
+            $kode = strip_tags(@$_POST['kode'][$i]);
+
+            $set = array(
+                    'pembelian_partial_nomor' => $nomor,
+                    'pembelian_partial_barang' => $barang,
+                    'pembelian_partial_berat' => $berat[$i],
+                    'pembelian_partial_panjang' => $panjang,
+                    'pembelian_partial_kode' => $kode, 
+                );
+
+            $db = $this->query_builder->add('t_pembelian_partial',$set);
+
+            //update stok bahan & kartu stok
+            $this->partial_stok->pembelian();
+            $this->stok->transaksi();
+            $this->kartu->add($nomor, 'pembelian');
+        }
+
+        if ($db == 1) {
+            $this->session->set_flashdata('success', 'Data berhasil di simpan');
+        }else{
+            $this->session->set_flashdata('gagal', 'Data gagal di simpan');
+        }
+
+        redirect(base_url('pembelian/utama'));
+    }
 }
