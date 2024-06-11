@@ -109,7 +109,12 @@
                         function(data) {
                           return "<span class='kode'>"+data+"</span>";
                         }},
-                        { "data": "gudang_nama"}, 
+                        { "data": "gudang_nama",
+                        "render":
+                        function(data) {
+                          if (data != null) {var d = data;}else{var d = ''}
+                          return "<span class='gudang'>"+d+"</span>";
+                        }}, 
                         { "data": "bahan_nama"},
                         { "data": "berat",
                         "render":
@@ -176,6 +181,19 @@ function auto(){
           $(this).text(val.replaceAll('.00', ''));
 
        });
+
+    });
+
+    //hide list
+    $.each($('.gudang'), function(index, val) {
+       
+       var val = $(this).text();
+
+       if (val == '') {
+
+          $(this).closest('tr').find('.bahan_list').remove();
+
+       }
 
     });
 
