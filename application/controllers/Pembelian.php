@@ -5,7 +5,8 @@ class Pembelian extends CI_Controller{
 		parent::__construct();
 		$this->load->model('m_pembelian');
 		$this->load->model('m_pembelian_umum');
-		$this->load->model('m_bahan');  
+		$this->load->model('m_bahan');
+		$this->load->model('m_partial');  
 	}   
 
 ///////////////////////// pembelian //////////////////////////////////////////////////
@@ -157,6 +158,8 @@ class Pembelian extends CI_Controller{
 						'pembelian_barang_nomor' => $nomor,
 						'pembelian_barang_barang' => strip_tags($_POST['barang'][$i]),
 						'pembelian_barang_kode' => strip_tags($_POST['kode'][$i]),
+						'pembelian_barang_berat_qty' => $berat / $panjang,
+						'pembelian_barang_panjang_qty' => $panjang / $berat,
 						'pembelian_barang_berat' => $berat,
 						'pembelian_barang_panjang' => $panjang,
 						'pembelian_barang_harga' => strip_tags(str_replace(',', '', $_POST['harga'][$i])),
@@ -298,6 +301,8 @@ class Pembelian extends CI_Controller{
 						'pembelian_barang_nomor' => $nomor,
 						'pembelian_barang_barang' => strip_tags($_POST['barang'][$i]),
 						'pembelian_barang_kode' => strip_tags($_POST['kode'][$i]),
+						'pembelian_barang_berat_qty' => $berat / $panjang,
+						'pembelian_barang_panjang_qty' => $panjang / $berat,
 						'pembelian_barang_berat' => $berat,
 						'pembelian_barang_panjang' => $panjang,
 						'pembelian_barang_harga' => strip_tags(str_replace(',', '', $_POST['harga'][$i])),
@@ -500,8 +505,10 @@ class Pembelian extends CI_Controller{
 		    	//partial stok
 
 		    	$kode = strip_tags(@$_POST['kode']);
+		    	$x1 = str_replace(', ', ',', $kode);
+		    	$x2 = '"'.str_replace(',', '","', $x1).'"';
 			
-				$data['data'] = $this->query_builder->view("SELECT * FROM t_pembelian as a JOIN t_pembelian_barang AS b ON a.pembelian_nomor = b.pembelian_barang_nomor JOIN t_bahan AS c ON b.pembelian_barang_barang = c.bahan_id WHERE b.pembelian_barang_kode = '$kode' AND b.pembelian_barang_berat_cek < b.pembelian_barang_berat AND b.pembelian_barang_panjang_cek < b.pembelian_barang_panjang AND a.pembelian_hapus = 0 AND a.pembelian_proses = 1");
+				$data['data'] = $this->query_builder->view("SELECT * FROM t_pembelian as a JOIN t_pembelian_barang AS b ON a.pembelian_nomor = b.pembelian_barang_nomor JOIN t_bahan AS c ON b.pembelian_barang_barang = c.bahan_id WHERE b.pembelian_barang_kode IN($x2) AND b.pembelian_barang_berat_cek < b.pembelian_barang_berat AND b.pembelian_barang_panjang_cek < b.pembelian_barang_panjang AND a.pembelian_hapus = 0 AND a.pembelian_proses = 1");
 			    
 			    $this->load->view('v_template_admin/admin_header',$data);
 			    $this->load->view('pembelian/partial');
@@ -1014,4 +1021,29 @@ class Pembelian extends CI_Controller{
 
         redirect(base_url('pembelian/utama'));
     }
+
+    function partial_list(){
+
+    	if ( $this->session->userdata('login') == 1) {
+
+		    $active = 'utama';
+			$data["title"] = $active; 
+			$data['url'] = $active;
+		    
+		    $this->load->view('v_template_admin/admin_header',$data);
+		    $this->load->view('pembelian/partial_list');
+		    $this->load->view('v_template_admin/admin_footer');
+
+		} else {
+			redirect(base_url('login'));
+		}
+    }
+
+    function partial_get_data(){
+		
+		$model = 'm_partial';
+		$where = array('pembelian_partial_hapus' => 0);
+		$output = $this->serverside($where, $model);
+		echo json_encode($output);
+	}
 }

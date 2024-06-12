@@ -3,16 +3,16 @@
 class M_partial extends CI_Model { 
 
 	//nama tabel
-	var $table = 't_pembelian';  
+	var $table = 't_pembelian_partial'; 
 
 	//kolom yang di tampilkan
-	var $column_order = array(null,'pembelian_nomor','kontak_nama','pembelian_jatuh_tempo','pembelian_status'); 
+	var $column_order = array(null,'pembelian_partial_id','pembelian_partial_tanggal'); 
 
 	//kolom yang di tampilkan setelah seacrh
-	var $column_search = array('pembelian_nomor','kontak_nama','pembelian_jatuh_tempo','pembelian_status'); 
+	var $column_search = array('pembelian_partial_nomor','pembelian_partial_kode'); 
 
 	//urutan 
-	var $order = array('pembelian_id' => 'desc'); 
+	var $order = array('pembelian_partial_id' => 'desc'); 
 
 	public function __construct()
 	{
@@ -61,24 +61,20 @@ class M_partial extends CI_Model {
 
 	function get_datatables($where)
 	{
-		$this->db->select('*');
-		$this->db->select('SUM(t_pembelian_barang.pembelian_barang_berat - t_pembelian_barang.pembelian_barang_berat_cek) AS berat_cek, SUM(t_pembelian_barang.pembelian_barang_panjang - t_pembelian_barang.pembelian_barang_panjang_cek) AS panjang_cek');
 		$this->_get_datatables_query();
 		if($_GET['length'] != -1)
 		$this->db->where($where);
-		$this->db->join('t_kontak', 't_pembelian.pembelian_supplier = t_kontak.kontak_id');
-		$this->db->join('t_pembelian_barang', 't_pembelian_barang.pembelian_barang_nomor = t_pembelian.pembelian_nomor');
-		$this->db->group_by('pembelian_nomor');
+		$this->db->join('t_bahan', 't_bahan.bahan_id = t_pembelian_partial.pembelian_partial_barang');
 		$this->db->limit($_GET['length'], $_GET['start']);
 		$query = $this->db->get();
 		return $query->result();
 	}
 
 	function count_filtered($where)
-	{	
+	{
 		$this->_get_datatables_query();
+		$this->db->join('t_bahan', 't_bahan.bahan_id = t_pembelian_partial.pembelian_partial_barang');
 		$this->db->where($where);
-		$this->db->group_by('pembelian_nomor');
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
@@ -86,8 +82,8 @@ class M_partial extends CI_Model {
 	public function count_all($where)
 	{
 		$this->db->from($this->table);
+		$this->db->join('t_bahan', 't_bahan.bahan_id = t_pembelian_partial.pembelian_partial_barang');
 		$this->db->where($where);
-		$this->db->group_by('pembelian_nomor');
 		return $this->db->count_all_results();
 	}
 

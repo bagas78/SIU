@@ -5,8 +5,8 @@
     color: white;
   }
 </style>
-
-    <!-- Main content -->  
+ 
+    <!-- Main content -->   
     <section class="content">
  
       <!-- Default box --> 
@@ -47,8 +47,8 @@
                                 <td><?=$v['pembelian_barang_nomor']?></td>
                                 <td>
                                     <span><?=$v['bahan_nama']?></span><br/>
-                                    <span class="badge">Berat : <?=$v['pembelian_barang_berat'] - $v['pembelian_barang_berat_cek'].' kg' ?></span> 
                                     <span class="badge">Panjang : <?=$v['pembelian_barang_panjang'] - $v['pembelian_barang_panjang_cek'].' m' ?></span>
+                                    <span class="badge">Berat : <?=$v['pembelian_barang_berat'] - $v['pembelian_barang_berat_cek'].' kg' ?></span> 
 
                                     <!-- hidden -->
                                     <input type="hidden" name="nomor[]" class="form-control" value="<?=$v['pembelian_barang_nomor']?>">
@@ -58,8 +58,14 @@
 
                                 </td>
                                 <td><?=$v['pembelian_barang_kode']?></td>
-                                <td><input type="number" name="berat[]" class="form-control"></td>
-                                <td><input type="number" name="panjang[]" class="form-control"></td>
+                                <td>
+                                  <input type="number" name="panjang[]" class="form-control panjang">
+                                  <input type="hidden" class="form-control panjang_qty" value="<?=$v['pembelian_barang_panjang_qty'];?>">
+                                </td>
+                                <td>
+                                  <input type="number" name="berat[]" class="form-control berat">
+                                  <input type="hidden" class="form-control berat_qty" value="<?=$v['pembelian_barang_berat_qty'];?>">
+                                </td>
                             </tr>
 
                         <?php endforeach ?>
@@ -87,3 +93,25 @@
         
       </div>
       <!-- /.box -->
+
+<script type="text/javascript">
+  
+  $(document).on('keyup', '.berat', function() {
+    
+    var berat = $(this).val();
+    var panjang_qty = $(this).closest('tr').find('.panjang_qty').val();
+
+    $(this).closest('tr').find('.panjang').val(berat * panjang_qty);
+
+  });
+
+  $(document).on('keyup', '.panjang', function() {
+    
+    var panjang = $(this).val();
+    var berat_qty = $(this).closest('tr').find('.berat_qty').val();
+
+    $(this).closest('tr').find('.berat').val(panjang * berat_qty);
+
+  });
+
+</script>
