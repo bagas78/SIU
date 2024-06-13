@@ -5,7 +5,7 @@
     color: white;
   }
 </style>
-
+ 
     <!-- Main content -->  
     <section class="content">
 
@@ -21,15 +21,15 @@
           </div>
         </div>
         <div class="box-body">
-          <h4 align="center" class="tit">Antrean Pesanan (PO)</h4>
+          <h4 align="center" class="tit">Antrean Penerimaan Bahan</h4>
           <table id="example1" class="table table-bordered table-hover" style="width: 100%;">
                 <thead>
                 <tr>
                   <th>Nomor</th> 
-                  <th>Supplier</th>
+                  <!-- <th>Supplier</th> -->
                   <th>Tanggal</th>
-                  <th>Jatuh Tempo</th>
-                  <th>Status</th>
+                  <!-- <th>Jatuh Tempo</th> -->
+                  <!-- <th>Status</th> -->
                   <th width="60">Action</th>
                 </tr>
                 </thead>
@@ -82,12 +82,12 @@
           </div>
         </div>
         <div class="box-body">
-          <h4 align="center" class="tit">Proses Pembelian</h4>
+          <h4 align="center" class="tit">Barang Diterima</h4>
           <table id="example2" class="table table-bordered table-hover" style="width: 100%;">
                 <thead>
                 <tr>
                   <th>Nomor</th> 
-                  <th>Supplier</th>
+                  <!-- <th>Supplier</th> -->
                   <th>Tanggal</th>
                   <th>Jatuh Tempo</th>
                   <th>Status</th>
@@ -122,27 +122,27 @@
             },
             "columns": [                               
                         { "data": "pembelian_nomor"},
-                        { "data": "kontak_nama"},
+                        // { "data": "kontak_nama"},
                         { "data": "pembelian_tanggal",
                         "render": 
                         function( data ) {
                             return "<span>"+moment(data).format("DD/MM/YYYY")+"</span>";
                           }
                         },
-                        { "data": "pembelian_jatuh_tempo",
-                        "render": 
-                        function( data ) {
-                            if (data == '0000-00-00') {var j = '-';}else{var j = moment(data).format("DD/MM/YYYY");}
-                            return "<span>"+j+"</span>";
-                          }
-                        },
-                        { "data": "pembelian_status",
-                        "render": 
-                        function( data ) {
-                            if (data == 'lunas') {var s = 'Lunas';} else {var s = 'Belum Lunas';}
-                            return "<span>"+s+"</span>";
-                          }
-                        },
+                        // { "data": "pembelian_jatuh_tempo",
+                        // "render": 
+                        // function( data ) {
+                        //     if (data == '0000-00-00') {var j = '-';}else{var j = moment(data).format("DD/MM/YYYY");}
+                        //     return "<span>"+j+"</span>";
+                        //   }
+                        // },
+                        // { "data": "pembelian_partial",
+                        // "render": 
+                        // function( data ) {
+                        //     if (data == '1') {var s = 'Selesai';} else {var s = 'Sebagian';}
+                        //     return "<span>"+s+"</span>";
+                        //   }
+                        // },
                         { "data": "pembelian_id",
                         "render": 
                         function( data ) {
@@ -171,7 +171,7 @@
             },
             "columns": [                               
                         { "data": "pembelian_nomor"},
-                        { "data": "kontak_nama"},
+                        // { "data": "kontak_nama"},
                         { "data": "pembelian_tanggal",
                         "render": 
                         function( data ) {
@@ -185,10 +185,10 @@
                             return "<span>"+j+"</span>";
                           }
                         },
-                        { "data": "pembelian_status",
+                        { "data": "pembelian_partial",
                         "render": 
                         function( data ) {
-                            if (data == 'lunas') {var s = 'Lunas';} else {var s = 'Belum Lunas';}
+                            if (data == '1') {var s = 'Selesai';} else {var s = 'Sebagian';}
                             return "<span>"+s+"</span>";
                           }
                         },

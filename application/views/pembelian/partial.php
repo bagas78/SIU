@@ -7,7 +7,7 @@
 </style>
  
     <!-- Main content -->   
-    <section class="content">
+    <section class="content"> 
  
       <!-- Default box --> 
       <div class="box"> 
@@ -63,7 +63,7 @@
                                   <input type="hidden" class="form-control panjang_qty" value="<?=$v['pembelian_barang_panjang_qty'];?>">
                                 </td>
                                 <td>
-                                  <input type="number" name="berat[]" class="form-control berat">
+                                  <input readonly type="number" name="berat[]" class="form-control berat">
                                   <input type="hidden" class="form-control berat_qty" value="<?=$v['pembelian_barang_berat_qty'];?>">
                                 </td>
                             </tr>

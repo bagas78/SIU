@@ -4,7 +4,7 @@
   }
 </style>
 
-<!-- Main content --> 
+<!-- Main content -->  
 <section class="content">  
  
   <!-- Default box -->   
@@ -119,12 +119,12 @@
         <table class="table table-responsive table-borderless">
           <thead>
             <tr>
-              <th width="300">Bahan</th>
-              <th width="300">Kode Item</th>
-              <th width="200">Berat <span class="stn">Kg</span></th>
-              <th width="200">Panjang <span class="stn">Mtr</span></th>
-              <th width="200">Harga <span class="stn">Rp</span></th>
-              <th width="200">Total <span class="stn">Rp</span></th>
+              <th class="th-bahan" width="300">Bahan</th>
+              <th class="th-kode" width="300">Kode Item</th>
+              <th class="th-berat" width="200">Berat <span class="stn">Kg</span></th>
+              <th class="th-panjang" width="200">Panjang <span class="stn">Mtr</span></th>
+              <th class="th-harga" width="200">Harga <span class="stn">Rp</span></th>
+              <th class="th-total" width="200">Total <span class="stn">Rp</span></th>
               <th><button type="button" onclick="clone()" class="add btn btn-success btn-sm"><i class="fa fa-plus"></i></button></th>
             </tr>
           </thead>
@@ -327,6 +327,32 @@ $(document).on('change', '#status', function() {
 
     var grandtotal =sum_total + ekspedisi;
     $('#grandtotal').val(number_format(grandtotal.toFixed(3).replaceAll('.000', '')));
+
+
+    <?php if ($this->uri->segment(2) == 'po_proses'): ?>
+
+      //hide proses
+      $('#status').closest('.form-group').hide();
+      $('#pembayaran').closest('.form-group').hide();
+      $('.harga').closest('td').hide();
+      $('.total').closest('td').hide();
+      $('.th-harga').hide();
+      $('.th-total').hide();
+      $('#subtotal').closest('tr').hide();
+      $('#ekspedisi_total').closest('tr').hide();
+      $('#ppn').closest('tr').hide();
+      $('#grandtotal').closest('tr').hide();
+      $('.add').closest('th').hide();
+      $('.remove').closest('td').hide();
+
+      //lock
+      $('#nomor').attr('readonly', '');
+      $('#supplier').closest('.form-group').css('pointer-events', 'none');
+      $('#supplier').closest('.form-group').find('.select2-selection--single').css('background', '#EEEEEE');
+      $('#barang').attr('readonly', '').css('pointer-events', 'none');
+      $('.kode').attr('readonly', '');
+
+    <?php endif ?>
 
     setTimeout(function() {
         auto();

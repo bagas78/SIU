@@ -1,9 +1,9 @@
 <?php
 class Pembelian extends CI_Controller{
  
-	function __construct(){ 
+	function __construct(){  
 		parent::__construct();
-		$this->load->model('m_pembelian');
+		$this->load->model('m_pembelian'); 
 		$this->load->model('m_pembelian_umum');
 		$this->load->model('m_bahan');
 		$this->load->model('m_partial');  
@@ -508,7 +508,7 @@ class Pembelian extends CI_Controller{
 		    	$x1 = str_replace(', ', ',', $kode);
 		    	$x2 = '"'.str_replace(',', '","', $x1).'"';
 			
-				$data['data'] = $this->query_builder->view("SELECT * FROM t_pembelian as a JOIN t_pembelian_barang AS b ON a.pembelian_nomor = b.pembelian_barang_nomor JOIN t_bahan AS c ON b.pembelian_barang_barang = c.bahan_id WHERE b.pembelian_barang_kode IN($x2) AND b.pembelian_barang_berat_cek < b.pembelian_barang_berat AND b.pembelian_barang_panjang_cek < b.pembelian_barang_panjang AND a.pembelian_hapus = 0 AND a.pembelian_proses = 1");
+				$data['data'] = $this->query_builder->view("SELECT * FROM t_pembelian as a JOIN t_pembelian_barang AS b ON a.pembelian_nomor = b.pembelian_barang_nomor JOIN t_bahan AS c ON b.pembelian_barang_barang = c.bahan_id WHERE b.pembelian_barang_kode IN($x2) AND a.pembelian_partial = 0 AND a.pembelian_hapus = 0 AND a.pembelian_proses = 1");
 			    
 			    $this->load->view('v_template_admin/admin_header',$data);
 			    $this->load->view('pembelian/partial');
@@ -523,7 +523,7 @@ class Pembelian extends CI_Controller{
 	function utama_get_data(){
 		
 		$model = 'm_pembelian';
-		$where = array('pembelian_po' => 0,'pembelian_hapus' => 0);
+		$where = array('pembelian_proses' => 1,'pembelian_hapus' => 0);
 		$output = $this->serverside($where, $model);
 		echo json_encode($output);
 	}
@@ -1009,11 +1009,14 @@ class Pembelian extends CI_Controller{
 
             //update stok bahan & kartu stok
             $this->partial_stok->pembelian();
-            $this->stok->transaksi();
-            $this->kartu->add($nomor, 'pembelian');
         }
 
         if ($db == 1) {
+        	
+        	//update stok	
+        	$this->stok->transaksi();
+            $this->kartu->add($nomor, 'pembelian');
+
             $this->session->set_flashdata('success', 'Data berhasil di simpan');
         }else{
             $this->session->set_flashdata('gagal', 'Data gagal di simpan');

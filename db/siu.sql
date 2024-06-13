@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 12, 2024 at 09:26 PM
+-- Generation Time: Jun 13, 2024 at 09:29 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -123,9 +123,11 @@ CREATE TABLE `t_bahan_gudang` (
 --
 
 INSERT INTO `t_bahan_gudang` (`bahan_gudang_id`, `bahan_gudang_bahan`, `bahan_gudang_gudang`, `bahan_gudang_berat_permeter`, `bahan_gudang_berat`, `bahan_gudang_panjang`, `bahan_gudang_hpp`, `bahan_gudang_tanggal`) VALUES
-(1, '28', '0', '0.20', '10.00', '50.00', '98314.29', '2024-06-07'),
+(1, '28', '0', '0.38', '60.20', '160.00', '29869.48', '2024-06-07'),
 (2, '29', '0', '0.00', '0.00', '0.00', '0.00', '2024-06-07'),
-(3, '30', '0', '0.00', '0.00', '0.00', '0.00', '2024-06-12');
+(3, '30', '0', '2.09', '4426.91', '2123.00', '77914.81', '2024-06-12'),
+(4, '31', '0', '1.00', '30.00', '30.00', '25333.33', '2024-06-13'),
+(5, '33', '0', '0.00', '0.00', '0.00', '0.00', '2024-06-13');
 
 -- --------------------------------------------------------
 
@@ -148,8 +150,13 @@ CREATE TABLE `t_bahan_item` (
 --
 
 INSERT INTO `t_bahan_item` (`bahan_item_id`, `bahan_item_gudang`, `bahan_item_bahan`, `bahan_item_kode`, `bahan_item_berat`, `bahan_item_panjang`, `bahan_item_tanggal`) VALUES
-(4, '0', '28', 'GV-1', '10.00', '50.00', '2024-06-12'),
-(5, '0', '30', 'GV-3', '0.00', '0.00', '2024-06-12');
+(10, '0', '31', 'A11', '10.00', '10.00', '2024-06-13'),
+(11, '0', '31', 'A12', '10.00', '10.00', '2024-06-13'),
+(12, '0', '31', 'A13', '10.00', '10.00', '2024-06-13'),
+(13, '0', '28', 'GV-1', '20.00', '100.00', '2024-06-13'),
+(14, '0', '30', 'BRCT223089099', '4346.51', '2003.00', '2024-06-14'),
+(15, '0', '28', 'GV-2', '40.20', '60.00', '2024-06-14'),
+(16, '0', '30', 'GV-3', '80.40', '120.00', '2024-06-14');
 
 -- --------------------------------------------------------
 
@@ -510,7 +517,19 @@ INSERT INTO `t_kartu` (`kartu_id`, `kartu_gudang`, `kartu_jenis`, `kartu_transak
 (86, '0', 'pembelian', 'masuk', 'PB-12062024-2', '30', 'BH003', 'GALVALUME 0.27 X 914', 'Mtr', '0.00', NULL, '2024-06-12', '02:07:55', 0),
 (87, '0', 'pembelian', 'masuk', 'PB-12062024-1', '30', 'BH003', 'GALVALUME 0.27 X 914', 'Mtr', '0.00', NULL, '2024-06-12', '00:39:30', 0),
 (88, '0', 'pembelian', 'masuk', 'PB-12062024-1', '28', 'BH001', 'GALVALUME 0.20 X 914', 'Mtr', '0.00', NULL, '2024-06-12', '00:39:30', 0),
-(89, '0', 'pembelian', 'masuk', 'PB-12062024-1', '28', 'BH001', 'GALVALUME 0.20 X 914', 'Mtr', '50.00', NULL, '2024-06-12', '00:39:30', 0);
+(89, '0', 'pembelian', 'masuk', 'PB-12062024-1', '28', 'BH001', 'GALVALUME 0.20 X 914', 'Mtr', '50.00', NULL, '2024-06-12', '00:39:30', 0),
+(95, '0', 'pembelian', 'masuk', 'PB-13062024-5', '33', 'BH006', 'PPGL HIJAU 0.23 X 914', 'Mtr', '0.00', NULL, '2024-06-13', '07:59:05', 0),
+(121, '0', 'pembelian', 'masuk', 'PB-13062024-4', '31', 'BH004', 'GALVALUME 0.33 X 914', 'Mtr', '10.00', NULL, '2024-06-13', '07:56:36', 0),
+(122, '0', 'pembelian', 'masuk', 'PB-13062024-4', '31', 'BH004', 'GALVALUME 0.33 X 914', 'Mtr', '10.00', NULL, '2024-06-13', '07:56:36', 0),
+(123, '0', 'pembelian', 'masuk', 'PB-13062024-4', '31', 'BH004', 'GALVALUME 0.33 X 914', 'Mtr', '10.00', NULL, '2024-06-13', '07:56:36', 0),
+(124, '0', 'pembelian', 'masuk', 'PB-13062024-4', '31', 'BH004', 'GALVALUME 0.33 X 914', 'Mtr', '0.00', NULL, '2024-06-13', '07:56:36', 0),
+(125, '0', 'pembelian', 'masuk', 'PB-13062024-4', '31', 'BH004', 'GALVALUME 0.33 X 914', 'Mtr', '0.00', NULL, '2024-06-13', '07:56:36', 0),
+(154, '0', 'pembelian', 'masuk', 'PB-13062024-6', '30', 'BH003', 'GALVALUME 0.27 X 914', 'Mtr', '2003.00', NULL, '2024-06-13', '09:16:23', 0),
+(155, '0', 'pembelian', 'masuk', 'PB-13062024-6', '30', 'BH003', 'GALVALUME 0.27 X 914', 'Mtr', '0.00', NULL, '2024-06-13', '09:16:23', 0),
+(156, '0', 'pembelian', 'masuk', 'PB-13062024-6', '30', 'BH003', 'GALVALUME 0.27 X 914', 'Mtr', '0.00', NULL, '2024-06-13', '09:16:23', 0),
+(157, '0', 'pembelian', 'masuk', 'PB-13062024-6', '30', 'BH003', 'GALVALUME 0.27 X 914', 'Mtr', '0.00', NULL, '2024-06-13', '09:16:23', 0),
+(158, '0', 'pembelian', 'masuk', 'PB-13062024-6', '30', 'BH003', 'GALVALUME 0.27 X 914', 'Mtr', '0.00', NULL, '2024-06-13', '09:16:23', 0),
+(159, '0', 'pembelian', 'masuk', 'PB-12062024-3', '28', 'BH001', 'GALVALUME 0.20 X 914', 'Mtr', '0.00', NULL, '2024-06-12', '02:10:43', 0);
 
 -- --------------------------------------------------------
 
@@ -745,6 +764,7 @@ INSERT INTO `t_pajak` (`pajak_id`, `pajak_jenis`, `pajak_persen`, `pajak_tanggal
 
 CREATE TABLE `t_pembelian` (
   `pembelian_id` int(11) NOT NULL,
+  `pembelian_partial` int(11) NOT NULL DEFAULT 0,
   `pembelian_proses` int(11) NOT NULL DEFAULT 0,
   `pembelian_po` int(11) NOT NULL DEFAULT 0,
   `pembelian_po_tanggal` date DEFAULT NULL,
@@ -773,10 +793,13 @@ CREATE TABLE `t_pembelian` (
 -- Dumping data for table `t_pembelian`
 --
 
-INSERT INTO `t_pembelian` (`pembelian_id`, `pembelian_proses`, `pembelian_po`, `pembelian_po_tanggal`, `pembelian_user`, `pembelian_nomor`, `pembelian_supplier`, `pembelian_ekspedisi`, `pembelian_gudang`, `pembelian_tanggal`, `pembelian_jam`, `pembelian_jatuh_tempo`, `pembelian_status`, `pembelian_pelunasan`, `pembelian_pelunasan_keterangan`, `pembelian_pembayaran`, `pembelian_keterangan`, `pembelian_lampiran`, `pembelian_subtotal`, `pembelian_ekspedisi_total`, `pembelian_ppn`, `pembelian_grandtotal`, `pembelian_hapus`) VALUES
-(2, 1, 0, '0000-00-00', '5', 'PB-12062024-1', '22', '4', '0', '2024-06-12', '00:39:30', '0000-00-00', 'lunas', NULL, '', 'tunai', 'tes kode item', '', '140', '12000', '0', '2222000', 0),
-(3, 1, 0, '2024-06-12', '5', 'PB-12062024-2', '22', '4', '0', '2024-06-12', '02:07:55', '0000-00-00', 'lunas', NULL, '', 'tunai', 'proses', '', '30', '5000', '0', '467000', 0),
-(4, 0, 1, '2024-06-12', '5', 'PB-12062024-3', '22', '4', '0', '2024-06-12', '02:10:43', '0000-00-00', 'lunas', NULL, '', 'tunai', 'GV3', '', '50', '0', '0', '815000', 0);
+INSERT INTO `t_pembelian` (`pembelian_id`, `pembelian_partial`, `pembelian_proses`, `pembelian_po`, `pembelian_po_tanggal`, `pembelian_user`, `pembelian_nomor`, `pembelian_supplier`, `pembelian_ekspedisi`, `pembelian_gudang`, `pembelian_tanggal`, `pembelian_jam`, `pembelian_jatuh_tempo`, `pembelian_status`, `pembelian_pelunasan`, `pembelian_pelunasan_keterangan`, `pembelian_pembayaran`, `pembelian_keterangan`, `pembelian_lampiran`, `pembelian_subtotal`, `pembelian_ekspedisi_total`, `pembelian_ppn`, `pembelian_grandtotal`, `pembelian_hapus`) VALUES
+(2, 1, 1, 0, '0000-00-00', '5', 'PB-12062024-1', '22', '4', '0', '2024-06-12', '00:39:30', '0000-00-00', 'lunas', NULL, '', 'tunai', 'tes kode item', '', '140', '12000', '0', '2222000', 0),
+(3, 0, 1, 0, '2024-06-12', '5', 'PB-12062024-2', '22', '4', '0', '2024-06-12', '02:07:55', '0000-00-00', 'lunas', NULL, '', 'tunai', 'proses', '', '30', '5000', '0', '467000', 0),
+(4, 0, 1, 0, '2024-06-12', '5', 'PB-12062024-3', '22', '4', '0', '2024-06-12', '02:10:43', '0000-00-00', 'lunas', NULL, '', 'tunai', 'GV3 di proses', '', '50', '0', '0', '815000', 0),
+(5, 0, 1, 0, '2024-06-13', '5', 'PB-13062024-4', '23', '4', '0', '2024-06-13', '07:56:36', '0000-00-00', 'lunas', NULL, '', 'tunai', '', '', '50', '0', '11', '760000', 0),
+(6, 0, 1, 0, '0000-00-00', '5', 'PB-13062024-5', '25', '4', '0', '2024-06-13', '07:59:05', '0000-00-00', 'lunas', NULL, '', 'tunai', '', '', '10', '0', '11', '158500', 0),
+(7, 0, 1, 0, '2024-06-13', '5', 'PB-13062024-6', '23', '4', '0', '2024-06-13', '09:16:23', '2024-07-13', 'belum', NULL, '', '7', '', '', '21540', '11500000', '11', '343216000', 0);
 
 -- --------------------------------------------------------
 
@@ -805,11 +828,22 @@ CREATE TABLE `t_pembelian_barang` (
 --
 
 INSERT INTO `t_pembelian_barang` (`pembelian_barang_id`, `pembelian_barang_nomor`, `pembelian_barang_barang`, `pembelian_barang_kode`, `pembelian_barang_berat_qty`, `pembelian_barang_panjang_qty`, `pembelian_barang_berat`, `pembelian_barang_panjang`, `pembelian_barang_berat_cek`, `pembelian_barang_panjang_cek`, `pembelian_barang_harga`, `pembelian_barang_total`, `pembelian_barang_ekspedisi`) VALUES
-(49, 'PB-12062024-3', '28', 'GV-3', '0.00', '0.00', '50.00', '60.00', '0.00', '0.00', '16300', '815000', '0'),
-(51, 'PB-12062024-1', '30', 'GV-3', '0.67', '1.50', '80.00', '120.00', '0.00', '0.00', '15400', '1232000', '6857.1428571429'),
-(52, 'PB-12062024-1', '28', 'GV-2', '0.67', '1.50', '40.00', '60.00', '0.00', '0.00', '16300', '652000', '3428.5714285714'),
-(53, 'PB-12062024-1', '28', 'GV-1', '0.20', '5.00', '20.00', '100.00', '10.00', '50.00', '16300', '326000', '1714.2857142857'),
-(54, 'PB-12062024-2', '30', 'GV-3', '1.00', '1.00', '30.00', '30.00', '0.00', '0.00', '15400', '462000', '5000');
+(51, 'PB-12062024-1', '30', 'GV-3', '0.67', '1.50', '80.00', '120.00', '80.40', '120.00', '15400', '1232000', '6857.1428571429'),
+(52, 'PB-12062024-1', '28', 'GV-2', '0.67', '1.50', '40.00', '60.00', '40.20', '60.00', '16300', '652000', '3428.5714285714'),
+(53, 'PB-12062024-1', '28', 'GV-1', '0.20', '5.00', '20.00', '100.00', '20.00', '100.00', '16300', '326000', '1714.2857142857'),
+(54, 'PB-12062024-2', '30', 'GV-3', '1.00', '1.00', '30.00', '30.00', '0.00', '0.00', '15400', '462000', '5000'),
+(60, 'PB-13062024-4', '31', 'A11', '1.00', '1.00', '10.00', '10.00', '10.00', '10.00', '15200', '152000', '0'),
+(61, 'PB-13062024-4', '31', 'A12', '1.00', '1.00', '10.00', '10.00', '10.00', '10.00', '15200', '152000', '0'),
+(62, 'PB-13062024-4', '31', 'A13', '1.00', '1.00', '10.00', '10.00', '10.00', '10.00', '15200', '152000', '0'),
+(63, 'PB-13062024-4', '31', 'A14', '1.00', '1.00', '10.00', '10.00', '0.00', '0.00', '15200', '152000', '0'),
+(64, 'PB-13062024-4', '31', 'A15', '1.00', '1.00', '10.00', '10.00', '0.00', '0.00', '15200', '152000', '0'),
+(65, 'PB-13062024-5', '33', 'A55', '0.50', '2.00', '10.00', '20.00', '0.00', '0.00', '15850', '158500', '0'),
+(91, 'PB-13062024-6', '30', 'BRCT223089099', '2.17', '0.46', '4350.00', '2003.00', '4346.51', '2003.00', '15400', '66990000', '2322423.3983287'),
+(92, 'PB-13062024-6', '30', 'BRCT223089098', '2.12', '0.47', '4450.00', '2100.00', '0.00', '0.00', '15400', '68530000', '2375812.4419684'),
+(93, 'PB-13062024-6', '30', 'BRCT223089097', '2.17', '0.46', '4340.00', '2002.00', '0.00', '0.00', '15400', '66836000', '2317084.4939647'),
+(94, 'PB-13062024-6', '30', 'BRCT223089096', '2.10', '0.48', '4150.00', '1980.00', '0.00', '0.00', '15400', '63910000', '2215645.3110492'),
+(95, 'PB-13062024-6', '30', 'BRCT223089095', '2.13', '0.47', '4250.00', '1999.00', '0.00', '0.00', '15400', '65450000', '2269034.354689'),
+(98, 'PB-12062024-3', '28', 'GV-3', '0.83', '1.20', '50.00', '60.00', '0.00', '0.00', '16300', '815000', '0');
 
 -- --------------------------------------------------------
 
@@ -833,7 +867,19 @@ CREATE TABLE `t_pembelian_partial` (
 --
 
 INSERT INTO `t_pembelian_partial` (`pembelian_partial_id`, `pembelian_partial_nomor`, `pembelian_partial_barang`, `pembelian_partial_kode`, `pembelian_partial_berat`, `pembelian_partial_panjang`, `pembelian_partial_tanggal`, `pembelian_partial_hapus`) VALUES
-(18, 'PB-12062024-1', 28, 'GV-1', '10.00', '50.00', '2024-06-13', 0);
+(18, 'PB-12062024-1', 28, 'GV-1', '10.00', '50.00', '2024-06-13', 0),
+(19, 'PB-13062024-4', 31, 'A11', '5.00', '5.00', '2024-06-13', 0),
+(20, 'PB-13062024-4', 31, 'A12', '5.00', '5.00', '2024-06-13', 0),
+(21, 'PB-13062024-4', 31, 'A13', '5.00', '5.00', '2024-06-13', 0),
+(22, 'PB-13062024-4', 31, 'A11', '5.00', '5.00', '2024-06-13', 0),
+(23, 'PB-13062024-4', 31, 'A12', '5.00', '5.00', '2024-06-13', 0),
+(24, 'PB-13062024-4', 31, 'A13', '5.00', '5.00', '2024-06-13', 0),
+(25, 'PB-13062024-6', 30, 'BRCT223089099', '4346.51', '2003.00', '2024-06-14', 0),
+(26, 'PB-12062024-1', 30, 'GV-3', '80.40', '120.00', '2024-06-14', 0),
+(27, 'PB-12062024-1', 28, 'GV-2', '40.20', '60.00', '2024-06-14', 0),
+(28, 'PB-12062024-1', 28, 'GV-1', '10.00', '50.00', '2024-06-14', 0),
+(29, 'PB-12062024-2', 30, 'GV-3', '0.00', '0.00', '2024-06-14', 0),
+(30, 'PB-12062024-3', 28, 'GV-3', '0.00', '0.00', '2024-06-14', 0);
 
 -- --------------------------------------------------------
 
@@ -1156,9 +1202,11 @@ CREATE TABLE `t_saldo` (
 
 INSERT INTO `t_saldo` (`saldo_id`, `saldo_nomor`, `saldo_sumber`, `saldo_nominal`, `saldo_rekening`, `saldo_jenis`, `saldo_keterangan`, `saldo_tanggal`, `saldo_hapus`) VALUES
 (1, 'PB-07062024-1', 'pembelian', '7970000', 'tunai', 'tarik', 'transaksi pembelian bahan', '2024-06-07 03:56:59', 1),
-(17, 'PB-12062024-3', 'pembelian', '815000', 'tunai', 'tarik', 'transaksi pembelian bahan', '2024-06-11 19:10:43', 0),
 (19, 'PB-12062024-1', 'pembelian', '2222000', 'tunai', 'tarik', 'transaksi pembelian bahan', '2024-06-12 17:52:56', 0),
-(20, 'PB-12062024-2', 'pembelian', '467000', 'tunai', 'tarik', 'transaksi pembelian bahan', '2024-06-12 17:54:54', 0);
+(20, 'PB-12062024-2', 'pembelian', '467000', 'tunai', 'tarik', 'transaksi pembelian bahan', '2024-06-12 17:54:54', 0),
+(22, 'PB-13062024-4', 'pembelian', '760000', 'tunai', 'tarik', 'transaksi pembelian bahan', '2024-06-13 00:56:49', 0),
+(23, 'PB-13062024-5', 'pembelian', '158500', 'tunai', 'tarik', 'transaksi pembelian bahan', '2024-06-13 00:59:05', 0),
+(26, 'PB-12062024-3', 'pembelian', '815000', 'tunai', 'tarik', 'transaksi pembelian bahan', '2024-06-13 18:59:36', 0);
 
 -- --------------------------------------------------------
 
@@ -1444,13 +1492,13 @@ ALTER TABLE `t_bahan`
 -- AUTO_INCREMENT for table `t_bahan_gudang`
 --
 ALTER TABLE `t_bahan_gudang`
-  MODIFY `bahan_gudang_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `bahan_gudang_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `t_bahan_item`
 --
 ALTER TABLE `t_bahan_item`
-  MODIFY `bahan_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `bahan_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `t_bank`
@@ -1492,7 +1540,7 @@ ALTER TABLE `t_jurnal`
 -- AUTO_INCREMENT for table `t_kartu`
 --
 ALTER TABLE `t_kartu`
-  MODIFY `kartu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
+  MODIFY `kartu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=160;
 
 --
 -- AUTO_INCREMENT for table `t_karyawan`
@@ -1534,19 +1582,19 @@ ALTER TABLE `t_pajak`
 -- AUTO_INCREMENT for table `t_pembelian`
 --
 ALTER TABLE `t_pembelian`
-  MODIFY `pembelian_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `pembelian_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `t_pembelian_barang`
 --
 ALTER TABLE `t_pembelian_barang`
-  MODIFY `pembelian_barang_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `pembelian_barang_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
 
 --
 -- AUTO_INCREMENT for table `t_pembelian_partial`
 --
 ALTER TABLE `t_pembelian_partial`
-  MODIFY `pembelian_partial_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `pembelian_partial_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `t_pembelian_umum`
@@ -1624,7 +1672,7 @@ ALTER TABLE `t_rekening`
 -- AUTO_INCREMENT for table `t_saldo`
 --
 ALTER TABLE `t_saldo`
-  MODIFY `saldo_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `saldo_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `t_satuan`

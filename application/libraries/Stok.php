@@ -3,10 +3,10 @@ class Stok{
   protected $sql; 
   function __construct(){
         $this->sql = &get_instance();
-  } 
+  }  
   function cek($table, $where){
     $this->sql->db->where($where); 
-    return $this->sql->db->get($table)->num_rows(); 
+    return $this->sql->db->get($table)->num_rows();  
   }
 
   /////////////////////////////////////////// atribut /////////////////////////////////////////////////
@@ -17,7 +17,7 @@ class Stok{
 
       $bahan_baku = $this->sql->db->query("SELECT a.produksi_hapus AS hapus, produksi_gudang AS gudang ,b.produksi_barang_barang AS bahan, SUM(b.produksi_barang_panjang) AS panjang, ROUND(SUM(b.produksi_barang_berat * b.produksi_barang_panjang), 2) AS berat FROM t_produksi AS a JOIN t_produksi_barang AS b ON a.produksi_nomor = b.produksi_barang_nomor WHERE a.produksi_proses = 1 AND a.produksi_hapus = 0 GROUP BY b.produksi_barang_barang, a.produksi_gudang")->result_array();
 
-      $item = $this->sql->db->query("SELECT b.pembelian_barang_kode AS kode, SUM(b.pembelian_barang_berat_cek) AS berat, SUM(b.pembelian_barang_panjang_cek) AS panjang, b.pembelian_barang_barang AS bahan, a.pembelian_hapus AS hapus, a.pembelian_gudang AS gudang FROM t_pembelian AS a JOIN t_pembelian_barang AS b ON a.pembelian_nomor = b.pembelian_barang_nomor WHERE a.pembelian_proses = 1 AND a.pembelian_hapus = 0 GROUP BY a.pembelian_gudang, b.pembelian_barang_barang, b.pembelian_barang_kode")->result_array();
+      $item = $this->sql->db->query("SELECT a.pembelian_partial_barang AS bahan, SUM(a.pembelian_partial_berat) AS berat, SUM(a.pembelian_partial_panjang) AS panjang, b.pembelian_gudang AS gudang, b.pembelian_hapus AS hapus, a.pembelian_partial_kode AS kode FROM t_pembelian_partial AS a JOIN t_pembelian AS b ON a.pembelian_partial_nomor = b.pembelian_nomor WHERE b.pembelian_hapus = 0 GROUP BY a.pembelian_partial_kode, b.pembelian_gudang")->result_array();
 
       //pembelian update stok produk
       
@@ -91,7 +91,7 @@ class Stok{
         $hapus = $it['hapus'];
         $kode = $it['kode'];
 
-        $cek = $this->sql->db->query("SELECT * FROM t_bahan_item WHERE bahan_item_bahan = '$bahan' AND bahan_item_gudang = '$gudang'")->num_rows();
+        $cek = $this->sql->db->query("SELECT * FROM t_bahan_item WHERE bahan_item_bahan = '$bahan' AND bahan_item_gudang = '$gudang' AND bahan_item_kode = '$kode'")->num_rows();
 
         if ($hapus != null && $hapus == 0) {
 
