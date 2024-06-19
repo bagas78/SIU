@@ -1,10 +1,10 @@
 <script>
 
   //atribut form
-  $('#nomor').val('<?=@$data['pembelian_nomor']?>'); 
+  $('#nomor').val('<?=@$data['pembelian_nomor']?>');
   $('#tanggal').val('<?=@$data['pembelian_tanggal']?>');
   $('#pembayaran').val('<?=@$data['pembelian_pembayaran']?>').change();
-  $('#supplier').val('<?=@$data['pembelian_supplier']?>').change(); 
+  $('#supplier').val('<?=@$data['pembelian_supplier']?>').change();
   $('#gudang').val('<?=@$data['pembelian_gudang']?>').change();
   $('#jatuh_tempo').val('<?=@$data['pembelian_jatuh_tempo']?>'); 
   $('#status').val('<?=@$data['pembelian_status']?>').change();
@@ -16,20 +16,9 @@
     $('#previewImg').attr('src', '<?=base_url('assets/gambar/pembelian/'.@$data['pembelian_lampiran'])?>');
   }
  
-  //get pembelian
+  //get pembelian 
   $.ajax({
-
-      <?php if ($this->uri->segment(2) == 'po_view'): ?>
-
-        //menu po
-         url: "<?=base_url('pembelian/get_pembelian/'.$data['pembelian_nomor'])?>",
-
-      <?php else:?>
-
-         url: "<?=base_url('pembelian/get_pembelian/'.$data['pembelian_nomor'].'/'.$data['pembelian_terima_id'])?>",
-
-      <?php endif ?>
-    
+      url: "<?=base_url('pembelian/terima_get_data/'.$data['pembelian_nomor'])?>",
       type: 'GET',
       dataType: 'json', 
       success: function(json) {

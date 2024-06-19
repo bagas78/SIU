@@ -54,7 +54,7 @@
             "scrollX": true, 
             
             "ajax": {
-                "url": "<?=site_url('pembelian/'.@$url.'_get_data')?>",
+                "url": "<?=site_url('pembelian/po_get_data')?>",
                 "type": "GET"
             },
             "columns": [                               

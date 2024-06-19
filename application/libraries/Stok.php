@@ -5,9 +5,9 @@ class Stok{
         $this->sql = &get_instance();
   }  
   function cek($table, $where){
-    $this->sql->db->where($where); 
+    $this->sql->db->where($where);  
     return $this->sql->db->get($table)->num_rows();  
-  }
+  } 
 
   /////////////////////////////////////////// atribut /////////////////////////////////////////////////
   
@@ -15,9 +15,9 @@ class Stok{
     //sum stok bahan update 
       $pembelian = $this->sql->db->query("SELECT SUM(b.pembelian_barang_berat_cek) AS berat, SUM(b.pembelian_barang_panjang_cek) AS panjang, b.pembelian_barang_barang AS bahan, a.pembelian_gudang AS gudang, SUM(b.pembelian_barang_total) AS total, SUM(b.pembelian_barang_ekspedisi) AS ekspedisi, a.pembelian_hapus AS hapus FROM t_pembelian AS a JOIN t_pembelian_barang AS b ON a.pembelian_nomor = b.pembelian_barang_nomor WHERE a.pembelian_proses = 1 AND a.pembelian_hapus = 0 GROUP BY a.pembelian_gudang, b.pembelian_barang_barang")->result_array();
 
-      $bahan_baku = $this->sql->db->query("SELECT a.produksi_hapus AS hapus, produksi_gudang AS gudang ,b.produksi_barang_barang AS bahan, SUM(b.produksi_barang_panjang) AS panjang, ROUND(SUM(b.produksi_barang_berat * b.produksi_barang_panjang), 2) AS berat FROM t_produksi AS a JOIN t_produksi_barang AS b ON a.produksi_nomor = b.produksi_barang_nomor WHERE a.produksi_proses = 1 AND a.produksi_hapus = 0 GROUP BY b.produksi_barang_barang, a.produksi_gudang")->result_array();
+      $bahan_baku = $this->sql->db->query("SELECT a.produksi_hapus AS hapus, produksi_gudang AS gudang ,b.produksi_barang_kode AS kode, b.produksi_barang_barang AS bahan, SUM(b.produksi_barang_panjang) AS panjang, ROUND(SUM(b.produksi_barang_berat * b.produksi_barang_panjang), 2) AS berat FROM t_produksi AS a JOIN t_produksi_barang AS b ON a.produksi_nomor = b.produksi_barang_nomor WHERE a.produksi_proses = 1 AND a.produksi_hapus = 0 GROUP BY b.produksi_barang_barang, a.produksi_gudang")->result_array();
 
-      $item = $this->sql->db->query("SELECT a.pembelian_partial_barang AS bahan, SUM(a.pembelian_partial_berat) AS berat, SUM(a.pembelian_partial_panjang) AS panjang, b.pembelian_gudang AS gudang, b.pembelian_hapus AS hapus, a.pembelian_partial_kode AS kode FROM t_pembelian_partial AS a JOIN t_pembelian AS b ON a.pembelian_partial_nomor = b.pembelian_nomor WHERE b.pembelian_hapus = 0 GROUP BY a.pembelian_partial_kode, b.pembelian_gudang")->result_array();
+      $item = $this->sql->db->query("SELECT a.pembelian_partial_barang AS bahan, SUM(a.pembelian_partial_berat) AS berat, SUM(a.pembelian_partial_panjang) AS panjang, b.pembelian_gudang AS gudang, b.pembelian_hapus AS hapus, a.pembelian_partial_kode AS kode FROM t_pembelian_partial AS a JOIN t_pembelian AS b ON a.pembelian_partial_nomor = b.pembelian_nomor WHERE b.pembelian_hapus = 0 GROUP BY a.pembelian_partial_barang, a.pembelian_partial_kode, b.pembelian_gudang")->result_array();
 
       //pembelian update stok produk
       
@@ -130,10 +130,16 @@ class Stok{
         $bahan = $bh['bahan'];
         $panjang = $bh['panjang'];
         $berat = $bh['berat'];
+        $kode = $bh['kode'];
 
         if ($hapus != null && $hapus == 0) {
 
+          //gudang
           $this->sql->db->query("UPDATE t_bahan_gudang SET bahan_gudang_panjang = bahan_gudang_panjang - {$panjang}, bahan_gudang_berat = bahan_gudang_berat - {$berat} WHERE bahan_gudang_bahan = {$bahan} AND bahan_gudang_gudang = {$gudang}");
+
+          //kode item
+          $this->sql->db->query("UPDATE t_bahan_item SET bahan_item_panjang = bahan_item_panjang - {$panjang}, bahan_item_berat = bahan_item_berat - {$berat} WHERE bahan_item_bahan = {$bahan} AND bahan_item_gudang = {$gudang} AND bahan_item_id = {$kode}");
+
         }
 
       }

@@ -1,7 +1,7 @@
 <?php $set = $this->query_builder->view_row("SELECT * FROM t_logo"); ?>
 
 <!DOCTYPE html>
-<html>
+<html> 
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -67,14 +67,14 @@
 			</tr>
 		</table>	
 
-    <table class="table table-responsive table-borderless">
+    <table class="table table-responsive table-bordered">
       <thead>
         <tr>
           <th width="70">No</th>
-          <th>Nama Bahan</th>
-          <th class="r">Stok (Mtr)</th>
-          <th class="r">Berat (Kg)</th>
-          <th class="r">Panjang (Mtr)</th>
+          <th>Kode Item</th>
+          <th class="r">Stok</th>
+          <th class="r">Berat</th>
+          <th class="r">Panjang</th>
         </tr>
       </thead>
       <tbody> 
@@ -83,13 +83,22 @@
 
           <tr>
             <td><?=$i?></td>
-            <td><?=@$val['bahan_nama']?></td>
-            <td class="r"><?=@$val['produksi_barang_stok'] ?></td>
-            <td class="r"><?=@$val['produksi_barang_berat'] ?></td>
-            <td class="r"><?=number_format(@$val['produksi_barang_panjang'])?></td>
+            <td><?=@$val['bahan_item_kode']?></td>
+            <td class="r"><?=str_replace('.00', '', @$val['produksi_barang_stok']).' Mtr' ?></td>
+            <td class="r"><?=str_replace('.00', '', @$val['produksi_barang_berat']).' Kg' ?></td>
+            <td class="r"><?=str_replace('.00', '', @$val['produksi_barang_panjang']).' Mtr'?></td>
           </tr>
         
         <?php $i++ ?>
+        <?php endforeach ?>
+
+        <?php foreach ($data_produksi as $key): ?>
+        	
+        	<tr>
+	        	<td colspan="4"><?=@$key['produk_nama']?></td>
+	        	<td class="r"><?=str_replace('.00', '', @$key['produksi_produksi_panjang_total']).' Mtr'?></td>
+	        </tr>
+
         <?php endforeach ?>
 
       </tbody>

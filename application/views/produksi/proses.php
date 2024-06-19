@@ -11,7 +11,7 @@
   
       <div class="box">   
         <div class="box-header with-border">
-
+ 
           <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
               <i class="fa fa-minus"></i></button>
@@ -63,14 +63,48 @@
               <th>Shift</th>
               <th>Tanggal</th>
               <th>Print</th>
+              <th>Selesai</th>
               <th width="30">Action</th>
+              <th hidden>status</th>
             </tr>
             </thead>
             <tbody>
 
             </tbody>
           </table>
-        </div>        
+        </div>       
+      </div>
+      <!-- /.box -->
+
+      <!-- Default box -->
+      <div class="box"> 
+        <div class="box-header with-border">
+          
+          <div align="left"></div>
+
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+              <i class="fa fa-minus"></i></button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+              <i class="fa fa-times"></i></button>
+          </div>
+        </div>
+        <div class="box-body">
+          <h4 align="center" class="tit">Selesai Produksi</h4>
+          <table id="example3" class="table table-bordered table-hover" style="width: 100%;">
+            <thead>
+            <tr>
+              <th>Nomor</th>
+              <th>Shift</th>
+              <th>Tanggal</th>
+              <th width="1">Surat Jalan</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+          </table>
+        </div>       
       </div>
       <!-- /.box -->
 
@@ -110,11 +144,11 @@
                           }
                         },
                         { "data": "produksi_proses",
-                      "render": 
-                      function( data ) {
-                          return "<span hidden class='so_proses'>"+data+"</span><span class='so_icon'></span>";
-                        }
-                      },
+                        "render": 
+                        function( data ) {
+                            return "<span hidden class='so_proses'>"+data+"</span><span class='so_icon'></span>";
+                          }
+                        },
                         { "data": "produksi_id",
                         "render": 
                         function( data ) {
@@ -164,11 +198,65 @@
                             return "<a href='<?php echo base_url('produksi/cetak3/')?>"+data+"'><button class='btn btn-xs btn-warning'><i class='fa fa-file-text' title='cetak'></i> Produksi detail</button></a> ";
                           }
                         },
+                        { "data": "produksi_nomor",
+                        "render":  
+                        function( data ) {
+                            return "<a class='action-selesai' href='<?php echo base_url('produksi/selesai/')?>"+data+"'><button class='btn-selesai btn btn-xs btn-success'><i class='fa fa-check' title='selesai produksi'></i> Selesai Produksi</button></a> ";
+                          }
+                        },
                         { "data": "produksi_id",
                         "render": 
                         function( data ) {
                             return "<a class='view' href='<?php echo base_url('produksi/proses_view/')?>"+data+"'><button class='btn btn-xs btn-success'><i class='fa fa-eye'></i></button></a> "+
                               "<button onclick=del('<?php echo base_url('produksi/proses_delete/')?>"+data+"') class='btn btn-xs btn-danger'><i class='fa fa-trash'></i></button> ";
+                          }
+                        },
+                        { "data": "produksi_selesai",
+                        "render":  
+                        function( data ) {
+                            return "<span class='selesai'>"+data+"</span>";
+                          }
+                        },
+                        
+                    ],
+        });
+
+    });
+
+/////////////////////////////////// SELESAI ///////////////////
+
+  var table3;
+    $(document).ready(function() {
+        //datatables
+        table3 = $('#example3').DataTable({ 
+
+            "processing": true, 
+            "serverSide": true,
+            "order":[], 
+            "scrollX": true, 
+            
+            "ajax": {
+                "url": "<?=site_url('produksi/selesai_get_data')?>",
+                "type": "GET"
+            },
+            "columns": [                               
+                        { "data": "produksi_nomor"},
+                        { "data": "user_name",
+                        "render": 
+                        function( data ) {
+                            return "<span>"+data+"</span>";
+                          }
+                        },
+                        { "data": "produksi_tanggal",
+                        "render": 
+                        function( data ) {
+                            return "<span>"+moment(data).format("DD/MM/YYYY  LT")+"</span>";
+                          }
+                        },
+                        { "data": "produksi_nomor",
+                        "render":  
+                        function( data ) {
+                            return "<a href='<?php echo base_url('produksi/surat/')?>"+data+"'><button class='btn btn-xs btn-primary'><i class='fa fa-file-text' title='cetak surat jalan'></i> Cetak Surat Jalan</button></a> ";
                           }
                         },
                         
@@ -183,6 +271,9 @@ function filter($val){
 
   var table2 = $('#example2').DataTable();
   table2.search($val).draw();
+
+  var table3 = $('#example3').DataTable();
+  table3.search($val).draw();
 }
 
 function auto() { 
@@ -199,6 +290,20 @@ function auto() {
        }else{
           proses.closest('tr').find('.so_action_view').attr('hidden', true);
           icon.html('<center><i class="fa fa-refresh"></i></center>');
+       }
+
+    });
+
+    //selesai
+    $.each($('.selesai'), function() {
+       
+       var i = $(this).text();
+       if (i == '1') {
+          $(this).closest('tr').find('.action-selesai').css('pointer-events', 'none');
+          $(this).closest('tr').find('.btn-selesai').css('background', '#999');
+          $(this).closest('td').attr('hidden', '');
+       }else{
+          $(this).closest('td').attr('hidden', '');
        }
 
     });

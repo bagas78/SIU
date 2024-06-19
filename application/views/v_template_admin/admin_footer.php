@@ -158,7 +158,7 @@ $(function () {
     swal("Sukses", "<?php echo $this->session->flashdata('success');?>", "success");
     $('.swal-footer').remove();
    <?php endif ?>
-
+ 
    <?php if($this->session->flashdata('gagal')): ?>
     swal("Gagal", "<?php echo $this->session->flashdata('gagal'); ?>", "warning");
     $('.swal-footer').remove();

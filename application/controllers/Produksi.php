@@ -2,7 +2,7 @@
 class Produksi extends CI_Controller{
 
 	function __construct(){
-		parent::__construct(); 
+		parent::__construct();  
 		$this->load->model('m_produksi'); 
 		$this->load->model('m_produk');
 		$this->load->model('m_bahan'); 
@@ -227,6 +227,7 @@ class Produksi extends CI_Controller{
 				$set3 = array(
 							'produksi_barang_nomor' => $nomor,
 							'produksi_barang_barang' => strip_tags(@$barang[$i]),
+							'produksi_barang_kode' => strip_tags(str_replace(',', '', @$_POST['kode'][$i])),
 							'produksi_barang_panjang' => strip_tags(str_replace(',', '', @$_POST['panjang'][$i])),
 							'produksi_barang_berat' => strip_tags(str_replace(',', '', @$_POST['berat'][$i])),
 							'produksi_barang_stok' => strip_tags(str_replace(',', '', @$_POST['stok'][$i])),	
@@ -369,6 +370,14 @@ class Produksi extends CI_Controller{
 		$output = $this->serverside($where, $model);
 		echo json_encode($output);
 	}
+	function selesai_get_data()
+	{
+		$model = 'm_produksi';
+		$where = array('produksi_hapus' => '0', 'produksi_proses' => '1', 'produksi_selesai' => 1);
+
+		$output = $this->serverside($where, $model);
+		echo json_encode($output);
+	}
 	function proses_add()
 	{
 		$redirect = 'proses';
@@ -479,18 +488,96 @@ class Produksi extends CI_Controller{
 	}	
 
 	function cetak3($nomor){
-		$data['data_produksi'] = $this->query_builder->view_row("
-			SELECT * FROM t_produksi as A
-			LEFT JOIN t_mesin as B ON A.produksi_mesin = B.mesin_id
-			WHERE produksi_nomor = '$nomor'");
+
+		$data['data_produksi'] = $this->query_builder->view("SELECT * FROM t_produksi_produksi AS a JOIN t_produk AS b ON a.produksi_produksi_produk = b.produk_id WHERE a.produksi_produksi_nomor = '$nomor'");
+
 		$data['data'] = $this->query_builder->view("
 			SELECT * FROM t_produksi_barang as a 
 			LEFT JOIN t_produksi as b ON a.produksi_barang_nomor = b.produksi_nomor 
 			LEFT JOIN t_bahan as c ON a.produksi_barang_barang = c.bahan_id 
-			LEFT JOIN t_satuan as d ON c.bahan_satuan = d.satuan_id 
+			LEFT JOIN t_satuan as d ON c.bahan_satuan = d.satuan_id
+			LEFT JOIN t_bahan_item as e ON e.bahan_item_id = a.produksi_barang_kode 
 			WHERE a.produksi_barang_nomor = '$nomor'");
 
 		$this->load->view('produksi/produksi-cetak3',$data);
 	}
 
+	//get kode item
+
+	function get_item($id, $gudang){
+
+		$data = $this->query_builder->view("SELECT * FROM t_bahan_item WHERE bahan_item_bahan = '$id' AND bahan_item_gudang = '$gudang'");
+
+		echo json_encode($data);
+
+	}
+	function selesai($nomor){
+
+		$set = ["produksi_selesai" => 1];
+		$where = ["produksi_nomor" => $nomor];
+		$db = $this->query_builder->update("t_produksi",$set,$where);
+
+		if ($db == 1) {
+			$this->session->set_flashdata('success','Data berhasil di simpan');
+		} else {
+			$this->session->set_flashdata('gagal','Data gagal di simpan');
+		}
+
+		redirect(base_url('produksi/proses'));
+		
+	}
+	function surat($nomor){
+
+		$user = $this->session->userdata('id');
+		$level = $this->session->userdata('level');
+		$tanggal = date('Y-m-d');
+
+		//cek
+		$cek = $this->query_builder->view_row("SELECT * FROM t_cetak WHERE cetak_nomor = '$nomor' AND cetak_user = '$user' AND cetak_level = '$level'");
+
+		if ($level == 0) {
+			
+			// admin
+			$cetak = 1;
+
+		}else{
+
+			//user
+			if (@$cek) {
+
+				if (@$cek['cetak_setujui'] == 1) {
+					
+					$cetak = 1;
+
+					//update setujui
+					$berhasil = @$cek['cetak_berhasil'] + 1; 
+					$this->query_builder->update('t_cetak',['cetak_setujui' => 0, 'cetak_berhasil' => $berhasil],['cetak_user' => $user, 'cetak_nomor' => $nomor]);
+				}else{
+
+					//update jumlah
+					$jumlah = @$cek['cetak_jumlah'] + 1;
+					$this->query_builder->update('t_cetak',['cetak_jumlah' => $jumlah],['cetak_user' => $user, 'cetak_nomor' => $nomor]);
+
+					// menunggu
+					$this->session->set_flashdata('gagal', 'menunggu persetujuan terlebih dahulu');
+					redirect(base_url('produksi/proses'));	
+				}
+
+			}else{
+
+				//insert 
+				$this->query_builder->add('t_cetak',['cetak_user' => $user, 'cetak_jumlah' => 1, 'cetak_level' => $level, 'cetak_nomor' => $nomor, 'cetak_tanggal' => $tanggal, 'cetak_berhasil' => 1]);
+
+				$cetak = 1;
+			}
+		}
+
+		if (@$cetak == 1) {
+			
+			$data['data'] = $this->query_builder->view("SELECT * FROM t_produksi as a JOIN t_user as b ON a.produksi_shift = b.user_id JOIN t_produksi_produksi as c ON a.produksi_nomor = c.produksi_produksi_nomor LEFT JOIN t_produk as d ON c.produksi_produksi_produk = d.produk_id WHERE a.produksi_nomor = '$nomor'");
+		}
+
+		$data["title"] = 'surat jalan';
+	    $this->load->view('produksi/surat',$data); 
+	}
 }

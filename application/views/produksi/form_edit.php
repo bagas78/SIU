@@ -11,7 +11,7 @@
   if ('<?=@$data['produksi_pekerja']?>' != '') { 
     $('#pekerja').val(<?=@$data['produksi_pekerja']?>).change(); 
   }
- 
+  
   if ('<?=@$data['produksi_lampiran_1']?>' != '') {
     $('#previewImg1').attr('src', '<?=base_url('assets/gambar/produksi/'.@$data['produksi_lampiran_1'])?>');
   }
@@ -89,16 +89,32 @@
           var i = index+1;
 
           //insert value
-          $('#copy2:nth-child('+i+') > td:nth-child(1) > select').val(val.produksi_barang_barang); 
-          $('#copy2:nth-child('+i+') > td:nth-child(2) > input').val(val.bahan_kategori); 
-          $('#copy2:nth-child('+i+') > td:nth-child(3) > input').val(val.produksi_barang_harga); 
-          $('#copy2:nth-child('+i+') > td:nth-child(4) > input').val(val.produksi_barang_stok); 
-          $('#copy2:nth-child('+i+') > td:nth-child(5) > input').val(val.produksi_barang_berat);  
-          $('#copy2:nth-child('+i+') > td:nth-child(6) > input').val(val.produksi_barang_panjang);
-          $('#copy2:nth-child('+i+') > td:nth-child(7) > input').val(val.produksi_barang_total);
+          $('#copy2:nth-child('+i+') > td:nth-child(1) > select').val(val.produksi_barang_barang).change(); 
+          $('#copy2:nth-child('+i+') > td:nth-child(3) > input').val(val.bahan_kategori); 
+          $('#copy2:nth-child('+i+') > td:nth-child(4) > input').val(val.produksi_barang_harga); 
+          $('#copy2:nth-child('+i+') > td:nth-child(5) > input').val(val.produksi_barang_stok); 
+          $('#copy2:nth-child('+i+') > td:nth-child(6) > input').val(val.produksi_barang_berat);  
+          $('#copy2:nth-child('+i+') > td:nth-child(7) > input').val(val.produksi_barang_panjang);
+          $('#copy2:nth-child('+i+') > td:nth-child(8) > input').val(val.produksi_barang_total);
 
           //jasa
           $('#jasa').val('<?=@$data['produksi_jasa']?>');
+
+
+          //select kode
+          function auto() { 
+
+            $('#copy2:nth-child('+i+') > td:nth-child(2) > select').val(val.produksi_barang_kode).change(); 
+
+            setTimeout(function() {
+                auto();
+            }, 100);
+          }
+
+          auto(); 
+
+          //kode
+          $('#copy2:nth-child('+i+') > td:nth-child(2) > select').val(val.produksi_barang_kode).change();
 
         });
 

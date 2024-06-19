@@ -31,33 +31,13 @@ class Partial_stok{
       $this->sql->db->set($set);
       $this->sql->db->update('t_pembelian_barang');
 
-      /////////////////////////////////////////////////////////////////////////////////////////
-      
-      //ubah status pembelian partial
-
-      $db1 = $this->sql->db->query("SELECT a.pembelian_barang_nomor AS nomor, SUM(a.pembelian_barang_berat) AS berat, SUM(a.pembelian_barang_berat_cek) AS berat_cek, SUM(a.pembelian_barang_panjang) AS panjang, SUM(a.pembelian_barang_panjang_cek) AS panjang_cek FROM t_pembelian_barang AS a GROUP BY a.pembelian_barang_nomor")->result_array();
-
-      foreach ($db1 as $v1) {
-        
-        $berat_cek = $v1['berat_cek'];
-        $berat = $v1['berat'];
-        $panjang_cek = $v1['panjang_cek'];
-        $panjang = $v1['panjang'];
-        $nomor = $v1['nomor'];
-
-        if ($panjang_cek >= $panjang) {
-          
-          $this->sql->db->where('pembelian_nomor', $nomor);
-          $this->sql->db->set('pembelian_partial', 1);
-          $this->sql->db->update('t_pembelian');
-
-        }
-
-      }
-
     }
 
     return;
+  }
+
+  function terima(){
+    
   }
 
 }

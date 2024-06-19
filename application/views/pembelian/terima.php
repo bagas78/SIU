@@ -4,17 +4,17 @@
   }
 </style>
 
-<!-- Main content -->    
+<!-- Main content -->  
 <section class="content">  
  
-  <!-- Default box -->   
+  <!-- Default box -->    
   <div class="box">  
-    <div class="box-header with-border">    
+    <div class="box-header with-border">  
 
       <div class="back" align="left" hidden>
         <a href="<?= @$_SERVER['HTTP_REFERER'] ?>"><button class="btn btn-danger"><i class="fa fa-arrow-left"></i> Kembali</button></a> 
       </div> 
-   
+  
       <div class="box-tools pull-right">   
         <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
           <i class="fa fa-minus"></i></button>
@@ -147,7 +147,7 @@
               <td>
                 <input type="text" name="berat[]" class="berat form-control" value="0" min="1" step="any">
               </td>
-              <td> 
+              <td>
                 <input type="text" name="panjang[]" class="panjang form-control" value="0" step="any">
               </td>
               <td>
@@ -156,14 +156,17 @@
               <td>
                 <input readonly="" type="text" name="total[]" class="total form-control" required value="0" min="0">
               </td>
+
               <td hidden>
                 <input type="text" name="terima[]" class="terima form-control" value="1" step="any">
               </td>
+
               <td hidden>
                 <input required type="text" name="id[]" class="id form-control" value="<?=@$id?>">
               </td>
+
               <td>
-                <button type="button" onclick="$(this).closest('tr').remove()" class="remove btn btn-danger btn-sm"><i class="fa fa-minus"></i></button>
+                <button type="button" onclick="hide($(this))" class="remove btn btn-danger btn-sm"><i class="fa fa-minus"></i></button>
               </td>
             </tr>
 
@@ -224,7 +227,7 @@
 <?php endif?>
 
 //atribut
-$('form').attr('action', '<?=base_url('pembelian/'.@$url.'_save')?>');
+$('form').attr('action', '<?=base_url('pembelian/terima_save')?>');
 $('#nomor').val('<?=@$nomor?>');
 $('#tanggal').val('<?=date('Y-m-d')?>');
 $('#previewImg').attr('src', '<?=base_url('assets/gambar/camera.png')?>');
@@ -272,16 +275,12 @@ $(document).on('change', '#status', function() {
 
     //blank new input
     $('#copy').find('select').val('');
-    $('#copy').find('.kode').val('');
     $('#copy').find('.qty').val(1);
     $('#copy').find('.berat').val(0);
     $('#copy').find('.panjang').val(0);
     $('#copy').find('.stok').val(0);
     $('#copy').find('.harga').val(0);
     $('#copy').find('.total').val(0);
-
-    var id = Number($('#copy').closest('tr').find('.id').val()) + 1;
-    $('#copy').find('.id').val(id);
   }
 
   //foto preview
@@ -340,10 +339,29 @@ $(document).on('change', '#status', function() {
     var grandtotal =sum_total + ekspedisi;
     $('#grandtotal').val(number_format(grandtotal.toFixed(3).replaceAll('.000', '')));
 
-    //PO
-    <?php if ($this->uri->segment(2) == 'po_add'): ?>
-      
-      $('.terima').val(0);
+
+    <?php if ($this->uri->segment(2) == 'po_proses'): ?>
+
+      //hide proses
+      $('#status').closest('.form-group').hide();
+      $('#pembayaran').closest('.form-group').hide();
+      $('.harga').closest('td').hide();
+      $('.total').closest('td').hide();
+      $('.th-harga').hide();
+      $('.th-total').hide();
+      $('#subtotal').closest('tr').hide();
+      $('#ekspedisi_total').closest('tr').hide();
+      $('#ppn').closest('tr').hide();
+      $('#grandtotal').closest('tr').hide();
+      $('.add').closest('th').hide();
+      // $('.remove').closest('td').hide();
+
+      //lock
+      $('#nomor').attr('readonly', '');
+      $('#supplier').closest('.form-group').css('pointer-events', 'none');
+      $('#supplier').closest('.form-group').find('.select2-selection--single').css('background', '#EEEEEE');
+      $('#barang').attr('readonly', '').css('pointer-events', 'none');
+      $('.kode').attr('readonly', '');
 
     <?php endif ?>
 
@@ -366,5 +384,12 @@ $(document).on('change', '#status', function() {
       }
 
   });
+
+//hide
+function hide(target){
+
+  target.closest('tr').find('.terima').val(0);
+  target.closest('tr').hide();
+}
 
 </script>

@@ -1,15 +1,15 @@
 <style type="text/css">
-  .tit{
+  .tit{ 
     background: black;
     padding: 0.5%;
-    color: white;
+    color: white; 
   }
 </style>
  
     <!-- Main content -->  
     <section class="content">
-
-      <!-- Default box -->
+ 
+      <!-- Default box --> 
       <div class="box"> 
         <div class="box-header with-border"> 
 
@@ -26,11 +26,11 @@
                 <thead>
                 <tr>
                   <th>Nomor</th> 
-                  <!-- <th>Supplier</th> -->
                   <th>Tanggal</th>
-                  <!-- <th>Jatuh Tempo</th> -->
-                  <!-- <th>Status</th> -->
-                  <th width="60">Action</th>
+                  <th class="th-jumlah">Jumlah</th>
+                  <th class="th-terima">Terima</th>
+                  <th>Status</th>
+                  <th width="1">Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -86,11 +86,10 @@
           <table id="example2" class="table table-bordered table-hover" style="width: 100%;">
                 <thead>
                 <tr>
-                  <th>Nomor</th> 
-                  <!-- <th>Supplier</th> -->
+                  <th>Nomor</th>
+                  <th>Bukti Penarikan</th> 
                   <th>Tanggal</th>
                   <th>Jatuh Tempo</th>
-                  <th>Status</th>
                   <th width="90">Action</th>
                 </tr>
                 </thead>
@@ -122,31 +121,34 @@
             },
             "columns": [                               
                         { "data": "pembelian_nomor"},
-                        // { "data": "kontak_nama"},
                         { "data": "pembelian_tanggal",
                         "render": 
                         function( data ) {
                             return "<span>"+moment(data).format("DD/MM/YYYY")+"</span>";
                           }
                         },
-                        // { "data": "pembelian_jatuh_tempo",
-                        // "render": 
-                        // function( data ) {
-                        //     if (data == '0000-00-00') {var j = '-';}else{var j = moment(data).format("DD/MM/YYYY");}
-                        //     return "<span>"+j+"</span>";
-                        //   }
-                        // },
-                        // { "data": "pembelian_partial",
-                        // "render": 
-                        // function( data ) {
-                        //     if (data == '1') {var s = 'Selesai';} else {var s = 'Sebagian';}
-                        //     return "<span>"+s+"</span>";
-                        //   }
-                        // },
+                        { "data": "pembelian_jumlah",
+                        "render": 
+                        function( data ) {
+                            return "<span class='jumlah'>"+data+"</span>";
+                          }
+                        },
+                        { "data": "terima",
+                        "render": 
+                        function( data ) {
+                            return "<span class='terima'>"+data+"</span>";
+                          }
+                        },
                         { "data": "pembelian_id",
                         "render": 
                         function( data ) {
-                            return "<a class='view' href='<?php echo base_url('pembelian/po_proses/')?>"+data+"'><button class='btn btn-xs btn-primary'>Proses <i class='fa fa-angle-double-right'></i></button></a>";
+                            return "<span class='status'></span>";
+                          }
+                        },
+                        { "data": "pembelian_id",
+                        "render": 
+                        function( data ) {
+                            return "<a class='proses' href='<?php echo base_url('pembelian/po_proses/')?>"+data+"'><button class='proses-btn btn btn-xs btn-primary'>Proses <i class='fa fa-angle-double-right'></i></button></a>";
                           }
                         },
                         
@@ -166,12 +168,12 @@
             "scrollX": true, 
             
             "ajax": {
-                "url": "<?=site_url('pembelian/'.@$url.'_get_data')?>",
+                "url": "<?=site_url('pembelian/utama_get_data')?>",
                 "type": "GET"
             },
             "columns": [                               
                         { "data": "pembelian_nomor"},
-                        // { "data": "kontak_nama"},
+                        { "data": "pembelian_terima_bukti"},
                         { "data": "pembelian_tanggal",
                         "render": 
                         function( data ) {
@@ -185,14 +187,7 @@
                             return "<span>"+j+"</span>";
                           }
                         },
-                        { "data": "pembelian_partial",
-                        "render": 
-                        function( data ) {
-                            if (data == '1') {var s = 'Selesai';} else {var s = 'Sebagian';}
-                            return "<span>"+s+"</span>";
-                          }
-                        },
-                        { "data": "pembelian_id",
+                        { "data": "pembelian_terima_id",
                         "render": 
                         function( data ) {
                             return "<a href='<?php echo base_url('pembelian/'.@$url.'_view/')?>"+data+"'><button class='btn btn-xs btn-success'><i class='fa fa-eye'></i></button></a> "+
@@ -215,5 +210,47 @@ function filter($val){
   table2.search($val).draw();
 }
 
+function auto(){
+
+    //hidden
+    $('.jumlah').closest('td').hide();
+    $('.terima').closest('td').hide();
+    $('.th-jumlah').hide();
+    $('.th-terima').hide();
+
+    $.each($('.jumlah'), function() {
+       
+      var jumlah = Number($(this).closest('tr').find('.jumlah').text());
+      var terima = Number($(this).closest('tr').find('.terima').text());
+      var proses = $(this).closest('tr').find('.proses');
+      var proses_btn = $(this).closest('tr').find('.proses-btn');
+
+      var status = $(this).closest('tr').find('.status');
+
+      if (terima == 0) {
+
+        status.text('Belum');
+      }
+
+      if (terima != 0 && jumlah > terima) {
+
+        status.text('Sebagian');
+      }
+
+      if (terima != 0 && terima >= jumlah) {
+
+        status.text('Selesai');
+        proses.css('pointer-events', 'none');
+        proses_btn.css('background', 'grey');
+      }
+
+    });
+
+    setTimeout(function() {
+        auto();
+    }, 100);
+  }
+
+  auto();
  
 </script>

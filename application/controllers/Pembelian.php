@@ -7,7 +7,7 @@ class Pembelian extends CI_Controller{
 		$this->load->model('m_pembelian_umum');
 		$this->load->model('m_bahan');
 		$this->load->model('m_partial');  
-	}   
+	}    
 
 ///////////////////////// pembelian //////////////////////////////////////////////////
 
@@ -15,6 +15,20 @@ class Pembelian extends CI_Controller{
 	    $data = $this->$model->get_datatables($where);
 		$total = $this->$model->count_all($where);
 		$filter = $this->$model->count_filtered($where);
+ 
+		$output = array(
+			"draw" => $_GET["draw"],
+			"recordsTotal" => $total,
+			"recordsFiltered" => $filter,
+			"data" => $data,
+		);
+
+		return $output; 
+	} 
+	function serverside_pembelian($where,$model,$group){
+	    $data = $this->$model->get_datatables($where, $group);
+		$total = $this->$model->count_all($where, $group);
+		$filter = $this->$model->count_filtered($where, $group);
  
 		$output = array(
 			"draw" => $_GET["draw"],
@@ -105,6 +119,7 @@ class Pembelian extends CI_Controller{
 		$koof = $ekspedisi / $subtotal;
 
 		$set1 = array( 
+						'pembelian_jumlah' => COUNT($_POST['barang']),
 						'pembelian_user' => $user,
 						'pembelian_proses' => $proses,
 						'pembelian_po' => $po,
@@ -155,7 +170,9 @@ class Pembelian extends CI_Controller{
 			$ekspedisi_total = $koof * $berat;
 
 			$set2 = array(
+						'pembelian_barang_id' => strip_tags($_POST['id'][$i]),
 						'pembelian_barang_nomor' => $nomor,
+						'pembelian_barang_terima' => strip_tags($_POST['terima'][$i]),
 						'pembelian_barang_barang' => strip_tags($_POST['barang'][$i]),
 						'pembelian_barang_kode' => strip_tags($_POST['kode'][$i]),
 						'pembelian_barang_berat_qty' => $berat / $panjang,
@@ -168,6 +185,20 @@ class Pembelian extends CI_Controller{
 					);	
 
 			$this->query_builder->add('t_pembelian_barang',$set2);
+		}
+
+		//terima
+		if ($po != 1) {
+			
+			$bukti = 'BD-'.date('dmY').'-'.($this->query_builder->count("SELECT * FROM t_pembelian_terima")+1);
+
+			$set3 = array(
+							'pembelian_terima_nomor' => $nomor,
+							'pembelian_terima_bukti' => $bukti,
+							'pembelian_terima_barang' => implode(',', $_POST['id']), 
+						);
+
+			$this->query_builder->add('t_pembelian_terima',$set3);
 		}
 
 		if ($db == 1) {
@@ -230,9 +261,20 @@ class Pembelian extends CI_Controller{
 
 	    return $data;
 	}
-	function get_pembelian($nomor){
+	function get_pembelian($nomor, $id = ''){
 		//pembelian barang
-		$db = $this->query_builder->view("SELECT * FROM t_pembelian_barang WHERE pembelian_barang_nomor = '$nomor'");
+
+		if ($id != '') {
+			
+			//terima barang
+			$get = $this->query_builder->view_row("SELECT * FROM t_pembelian_terima WHERE pembelian_terima_id = '$id'");
+			$barang = $get['pembelian_terima_barang'];
+			$db = $this->query_builder->view("SELECT * FROM t_pembelian_barang WHERE pembelian_barang_id IN($barang)");
+		}else{
+
+			$db = $this->query_builder->view("SELECT * FROM t_pembelian_barang WHERE pembelian_barang_nomor = '$nomor'");
+		}
+
 		echo json_encode($db);
 	}
 	function update($po, $proses, $redirect){
@@ -279,12 +321,8 @@ class Pembelian extends CI_Controller{
 			$result = $set1;
 		}
 
-		$where1 = ['pembelian_nomor' => $nomor];
-		$db = $this->query_builder->update('t_pembelian',$result,$where1);
-
-		//delete barang
-		$where2 = ['pembelian_barang_nomor' => $nomor];
-		$this->query_builder->delete('t_pembelian_barang',$where2);
+		$where = ['pembelian_nomor' => $nomor];
+		$db = $this->query_builder->update('t_pembelian',$result,$where);
 
 		//save barang
 		$barang = $_POST['barang'];
@@ -296,9 +334,11 @@ class Pembelian extends CI_Controller{
 			$berat = strip_tags($_POST['berat'][$i]);
 			$panjang = strip_tags($_POST['panjang'][$i]);
 			$ekspedisi_total = $koof * $berat;
+			$id = strip_tags($_POST['id'][$i]);
 
 			$set2 = array(
 						'pembelian_barang_nomor' => $nomor,
+						'pembelian_barang_terima' => strip_tags($_POST['terima'][$i]),
 						'pembelian_barang_barang' => strip_tags($_POST['barang'][$i]),
 						'pembelian_barang_kode' => strip_tags($_POST['kode'][$i]),
 						'pembelian_barang_berat_qty' => $berat / $panjang,
@@ -310,7 +350,7 @@ class Pembelian extends CI_Controller{
 						'pembelian_barang_ekspedisi' => $ekspedisi_total,
 					);	
 
-			$this->query_builder->add('t_pembelian_barang',$set2);
+			$this->query_builder->update('t_pembelian_barang',$set2,['pembelian_barang_id' => $id]);
 		}
 
 		if ($db == 1) {
@@ -366,7 +406,9 @@ class Pembelian extends CI_Controller{
 
 		$data['title'] = 'laporan';
 
-		$data['data'] = $this->query_builder->view("SELECT * FROM t_pembelian AS a LEFT JOIN t_pembelian_barang as b ON a.pembelian_nomor = b.pembelian_barang_nomor LEFT JOIN t_kontak as c ON a.pembelian_supplier = c.kontak_id LEFT JOIN t_bahan as d ON b.pembelian_barang_barang = d.bahan_id LEFT JOIN t_user as e ON a.pembelian_user = e.user_id LEFT JOIN t_satuan as f ON d.bahan_satuan = f.satuan_id WHERE a.pembelian_hapus = 0 AND a.pembelian_id = '$id'");
+		$get = $this->query_builder->view_row("SELECT * FROM t_pembelian_terima WHERE pembelian_terima_id = '$id'");
+		$barang = $get['pembelian_terima_barang'];
+		$data['data'] = $this->query_builder->view("SELECT * FROM t_pembelian AS a LEFT JOIN t_pembelian_barang as b ON a.pembelian_nomor = b.pembelian_barang_nomor LEFT JOIN t_kontak as c ON a.pembelian_supplier = c.kontak_id LEFT JOIN t_bahan as d ON b.pembelian_barang_barang = d.bahan_id LEFT JOIN t_user as e ON a.pembelian_user = e.user_id LEFT JOIN t_satuan as f ON d.bahan_satuan = f.satuan_id WHERE a.pembelian_hapus = 0 AND b.pembelian_barang_id IN($barang)");
 
 		$this->load->view('pembelian/laporan', $data);
 	}
@@ -397,7 +439,8 @@ class Pembelian extends CI_Controller{
 		
 		$model = 'm_pembelian';
 		$where = array('pembelian_po' => 1,'pembelian_hapus' => 0);
-		$output = $this->serverside($where, $model);
+		$group = 'pembelian_nomor';
+		$output = $this->serverside_pembelian($where, $model, $group);
 		echo json_encode($output);
 	}
 	function po_delete($id){
@@ -416,6 +459,8 @@ class Pembelian extends CI_Controller{
 		//generate nomor transaksi
 	    $pb = $this->query_builder->count("SELECT * FROM t_pembelian");
 	    $data['nomor'] = 'PB-'.date('dmY').'-'.($pb+1);
+
+	    $data['id'] = $this->query_builder->count("SELECT * FROM t_pembelian_barang")+1;
 
 	    $data["title"] = $redirect;
 
@@ -472,15 +517,49 @@ class Pembelian extends CI_Controller{
 		$data["url"] = 'rotate';
 
 	    $this->load->view('v_template_admin/admin_header',$data);
-	    $this->load->view('pembelian/form');
-	    $this->load->view('pembelian/form_edit');
+	    $this->load->view('pembelian/terima');
+	    $this->load->view('pembelian/terima_edit');
 	    $this->load->view('v_template_admin/admin_footer');
 	}
-	function rotate_save(){
+
+
+	///////////// terima pembelian PO ////////////////////
+
+	function terima_get_data($nomor){
+		//pembelian barang po
+		$db = $this->query_builder->view("SELECT * FROM t_pembelian_barang WHERE pembelian_barang_nomor = '$nomor' AND pembelian_barang_terima = 0");
+
+		echo json_encode($db);
+	}
+	function terima_save(){
+
+		//simpan terima
+	    $bukti = 'BD-'.date('dmY').'-'.($this->query_builder->count("SELECT * FROM t_pembelian_terima")+1);
+
+	    $arr = array();
+		for ($i=0; $i < count($_POST['barang']); $i++) { 
+			
+			$terima = strip_tags(@$_POST['terima'][$i]);
+			$id = strip_tags(@$_POST['id'][$i]);
+
+			if ($terima == 1) {
+				
+				$arr[] = $id;
+			}
+		}
+
+		$set = array(
+						'pembelian_terima_nomor' => strip_tags(@$_POST['nomor']),
+						'pembelian_terima_bukti' => $bukti,
+						'pembelian_terima_barang' => implode(',', $arr), 
+					);
+
+		$this->query_builder->add('t_pembelian_terima',$set);
 		
+		//ubah status pembelian
 		$redirect = 'utama';
 		$proses = 1;
-		$this->update($po = 0, $proses, $redirect);
+		$this->update($po = 1, $proses, $redirect);
 	}
 
 
@@ -508,7 +587,7 @@ class Pembelian extends CI_Controller{
 		    	$x1 = str_replace(', ', ',', $kode);
 		    	$x2 = '"'.str_replace(',', '","', $x1).'"';
 			
-				$data['data'] = $this->query_builder->view("SELECT * FROM t_pembelian as a JOIN t_pembelian_barang AS b ON a.pembelian_nomor = b.pembelian_barang_nomor JOIN t_bahan AS c ON b.pembelian_barang_barang = c.bahan_id WHERE b.pembelian_barang_kode IN($x2) AND a.pembelian_partial = 0 AND a.pembelian_hapus = 0 AND a.pembelian_proses = 1");
+				$data['data'] = $this->query_builder->view("SELECT * FROM t_pembelian as a JOIN t_pembelian_barang AS b ON a.pembelian_nomor = b.pembelian_barang_nomor JOIN t_bahan AS c ON b.pembelian_barang_barang = c.bahan_id WHERE b.pembelian_barang_kode IN($x2) AND a.pembelian_hapus = 0 AND a.pembelian_proses = 1 AND b.pembelian_barang_berat_cek <= b.pembelian_barang_berat AND b.pembelian_barang_panjang_cek <= b.pembelian_barang_panjang");
 			    
 			    $this->load->view('v_template_admin/admin_header',$data);
 			    $this->load->view('pembelian/partial');
@@ -523,8 +602,9 @@ class Pembelian extends CI_Controller{
 	function utama_get_data(){
 		
 		$model = 'm_pembelian';
-		$where = array('pembelian_proses' => 1,'pembelian_hapus' => 0);
-		$output = $this->serverside($where, $model);
+		$where = array('pembelian_proses' => 1,'pembelian_terima_hapus' => 0);
+		$group = 'pembelian_terima_bukti';
+		$output = $this->serverside_pembelian($where, $model, $group);
 		echo json_encode($output);
 	}
 	function utama_add()
@@ -537,6 +617,8 @@ class Pembelian extends CI_Controller{
 		//generate nomor transaksi
 	    $pb = $this->query_builder->count("SELECT * FROM t_pembelian");
 	    $data['nomor'] = 'PB-'.date('dmY').'-'.($pb+1);
+	    
+	    $data['id'] = $this->query_builder->count("SELECT * FROM t_pembelian_barang")+1;
 
 	    $data["title"] = $redirect;
 
@@ -566,7 +648,29 @@ class Pembelian extends CI_Controller{
 	function utama_edit($id){ 
 		
 		$active = 'utama';
-		$data = $this->edit($id, $active);
+		
+		//data
+	    $data['data'] = $this->query_builder->view_row("SELECT * FROM t_pembelian as a LEFT JOIN t_pembelian_terima as b ON a.pembelian_nomor = b.pembelian_terima_nomor WHERE b.pembelian_terima_id = '$id'");
+
+	    //rekening
+	    $data['rekening_data'] = $this->query_builder->view("SELECT * FROM t_rekening WHERE rekening_hapus = 0");
+
+	    //kontak
+	    $data['kontak_data'] = $this->query_builder->view("SELECT * FROM t_kontak WHERE kontak_jenis = 's' AND kontak_hapus = 0");
+
+	    //barang
+		$data['bahan_data'] = $this->query_builder->view("SELECT * FROM t_bahan WHERE bahan_hapus = 0 AND bahan_id > 0");
+
+		//gudang
+		$data['gudang_data'] = $this->query_builder->view("SELECT * FROM t_gudang WHERE gudang_hapus = 0");	
+
+	    //ppn
+	    $data['ppn'] = $this->query_builder->view_row("SELECT * FROM t_pajak WHERE pajak_jenis = 'pembelian'");
+
+	    //ekspedisi
+	    $data['ekspedisi_data'] = $this->query_builder->view("SELECT * FROM t_ekspedisi WHERE ekspedisi_hapus = 0");
+
+	    $data['url'] = $active;
 
 		$data["title"] = $active;
 
@@ -578,9 +682,32 @@ class Pembelian extends CI_Controller{
 	function utama_view($id){
 		
 		$active = 'utama';
-		$data = $this->edit($id, $active);
+		
+		//data
+	    $data['data'] = $this->query_builder->view_row("SELECT * FROM t_pembelian as a LEFT JOIN t_pembelian_terima as b ON a.pembelian_nomor = b.pembelian_terima_nomor WHERE b.pembelian_terima_id = '$id'");
+
+	    //rekening
+	    $data['rekening_data'] = $this->query_builder->view("SELECT * FROM t_rekening WHERE rekening_hapus = 0");
+
+	    //kontak
+	    $data['kontak_data'] = $this->query_builder->view("SELECT * FROM t_kontak WHERE kontak_jenis = 's' AND kontak_hapus = 0");
+
+	    //barang
+		$data['bahan_data'] = $this->query_builder->view("SELECT * FROM t_bahan WHERE bahan_hapus = 0 AND bahan_id > 0");
+
+		//gudang
+		$data['gudang_data'] = $this->query_builder->view("SELECT * FROM t_gudang WHERE gudang_hapus = 0");	
+
+	    //ppn
+	    $data['ppn'] = $this->query_builder->view_row("SELECT * FROM t_pajak WHERE pajak_jenis = 'pembelian'");
+
+	    //ekspedisi
+	    $data['ekspedisi_data'] = $this->query_builder->view("SELECT * FROM t_ekspedisi WHERE ekspedisi_hapus = 0");
+
+	    $data['url'] = $active;
 
 		$data["title"] = $active;
+
 		$data["view"] = 1;
 
 	    $this->load->view('v_template_admin/admin_header',$data);
@@ -597,9 +724,9 @@ class Pembelian extends CI_Controller{
 	}
 	function utama_delete($id){
 		
-		$table = 'pembelian';
+		$table = 'pembelian_terima';
 		$redirect = 'utama';
-		$this->delete('pembelian', $id, $redirect);
+		$this->delete($table, $id, $redirect);
 	}
 
 //////// umum /////////////////////////////////////////////////

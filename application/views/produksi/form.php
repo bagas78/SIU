@@ -14,7 +14,7 @@
   }
 </style> 
  
-<!-- Main content --> 
+<!-- Main content -->  
 <section class="content">
     
   <!-- Default box -->  
@@ -193,12 +193,13 @@
             <thead>
               <tr>
                 <th width="300">Bahan</th>
+                <th width="300">Kode Item</th>
                 <th width="300">Kategori</th>
-                <th width="300" hidden>Hpp <span class="stn">Rp</span></th>
-                <th width="300">Stok <span class="stn">Mtr</span></th>   
-                <th width="300">Berat / Meter <span class="stn">Kg</span></th>           
-                <th width="300">Panjang <span class="stn">Mtr</span></th>
-                <th width="300" hidden>Total <span class="stn">Rp</span></th>
+                <th width="200" hidden>Hpp <span class="stn">Rp</span></th>
+                <th width="200">Stok <span class="stn">Mtr</span></th>   
+                <th width="200">Berat / Meter <span class="stn">Kg</span></th>           
+                <th width="200">Panjang <span class="stn">Mtr</span></th>
+                <th width="200" hidden>Total <span class="stn">Rp</span></th>
                 <th><button type="button" onclick="clone('2')" class="add btn btn-success btn-sm"><i class="fa fa-plus"></i></button></th>
               </tr>
             </thead>
@@ -215,18 +216,24 @@
                 </td>
 
                 <td>
+                  <select required id="kode" class="kode form-control" name="kode[]">
+                    
+                  </select>
+                </td>
+
+                <td>
                   <input type="text" name="kategori[]" class="kategori form-control" required readonly>
                 </td>
                 <td hidden>
-                  <input min="0" type="text" name="harga[]" class="harga form-control text-number" value="0" required readonly step="any">
+                  <input min="0" type="text" name="harga[]" class="harga form-control" value="0" required readonly step="any">
                 </td>
 
                 <td>
-                  <input min="0" type="text" name="stok[]" class="stok form-control text-number" value="0" required readonly step="any">                
+                  <input min="0" type="text" name="stok[]" class="stok form-control" value="0" required readonly step="any">                
                 </td>
 
                 <td>
-                  <input type="text" name="berat[]" class="berat form-control text-number" required value="0" min="0" readonly step="any">
+                  <input type="text" name="berat[]" class="berat form-control" required value="0" min="0" readonly step="any">
                 </td>
 
                 <td>
@@ -241,7 +248,7 @@
               </tr>
 
               <tr hidden>
-                <td colspan="5"></td>
+                <td colspan="6"></td>
                 <td align="right"><b>Subtotal</b> <span class="stn">Rp</span></td>
                 <td>
                   <input readonly required id="subtotal" type="text" name="subtotal" class="form-control text-number" value="0" min="0" step="any">
@@ -249,7 +256,7 @@
               </tr>
 
               <tr hidden>
-                <td colspan="5"></td>
+                <td colspan="6"></td>
                 <td align="right"><b>Biaya Jasa</b> <span class="stn">Rp</span></td>
                 <td>
                   <input id="jasa" type="text" name="jasa" class="form-control text-number" value="0" min="0" step="any">
@@ -257,14 +264,14 @@
               </tr>
 
               <tr hidden>
-                <td colspan="5"></td>
+                <td colspan="6"></td>
                 <td align="right"><b>Grand Total</b> <span class="stn">Rp</span></td>
                 <td>
                   <input id="grandtotal" readonly="" type="text" name="grandtotal" class="form-control text-number" value="0" min="0" step="any">
                 </td>
               </tr>
               <tr class="save">
-                <td colspan="7" align="right">
+                <td colspan="8" align="right">
                   <button type="submit" class="btn btn-primary">Simpan <i class="fa fa-check"></i></button>
                   <a href="<?= @$_SERVER['HTTP_REFERER'] ?>"><button type="button" class="btn btn-danger">Batal <i class="fa fa-times"></i></button></a>
                 </td>
@@ -452,7 +459,7 @@ $(document).on('change', '.produk', function() {
             }else{
 
               kategori.val(val.bahan_kategori);
-              stok.val(number_format(val.stok.replaceAll('.00','')));
+              stok.val(number_format(val.stok));
               berat.val(val.berat);
               harga.val(val.bahan_gudang_hpp);
             }
@@ -532,6 +539,32 @@ $(document).on('change', '.produk', function() {
         }
       }
   }
+
+  //bahan
+  $(document).on('change', '.bahan', function() {
+
+    //empty
+    $('.kode').empty();
+      
+    var id = $(this).val();
+    var gudang = $('#gudang').val();
+
+    $.get('<?=base_url('produksi/get_item/')?>'+id+'/'+gudang, function(data) {
+
+      var arr = $.parseJSON(data)
+
+      var html = '<option value="" hidden>-- Pilih --</option>';
+      $.each(arr, function(index, val) {
+         
+         html += '<option value="'+val['bahan_item_id']+'">'+val['bahan_item_kode']+'</option>';
+
+      });
+
+      $('.kode').append(html);
+
+    });
+
+  });
 
   //subtotal
   $(document).on('keyup blur focus', '.panjang', function() {
