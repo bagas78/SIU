@@ -17,7 +17,7 @@
   	<script src="<?php echo base_url() ?>assets/js/number_format.js"></script>
 
   	<style type="text/css"> 
-  		.box{
+  		.box{ 
   			padding: 3%;
   		}
   		.tit{
@@ -61,7 +61,7 @@
 				<span class="tit">NOTA PEMBELIAN</span>
 			</div>
 
-			<div class="clearfix"></div>
+			<div class="clearfix"></div><br/><br/>
 		
 			<div class="col-md-12" style="margin-bottom: 3%;">
 				
@@ -87,8 +87,8 @@
 							<th class="r">Berat</th>
 							<th class="r">Panjang</th>
 							<th class="r">Berat / Meter</th>
-							<th class="r">Harga</th>
-							<th class="r">Total</th>
+							<th hidden class="r">Harga</th>
+							<th hidden class="r">Total</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -101,10 +101,10 @@
 								<td class="r"><span class="number berat"><?=@$val['pembelian_barang_berat']?></span> Kg</td>
 								<td class="r"><span class="number"><?=@$val['pembelian_barang_panjang']?></span> Mtr</td>
 								<td class="r"><span class="number"><?=round(@$val['pembelian_barang_berat'] / @$val['pembelian_barang_panjang'], 3)?></span> Kg</td>
-								<td class="r">
+								<td hidden class="r">
 									Rp. <span class="number"><?=@$val['pembelian_barang_harga']?><span class="number">
 								</td>
-								<td class="r">
+								<td hidden class="r">
 									Rp. <span class="total number"><?=@$val['pembelian_barang_total']?><span class="number">
 								</td>
 							</tr>
@@ -117,25 +117,25 @@
 							<td class="r">Berat Total</td>
 							<td class="r" ><span class="number" id="berat_total"></span> Kg</td>
 						</tr> -->
-						<tr>
+						<tr hidden>
 							<td colspan="5"></td>
 							<td class="r">Produk Total</td>
 							<td class="r" >Rp. <span class="number" id="produk_total"></span></td>
 						</tr>
-						<tr>
+						<tr hidden>
 							<td style="border-top: 0;" colspan="5"></td>
 							<td style="border-top: 0;" class="r">PPN <?=@$data[0]['pembelian_ppn']. '%'?></td>
 							<td style="border-top: 0;" class="r">Rp. <span class="number" id="ppn"></span></td>
 						</tr>
 						<tr>
 							<td style="border-top: 0;" colspan="5">Jatuh Tempo : <?php @$d = date_create($data[0]['pembelian_jatuh_tempo']); echo date_format($d, 'd M Y') ?></td>
-							<td style="border-top: 0;" class="r">Ekspedisi</td>
-							<td style="border-top: 0;" class="r">Rp. <span class="number" id="ekspedisi"><?=@$data[0]['pembelian_ekspedisi_total']?></span></td>
+							<td hidden style="border-top: 0;" class="r">Ekspedisi</td>
+							<td hidden style="border-top: 0;" class="r">Rp. <span class="number" id="ekspedisi"><?=@$data[0]['pembelian_ekspedisi_total']?></span></td>
 						</tr>
 						<tr>
 							<td style="border-top: 0;" colspan="5">Keterangan : <?=@$data[0]['pembelian_keterangan']?></td>
-							<td class="r" style="border-top: 0;"><b>Grand Total</b></td>
-							<td class="r" style="border-top: 0;"><b>Rp. <span class="number" id="total_akhir"></span></b></td>
+							<td hidden class="r" style="border-top: 0;"><b>Grand Total</b></td>
+							<td hidden class="r" style="border-top: 0;"><b>Rp. <span class="number" id="total_akhir"></span></b></td>
 						</tr>
 						
 

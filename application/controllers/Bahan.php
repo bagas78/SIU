@@ -134,14 +134,14 @@ class Bahan extends CI_Controller{
 		redirect(base_url('bahan'));
 	}
 
-	function list($id)
+	function list($gudang, $bahan)
 	{
 		if ( $this->session->userdata('login') == 1) {
 		    $data["title"] = 'bahan';
 
-		    $data['data'] = $this->query_builder->view_row("SELECT * FROM t_bahan_gudang as a JOIN t_gudang as b ON a.bahan_gudang_gudang = b.gudang_id JOIN t_bahan as c ON a.bahan_gudang_bahan = c.bahan_id WHERE c.bahan_id = '$id'");
+		    $data['data'] = $this->query_builder->view_row("SELECT * FROM t_bahan_item AS a LEFT JOIN t_gudang AS b ON a.bahan_item_gudang = b.gudang_id LEFT JOIN t_bahan AS c ON a.bahan_item_bahan = c.bahan_id WHERE a.bahan_item_gudang = '$gudang' AND a.bahan_item_bahan = '$bahan'");
 
-		    $this->load->view('v_template_admin/admin_header',$data);
+		    $this->load->view('v_template_admin/admin_header',$data); 
 		    $this->load->view('bahan/list');
 		    $this->load->view('v_template_admin/admin_footer');
 
@@ -158,4 +158,18 @@ class Bahan extends CI_Controller{
 		$output = $this->serverside($where, $model);
 		echo json_encode($output);
 	} 
+	function hpp()
+	{
+		$bahan_id = $_GET['bahan_id'];
+		
+		// kirim ke model, ambil data
+		$result = $this->m_bahan->get_data_hpp($bahan_id);
+
+		// $output = '{"name":"John", "age":'.$bahan_id.', "car":"Toyota"}';
+		// echo json_encode($result);
+		// echo $result;
+
+		$out = array_values($result);
+		echo json_encode($out);
+	}
 }

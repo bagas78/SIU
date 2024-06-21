@@ -104,7 +104,7 @@
           //select kode
           function auto() { 
 
-            $('#copy2:nth-child('+i+') > td:nth-child(2) > select').val(val.produksi_barang_kode).change(); 
+            $('#copy2:nth-child('+i+') > td:nth-child(2) > select').val(val.produksi_barang_kode); 
 
             setTimeout(function() {
                 auto();
@@ -112,9 +112,6 @@
           }
 
           auto(); 
-
-          //kode
-          $('#copy2:nth-child('+i+') > td:nth-child(2) > select').val(val.produksi_barang_kode).change();
 
         });
 

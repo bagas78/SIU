@@ -347,12 +347,26 @@ $(document).on('change', '#status', function() {
 
     <?php endif ?>
 
+    <?php if ($this->uri->segment(2) == 'utama_view'): ?>
+
+      //hide harga
+      $('.harga').closest('td').hide();
+      $('.total').closest('td').hide();
+      $('.th-harga').hide();
+      $('.th-total').hide();
+      $('#subtotal').closest('tr').hide();
+      $('#ekspedisi_total').closest('tr').hide();
+      $('#ppn').closest('tr').hide();
+      $('#grandtotal').closest('tr').hide();
+
+    <?php endif ?>
+
     setTimeout(function() {
         auto();
     }, 100);
   }
 
-  auto();
+  auto(); 
 
   //ppn
   $(document).on('change', '.check', function() {

@@ -724,9 +724,26 @@ class Pembelian extends CI_Controller{
 	}
 	function utama_delete($id){
 		
-		$table = 'pembelian_terima';
-		$redirect = 'utama';
-		$this->delete($table, $id, $redirect);
+		//delete & ubah status pembelian
+		$db = $this->query_builder->view_row("SELECT * FROM t_pembelian_terima WHERE pembelian_terima_id = '$id'");
+		$nomor = $db['pembelian_terima_nomor'];
+
+		$this->query_builder->update("t_pembelian",['pembelian_proses' => 0], ['pembelian_nomor' => $nomor]);
+		$this->query_builder->update("t_pembelian_barang",['pembelian_barang_terima' => 0], ['pembelian_barang_nomor' => $nomor]);
+		//
+
+		if ($this->query_builder->delete("t_pembelian_terima",['pembelian_terima_id' => $id])) {	
+			
+			//stok
+			$this->stok->transaksi();
+
+			$this->session->set_flashdata('success','Data berhasil di tambah');
+		} else {
+			
+			$this->session->set_flashdata('gagal','Data gagal di tambah');
+		}
+
+		redirect(base_url('pembelian/utama'));
 	}
 
 //////// umum /////////////////////////////////////////////////

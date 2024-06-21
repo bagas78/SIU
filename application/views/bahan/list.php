@@ -2,7 +2,7 @@
     <!-- Main content --> 
     <section class="content">
 
-      <!-- Default box --> 
+      <!-- Default box -->  
       <div class="box"> 
         <div class="box-header with-border">
 
@@ -57,7 +57,7 @@
             "scrollX"     : true,
             
             "ajax": {
-                "url": "<?=site_url('bahan/get_item/'.@$data["bahan_gudang_gudang"].'/'.@$data["bahan_gudang_bahan"]) ?>",
+                "url": "<?=site_url('bahan/get_item/'.@$data["bahan_item_gudang"].'/'.@$data["bahan_item_bahan"]) ?>",
                 "type": "GET"
             },
             "columns": [ 

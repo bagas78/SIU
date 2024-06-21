@@ -6,7 +6,7 @@
     text-align: center;
   }
   .tit{
-    padding: 0.5%; 
+    padding: 0.5%;  
     font-size: large;
     background: black;
     color: white; 
@@ -197,7 +197,7 @@
                 <th width="300">Kategori</th>
                 <th width="200" hidden>Hpp <span class="stn">Rp</span></th>
                 <th width="200">Stok <span class="stn">Mtr</span></th>   
-                <th width="200">Berat / Meter <span class="stn">Kg</span></th>           
+                <th hidden width="200">Berat / Meter <span class="stn">Kg</span></th>           
                 <th width="200">Panjang <span class="stn">Mtr</span></th>
                 <th width="200" hidden>Total <span class="stn">Rp</span></th>
                 <th><button type="button" onclick="clone('2')" class="add btn btn-success btn-sm"><i class="fa fa-plus"></i></button></th>
@@ -232,7 +232,7 @@
                   <input min="0" type="text" name="stok[]" class="stok form-control" value="0" required readonly step="any">                
                 </td>
 
-                <td>
+                <td hidden>
                   <input type="text" name="berat[]" class="berat form-control" required value="0" min="0" readonly step="any">
                 </td>
 
@@ -459,7 +459,6 @@ $(document).on('change', '.produk', function() {
             }else{
 
               kategori.val(val.bahan_kategori);
-              stok.val(number_format(val.stok));
               berat.val(val.berat);
               harga.val(val.bahan_gudang_hpp);
             }
@@ -551,7 +550,7 @@ $(document).on('change', '.produk', function() {
 
     $.get('<?=base_url('produksi/get_item/')?>'+id+'/'+gudang, function(data) {
 
-      var arr = $.parseJSON(data)
+      var arr = $.parseJSON(data);
 
       var html = '<option value="" hidden>-- Pilih --</option>';
       $.each(arr, function(index, val) {
@@ -561,6 +560,23 @@ $(document).on('change', '.produk', function() {
       });
 
       $('.kode').append(html);
+
+    });
+
+  });
+
+  //kode
+  $(document).on('change', '.kode', function() {
+      
+    var id = $(this).val();
+    var gudang = $('#gudang').val();
+    var target = $(this).closest('tr');
+
+    $.get('<?=base_url('produksi/get_kode/')?>'+id+'/'+gudang, function(data) {
+
+      var val = $.parseJSON(data);
+
+      target.find('.stok').val(val['bahan_item_panjang']);
 
     });
 

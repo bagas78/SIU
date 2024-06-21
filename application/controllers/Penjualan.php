@@ -8,7 +8,7 @@ class Penjualan extends CI_Controller{
 		$this->load->model('m_produksi'); 
 		$this->load->model('m_produksi_so');  
 	}    
- 
+  
 ///////////////////////// penjualan //////////////////////////////////////////////////
 
 	function serverside($where,$model){
@@ -108,29 +108,29 @@ class Penjualan extends CI_Controller{
 		$grandtotal = strip_tags(str_replace(',', '', @$_POST['grandtotal']));
 		$gudang = strip_tags(@$_POST['gudang']);
 		$pelanggan = strip_tags(@$_POST['pelanggan']);
-		$pembayaran = strip_tags($_POST['pembayaran']);
+		$pembayaran = strip_tags(@$_POST['pembayaran']);
 
 		$set1 = array(
 						'penjualan_proses' => $proses,
 						'penjualan_so' => $so,
 						'penjualan_so_tanggal' => $so_tanggal,
 						'penjualan_nomor' => $nomor,
-						'penjualan_ambil' => strip_tags($_POST['ambil']),
-						'penjualan_tanggal' => strip_tags($_POST['tanggal']),
+						'penjualan_ambil' => strip_tags(@$_POST['ambil']),
+						'penjualan_tanggal' => strip_tags(@$_POST['tanggal']),
 						'penjualan_pelanggan' => $pelanggan,
-						'penjualan_jatuh_tempo' => strip_tags($_POST['jatuh_tempo']),
+						'penjualan_jatuh_tempo' => strip_tags(@$_POST['jatuh_tempo']),
 						'penjualan_pembayaran' => $pembayaran,
 						'penjualan_status' => $status,
 						'penjualan_gudang' => $gudang,
-						'penjualan_keterangan' => strip_tags($_POST['keterangan']),
-						'penjualan_subtotal' => strip_tags(str_replace(',', '', $_POST['subtotal'])),
-						'penjualan_ppn' => strip_tags(str_replace(',', '', $_POST['ppn'])),
+						'penjualan_keterangan' => strip_tags(@$_POST['keterangan']),
+						'penjualan_subtotal' => strip_tags(str_replace(',', '', @$_POST['subtotal'])),
+						'penjualan_ppn' => strip_tags(str_replace(',', '', @$_POST['ppn'])),
 						'penjualan_grandtotal' => $grandtotal, 
 					);
 
 		//upload lampiran
 		$lampiran = @$_FILES['lampiran'];
-		if ($lampiran['name']) {
+		if (@$lampiran['name']) {
 
 			$file = $lampiran;
 			$path = './assets/gambar/penjualan';
@@ -297,9 +297,9 @@ class Penjualan extends CI_Controller{
 			$nomor = $xnomor;
 		}
 
-		$status = strip_tags($_POST['status']);
-		$grandtotal = strip_tags(str_replace(',', '', $_POST['grandtotal']));
-		$pembayaran = strip_tags($_POST['pembayaran']);
+		$status = strip_tags(@$_POST['status']);
+		$grandtotal = strip_tags(str_replace(',', '', @$_POST['grandtotal']));
+		$pembayaran = strip_tags(@$_POST['pembayaran']);
 
 		//piutang status
 		if ($status == 'belum') { $piutang = '1'; }else{ $piutang = '0'; }
@@ -310,22 +310,22 @@ class Penjualan extends CI_Controller{
 						'penjualan_so_tanggal' => $so_tanggal,
 						'penjualan_piutang' => $piutang,
 						'penjualan_nomor' => $nomor,
-						'penjualan_ambil' => strip_tags($_POST['ambil']),
-						'penjualan_tanggal' => strip_tags($_POST['tanggal']),
-						'penjualan_pelanggan' => strip_tags($_POST['pelanggan']),
-						'penjualan_jatuh_tempo' => strip_tags($_POST['jatuh_tempo']),
+						'penjualan_ambil' => strip_tags(@$_POST['ambil']),
+						'penjualan_tanggal' => strip_tags(@$_POST['tanggal']),
+						'penjualan_pelanggan' => strip_tags(@$_POST['pelanggan']),
+						'penjualan_jatuh_tempo' => strip_tags(@$_POST['jatuh_tempo']),
 						'penjualan_pembayaran' => $pembayaran,
 						'penjualan_status' => $status,
-						'penjualan_gudang' => strip_tags($_POST['gudang']),
-						'penjualan_keterangan' => strip_tags($_POST['keterangan']),
-						'penjualan_subtotal' => strip_tags(str_replace(',', '', $_POST['subtotal'])),
-						'penjualan_ppn' => strip_tags(str_replace(',', '', $_POST['ppn'])),
+						'penjualan_gudang' => strip_tags(@$_POST['gudang']),
+						'penjualan_keterangan' => strip_tags(@$_POST['keterangan']),
+						'penjualan_subtotal' => strip_tags(str_replace(',', '', @$_POST['subtotal'])),
+						'penjualan_ppn' => strip_tags(str_replace(',', '', @$_POST['ppn'])),
 						'penjualan_grandtotal' => $grandtotal, 
 					);
 
 		//upload lampiran
 		$lampiran = @$_FILES['lampiran'];
-		if ($lampiran['name']) {
+		if (@$lampiran['name']) {
 
 			$file = $lampiran;
 			$path = './assets/gambar/penjualan';

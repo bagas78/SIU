@@ -2,7 +2,7 @@
     <!-- Main content --> 
     <section class="content">
 
-      <!-- Default box --> 
+      <!-- Default box -->  
       <div class="box"> 
         <div class="box-header with-border">
   
@@ -49,6 +49,8 @@
                   <th>Hpp <span class="stn">Rp</span></th>
                   <th>Kategori</th>
                   <th width="60">Action</th>
+                  <th hidden>Id Gudang</th>
+                  <th hidden>Id Bahan</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -144,7 +146,19 @@
                         function(data) {
                             return "<div class='action'><a href='<?= base_url('bahan/edit/')?>"+data+"'><button class='btn btn-xs btn-primary bahan_add'><i class='fa fa-edit'></i></button></a> "+
                             "<button onclick=del('<?= base_url('bahan/delete/')?>"+data+"') class='btn btn-xs btn-danger bahan_del'><i class='fa fa-trash'></i></button> "+
-                            "<a href= '<?=base_url('bahan/list/')?>"+data+"'><button class='btn btn-xs btn-info bahan_list'><i class='fa fa-list-ul '></i></button></a></div>";
+                            "<button class='btn btn-xs btn-info bahan_list'><i class='fa fa-list-ul '></i></button>";
+                          }
+                        },
+                        { "data": "gudang_id",
+                        "render":
+                          function(data) {
+                            return "<span class='gudang_id'>"+data+"</span>"
+                          }
+                        },
+                        { "data": "bahan_id",
+                        "render":
+                          function(data) {
+                            return "<span class='bahan_id'>"+data+"</span>"
                           }
                         },
                         
@@ -152,6 +166,16 @@
         });
 
     });
+
+//list
+$(document).on('click', '.bahan_list', function() {
+
+  var gudang = $(this).closest('tr').find('.gudang_id').text();
+  var bahan = $(this).closest('tr').find('.bahan_id').text();
+  
+  window.location.href = "<?=base_url('bahan/list/')?>"+gudang+'/'+bahan;
+
+});
 
 function filter($val){
   var table = $('#example').DataTable();
@@ -197,6 +221,20 @@ function auto(){
 
     });
 
+    //hide gudang id
+    $.each($('.gudang_id'), function(index, val) {
+       
+       $(this).closest('td').hide();
+
+    });
+
+    //hide bahan id
+    $.each($('.bahan_id'), function(index, val) {
+       
+       $(this).closest('td').hide();
+
+    });
+
     setTimeout(function() {
         auto();
     }, 100);
@@ -210,7 +248,7 @@ function auto(){
   // script hpp dialog
   function myFunction(id) {
     $.ajax({
-        url : '<?=site_url('bahan/tes');?>',
+        url : '<?=site_url('bahan/hpp');?>',
         type : 'GET',
         data : {
             'bahan_id' : id

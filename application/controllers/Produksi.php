@@ -511,6 +511,13 @@ class Produksi extends CI_Controller{
 		echo json_encode($data);
 
 	}
+	function get_kode($id, $gudang){
+
+		$data = $this->query_builder->view_row("SELECT * FROM t_bahan_item WHERE bahan_item_id = '$id' AND bahan_item_gudang = '$gudang'");
+
+		echo json_encode($data);
+
+	}
 	function selesai($nomor){
 
 		$set = ["produksi_selesai" => 1];

@@ -266,24 +266,24 @@ function notif(){
     }
 
     //reminder bahan
-    $.get('<?=base_url('reminder/bahan_notif')?>', function(data) {
+    // $.get('<?=base_url('reminder/bahan_notif')?>', function(data) {
         
-        if (parseInt(data) > 0) {
-            $('.reminder_notif').text('New');
-            $('.bahan_notif').text(data);
-        }
+    //     if (parseInt(data) > 0) {
+    //         $('.reminder_notif').text('New');
+    //         $('.bahan_notif').text(data);
+    //     }
 
-    });
+    // });
 
     //reminder produk
-    $.get('<?=base_url('reminder/produk_notif')?>', function(data) {
+    // $.get('<?=base_url('reminder/produk_notif')?>', function(data) {
         
-        if (parseInt(data) > 0) {
-            $('.reminder_notif').text('New');
-            $('.produk_notif').text(data);
-        }
+    //     if (parseInt(data) > 0) {
+    //         $('.reminder_notif').text('New');
+    //         $('.produk_notif').text(data);
+    //     }
 
-    });
+    // });
 
     setTimeout(function() {
         notif();
