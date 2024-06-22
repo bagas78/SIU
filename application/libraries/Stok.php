@@ -138,7 +138,7 @@ class Stok{
           $this->sql->db->query("UPDATE t_bahan_gudang SET bahan_gudang_panjang = bahan_gudang_panjang - {$panjang}, bahan_gudang_berat = bahan_gudang_berat - {$berat} WHERE bahan_gudang_bahan = {$bahan} AND bahan_gudang_gudang = {$gudang}");
 
           //kode item
-          $this->sql->db->query("UPDATE t_bahan_item SET bahan_item_panjang = bahan_item_panjang - {$panjang}, bahan_item_berat = bahan_item_berat - {$berat} WHERE bahan_item_bahan = {$bahan} AND bahan_item_gudang = {$gudang} AND bahan_item_id = {$kode}"); 
+          $this->sql->db->query("UPDATE t_bahan_item SET bahan_item_panjang = bahan_item_panjang - {$panjang}, bahan_item_berat = bahan_item_berat - $berat WHERE bahan_item_bahan = {$bahan} AND bahan_item_gudang = '$gudang' AND bahan_item_id = '$kode'"); 
 
         }
 
