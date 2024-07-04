@@ -1,6 +1,7 @@
 <script type="text/javascript">
 	$('form').attr('action', '<?=base_url('produk/update/'.@$data['produk_id'])?>');;
 	$('#kode').val('<?=@$data['produk_kode']?>');
+	$('#harga').val('<?=@$data['produk_harga']?>');
 	$('#nama').val('<?=@$data['produk_nama']?>');
 	$('#merk').val('<?=@$data['produk_merk']?>');
 	$('#konversi').val('<?=@$data['produk_konversi']?>');

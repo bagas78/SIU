@@ -7,7 +7,7 @@
     /*pointer-events: none;*/
     background: #EEEEEE; 
   } 
-  .readonly::-webkit-outer-spin-button,
+  .readonly::-webkit-outer-spin-button, 
   .readonly::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
@@ -345,7 +345,7 @@ $(document).on('change', '#produk', function() {
 
               target.find('.stok').val(val['produk_gudang_panjang'].replaceAll('.00',''));
               target.find('.hps').val(val['produk_gudang_hps']);
-              target.find('.harga').val(val['produk_gudang_harga']);
+              target.find('.harga').val(val['produk_harga']);
               
 
               //cek konversi

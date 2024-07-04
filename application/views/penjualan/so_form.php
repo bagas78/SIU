@@ -7,7 +7,7 @@
   }
   .readonly{
     /*pointer-events: none;*/
-    background: #EEEEEE;
+    background: #EEEEEE; 
   } 
   .readonly::-webkit-outer-spin-button,
   .readonly::-webkit-inner-spin-button {
@@ -295,6 +295,7 @@ $(document).on('blur focus change', '#gudang', function() {
 
 //get barang
 $(document).on('change', '#produk', function() {
+
     var id = $(this).val();
     var text = $(this).text();
     var index = $(this).closest('tr').index();
@@ -349,7 +350,7 @@ $(document).on('change', '#produk', function() {
 
               target.find('.stok').val(val['produk_gudang_panjang'].replaceAll('.00',''));
               target.find('.hps').val(val['produk_gudang_hps']);
-              target.find('.harga').val(val['produk_gudang_harga']);
+              target.find('.harga').val(val['produk_harga']);
             }
             
 

@@ -7,6 +7,7 @@ class Produk extends CI_Controller{
 		$this->load->model('m_warna');
 		$this->load->model('m_jenis');
 		$this->load->model('m_produk_barang');
+		$this->load->model('m_produk_gudang');
 	}  
 	function index(){
 		if ( $this->session->userdata('login') == 1) {
@@ -31,6 +32,24 @@ class Produk extends CI_Controller{
 	    $data = $this->m_produk->get_datatables($where);
 		$total = $this->m_produk->count_all($where);
 		$filter = $this->m_produk->count_filtered($where);
+
+		$output = array( 
+			"draw" => $_GET['draw'],
+			"recordsTotal" => $total,
+			"recordsFiltered" => $filter,
+			"data" => $data,
+		);
+		//output dalam format JSON
+		echo json_encode($output);
+	}
+
+	function get_stok(){
+
+		$where = array('produk_gudang_hapus' => 0);
+
+	    $data = $this->m_produk_gudang->get_datatables($where);
+		$total = $this->m_produk_gudang->count_all($where);
+		$filter = $this->m_produk_gudang->count_filtered($where);
 
 		$output = array( 
 			"draw" => $_GET['draw'],
@@ -74,6 +93,7 @@ class Produk extends CI_Controller{
 							'produk_ketebalan' => strip_tags($_POST['ketebalan']),
 							'produk_keterangan' => strip_tags($_POST['keterangan']),
 							'produk_colly' => strip_tags($_POST['colly']),
+							'produk_harga' => strip_tags($_POST['harga']),
 						);
 
 			$db = $this->query_builder->add('t_produk',$set);
@@ -122,6 +142,7 @@ class Produk extends CI_Controller{
 							'produk_ketebalan' => strip_tags($_POST['ketebalan']),
 							'produk_keterangan' => strip_tags($_POST['keterangan']),
 							'produk_colly' => strip_tags($_POST['colly']),
+							'produk_harga' => strip_tags($_POST['harga']),
 						);
 
 			$where = ['produk_id' => $id];

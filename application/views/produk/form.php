@@ -8,7 +8,7 @@
 <section class="content">
 
   <!-- Default box -->  
-  <div class="box"> 
+  <div class="box">  
     <div class="box-header with-border">
       <div class="box-tools pull-right">
         <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
@@ -53,6 +53,12 @@
           </div>
 
           <div class="col-md-6">
+
+            <div class="form-group">
+              <label>Harga <span class="stn">Rp</span></label>
+              <input required type="number" name="harga" class="form-control" id="harga" step='0.01'>
+            </div>
+
             <div class="form-group">
               <label>Ketebalan <span class="stn">Mm</span></label>
               <input required type="number" name="ketebalan" class="form-control" id="ketebalan" step='0.01'>

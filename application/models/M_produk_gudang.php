@@ -1,18 +1,18 @@
 <?php
  
-class M_produk extends CI_Model { 
+class M_produk_gudang extends CI_Model { 
 
 	//nama tabel
-	var $table = 't_produk'; 
+	var $table = 't_produk_gudang'; 
 
 	//kolom yang di tampilkan
 	var $column_order = array(null, 'produk_nama','produk_kode'); 
 
 	//kolom yang di tampilkan setelah seacrh
-	var $column_search = array('produk_nama','produk_kode'); 
+	var $column_search = array('produk_nama','produk_kode','gudang_nama'); 
 
 	//urutan 
-	var $order = array('produk_id' => 'desc'); 
+	var $order = array('produk_gudang_id' => 'desc'); 
  
 	public function __construct()
 	{
@@ -65,6 +65,8 @@ class M_produk extends CI_Model {
 		if($_GET['length'] != -1)
 		$this->db->where($where);
 		$this->db->limit($_GET['length'], $_GET['start']);
+		$this->db->join('t_produk', 't_produk.produk_id = t_produk_gudang.produk_gudang_produk');
+		$this->db->join('t_gudang', 't_gudang.gudang_id = t_produk_gudang.produk_gudang_gudang');
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -73,6 +75,8 @@ class M_produk extends CI_Model {
 	{
 		$this->_get_datatables_query();
 		$this->db->where($where);
+		$this->db->join('t_produk', 't_produk.produk_id = t_produk_gudang.produk_gudang_produk');
+		$this->db->join('t_gudang', 't_gudang.gudang_id = t_produk_gudang.produk_gudang_gudang');
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
@@ -81,6 +85,8 @@ class M_produk extends CI_Model {
 	{
 		$this->db->from($this->table);
 		$this->db->where($where);
+		$this->db->join('t_produk', 't_produk.produk_id = t_produk_gudang.produk_gudang_produk');
+		$this->db->join('t_gudang', 't_gudang.gudang_id = t_produk_gudang.produk_gudang_gudang');
 		return $this->db->count_all_results();
 	}
 
