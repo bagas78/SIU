@@ -11,7 +11,7 @@
   } 
   .readonly::-webkit-outer-spin-button,
   .readonly::-webkit-inner-spin-button {
-    -webkit-appearance: none;
+    -webkit-appearance: none; 
     margin: 0;
   }  
 </style> 
@@ -372,7 +372,15 @@ $(document).on('change', '#produk', function() {
 
 
           });
-      //   }else{
+      }else{
+
+        $.get('<?=base_url('penjualan/get_produk/')?>'+id, function(data) {
+          
+            var val = $.parseJSON(data);
+
+            target.find('.harga').val(val['produk_harga']);
+
+        });
 
       //     alert_sweet('Gudang belum di pilih');
 
@@ -381,9 +389,7 @@ $(document).on('change', '#produk', function() {
       //     target.find('.panjang').val(0);
       //     target.find('.harga').val(0);
       //     target.find('.hps').val(0);
-      //   }
-      
-      // }
+     
       ////// end exist barang ///////////
     }
 

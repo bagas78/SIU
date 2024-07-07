@@ -17,7 +17,7 @@
 <!-- Main content -->  
 <section class="content">
 
-  <!-- Default box -->        
+  <!-- Default box -->         
   <div class="box">  
     <div class="box-header with-border"> 
 
@@ -378,21 +378,29 @@ $(document).on('change', '#produk', function() {
             }
 
           });
-      //   }else{
+        }else{
 
-      //     alert_sweet('Gudang belum di pilih');
+          $.get('<?=base_url('penjualan/get_produk/')?>'+id, function(data) {
+          
+            var val = $.parseJSON(data);
 
-      //     target.find('select').val('').change();
-      //     target.find('.stok').val(0);
-      //     target.find('.panjang').val(0);
-      //     target.find('.harga').val(0);
-      //     target.find('.hps').val(0);
-      //     target.find('.konversi').val(0);
-      //   }
-      
-      // }
+            target.find('.harga').val(val['produk_harga']);
+
+          });
+
+          // alert_sweet('Gudang belum di pilih');
+
+          // target.find('select').val('').change();
+          // target.find('.stok').val(0);
+          // target.find('.panjang').val(0);
+          // target.find('.harga').val(0);
+          // target.find('.hps').val(0);
+          // target.find('.konversi').val(0);
+        
+        }
+    
       ////// end exist barang ///////////
-    }
+    //}
 
 });
 
