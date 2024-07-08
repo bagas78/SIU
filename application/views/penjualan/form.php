@@ -16,7 +16,7 @@
    
 <!-- Main content -->  
 <section class="content">
-
+ 
   <!-- Default box -->         
   <div class="box">  
     <div class="box-header with-border"> 
@@ -130,15 +130,15 @@
           <table class="table table-responsive table-borderless">
             <thead>
               <tr>
-                <th width="200">Produk</th>
-                <th width="150">Stok <span class="stn">Mtr</span></th>
-                <th width="150">Konversi <span class="stn">Mtr</span></th>
-                <th width="150">Batang <span class="stn">Btg</span></th>
-                <th width="150">Panjang <span class="stn">text</span></th>
-                <th width="150">Qty <span class="stn">text</span></th>
-                <th width="150">Panjang <span class="stn">Mtr</span></th>
-                <th width="150">Harga <span class="stn">Rp</span></th>
-                <th width="150">Total <span class="stn">Rp</span></th>
+                <th width="300">Produk</th>
+                <th width="120">Stok <span class="stn">Mtr</span></th>
+                <th width="120">Konversi <span class="stn">Mtr</span></th>
+                <th width="120">Batang <span class="stn">Btg</span></th>
+                <th width="120">Panjang <span class="stn">text</span></th>
+                <th width="120">Qty <span class="stn">text</span></th>
+                <th width="120">Panjang <span class="stn">Mtr</span></th>
+                <th width="120">Harga <span class="stn">Rp</span></th>
+                <th width="120">Total <span class="stn">Rp</span></th>
                 <th><button type="button" onclick="clone()" class="add btn btn-success btn-sm"><i class="fa fa-plus"></i></button></th>
               </tr>
             </thead>
@@ -408,10 +408,12 @@ $(document).on('change', '#produk', function() {
 //copy paste
 function clone(){
   //paste
+  var produk = $('.produk').val();
+  
   $('#paste').prepend($('#copy').clone());
 
   //blank new input
-  $('#copy').find('select').val('');
+  $('#copy').find('select').val(produk).change();
   $('#copy').find('.stok').val(0);
   $('#copy').find('.panjang').val(0);
   $('#copy').find('.harga').val(0);
@@ -515,8 +517,6 @@ function auto(){
       
     sum_subtotal += Number($(this).val().replaceAll(',', ''));
   });
-
-  console.log('hydev:' + sum_subtotal);
 
   //total akhir
   // var ppn = (Number($('#ppn').val()) * Number(sum_subtotal) / 100);

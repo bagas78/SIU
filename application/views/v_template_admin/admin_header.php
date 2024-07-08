@@ -73,6 +73,7 @@
     padding: 3px 4px 4px 4px;
     font-weight: bold;
     border-radius: 5px;
+    font-size: 10px;
   }
   .main-sidebar{
     background: #e9fcff;
