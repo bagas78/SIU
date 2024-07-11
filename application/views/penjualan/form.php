@@ -13,7 +13,7 @@
     margin: 0;
   }  
 </style> 
-   
+    
 <!-- Main content -->  
 <section class="content">
  
@@ -339,13 +339,12 @@ $(document).on('change', '#produk', function() {
             target.find('.panjang_total').val(0);
             target.find('.stok').val(0);
             target.find('.hps').val(0);
-            target.find('.harga').val('');
+            target.find('.harga').val(val['produk_harga']);
               
             if (val != null) {
 
               target.find('.stok').val(val['produk_gudang_panjang'].replaceAll('.00',''));
               target.find('.hps').val(val['produk_gudang_hps']);
-              target.find('.harga').val(val['produk_harga']);
               
 
               //cek konversi

@@ -19,7 +19,7 @@
 <!-- Main content -->  
 <section class="content">
 
-  <!-- Default box -->       
+  <!-- Default box -->        
   <div class="box"> 
     <div class="box-header with-border"> 
 
@@ -128,15 +128,15 @@
           <table class="table table-responsive table-borderless">
             <thead>
               <tr>
-                <th width="200">Produk</th>
-                <th width="150">Stok <span class="stn">Mtr</span></th>
-                <th width="150">Konversi <span class="stn">Mtr</span></th>
-                <th width="150">Batang <span class="stn">Btg</span></th>
-                <th width="150">Panjang <span class="stn">text</span></th>
-                <th width="150">Qty <span class="stn">text</span></th>
-                <th width="150">Panjang <span class="stn">Mtr</span></th>
-                <th width="150">Harga <span class="stn">Rp</span></th>
-                <th width="150">Total <span class="stn">Rp</span></th>
+                <th width="300">Produk</th>
+                <th width="120">Stok <span class="stn">Mtr</span></th>
+                <th width="120">Konversi <span class="stn">Mtr</span></th>
+                <th width="120">Batang <span class="stn">Btg</span></th>
+                <th width="120">Panjang <span class="stn">text</span></th>
+                <th width="120">Qty <span class="stn">text</span></th>
+                <th width="120">Panjang <span class="stn">Mtr</span></th>
+                <th width="120">Harga <span class="stn">Rp</span></th>
+                <th width="120">Total <span class="stn">Rp</span></th>
                 <th><button type="button" onclick="clone()" class="add btn btn-success btn-sm"><i class="fa fa-plus"></i></button></th>
               </tr>
             </thead>
@@ -343,14 +343,13 @@ $(document).on('change', '#produk', function() {
             target.find('.panjang_total').val(0);
             target.find('.stok').val(0);
             target.find('.hps').val(0);
-            target.find('.harga').val('');
+            target.find('.harga').val(val['produk_harga']);
 
             //cek row stok
             if (stok) {
 
               target.find('.stok').val(val['produk_gudang_panjang'].replaceAll('.00',''));
               target.find('.hps').val(val['produk_gudang_hps']);
-              target.find('.harga').val(val['produk_harga']);
             }
             
 
@@ -376,7 +375,7 @@ $(document).on('change', '#produk', function() {
 
         $.get('<?=base_url('penjualan/get_produk/')?>'+id, function(data) {
           
-            var val = $.parseJSON(data);
+            var val = $.parseJSON(data); 
 
             target.find('.harga').val(val['produk_harga']);
 
@@ -398,11 +397,14 @@ $(document).on('change', '#produk', function() {
 
 //copy paste
 function clone(){
+
+  var produk = $('#produk').val();
+
   //paste
   $('#paste').prepend($('#copy').clone());
 
   //blank new input
-  $('#copy').find('select').val('');
+  $('#copy').find('select').val(produk);
   $('#copy').find('.stok').val(0);
   $('#copy').find('.panjang').val(0);
   $('#copy').find('.harga').val(0);

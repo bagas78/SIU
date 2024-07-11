@@ -9,7 +9,7 @@
  
   <!-- Default box -->   
   <div class="box">  
-    <div class="box-header with-border">    
+    <div class="box-header with-border">     
 
       <div class="back" align="left" hidden>
         <a href="<?= @$_SERVER['HTTP_REFERER'] ?>"><button class="btn btn-danger"><i class="fa fa-arrow-left"></i> Kembali</button></a> 
@@ -120,13 +120,13 @@
           <thead>
             <tr>
               <th class="th-bahan" width="300">Bahan</th>
-              <th class="th-kode" width="300">Kode Item</th>
-              <th class="th-berat" width="200">Berat <span class="stn">Kg</span></th>
-              <th class="th-panjang" width="200">Panjang <span class="stn">Mtr</span></th>
-              <th class="th-harga" width="200">Harga <span class="stn">Rp</span></th>
-              <th class="th-total" width="200">Total <span class="stn">Rp</span></th>
-              <th hidden class="th-terima" width="200">Terima</th>
-              <th hidden class="th-id" width="300">id</th>
+              <th class="th-kode" width="200">Kode Item</th>
+              <th class="th-berat" width="130">Berat <span class="stn">Kg</span></th>
+              <th class="th-panjang" width="130">Panjang <span class="stn">Mtr</span></th>
+              <th class="th-harga" width="130">Harga <span class="stn">Rp</span></th>
+              <th class="th-total" width="130">Total <span class="stn">Rp</span></th>
+              <th hidden class="th-terima" width="130">Terima</th>
+              <th hidden class="th-id" width="130">id</th>
               <th><button type="button" onclick="clone()" class="add btn btn-success btn-sm"><i class="fa fa-plus"></i></button></th>
             </tr>
           </thead>
@@ -268,10 +268,11 @@ $(document).on('change', '#status', function() {
   //copy paste
   function clone(){
     //paste
+    var bahan = $('#barang').val();
     $('#paste').prepend($('#copy').clone());
 
     //blank new input
-    $('#copy').find('select').val('');
+    $('#copy').find('select').val(bahan);
     $('#copy').find('.kode').val('');
     $('#copy').find('.qty').val(1);
     $('#copy').find('.berat').val(0);
