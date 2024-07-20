@@ -279,7 +279,7 @@ class Penjualan extends CI_Controller{
 	function get_penjualan($nomor){ 
 
 		//penjualan barang
-		$db = $this->query_builder->view("SELECT * FROM t_penjualan AS a LEFT JOIN t_penjualan_barang AS b ON a.penjualan_nomor = b.penjualan_barang_nomor LEFT JOIN t_produk_gudang AS c ON b.penjualan_barang_barang = c.produk_gudang_produk WHERE b.penjualan_barang_nomor = '$nomor'");
+		$db = $this->query_builder->view("SELECT * FROM t_penjualan AS a LEFT JOIN t_penjualan_barang AS b ON a.penjualan_nomor = b.penjualan_barang_nomor LEFT JOIN t_produk_gudang AS c ON b.penjualan_barang_barang = c.produk_gudang_produk WHERE b.penjualan_barang_nomor = '$nomor' GROUP BY b.penjualan_barang_id");
 		echo json_encode($db);
 	}
 	function update($so, $proses, $redirect, $so_tanggal = ''){

@@ -14,7 +14,7 @@
 
   if ('<?=@$data['pembelian_lampiran']?>' != '') {
     $('#previewImg').attr('src', '<?=base_url('assets/gambar/pembelian/'.@$data['pembelian_lampiran'])?>');
-  }
+  } 
  
   //get pembelian
   $.ajax({

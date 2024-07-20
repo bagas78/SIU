@@ -12,11 +12,11 @@
   $('#ambil').val('<?=@$data['penjualan_ambil']?>').change(); 
 
 
-  if ('<?=@$data['penjualan_lampiran']?>' != '') { 
+  if ('<?=@$data['penjualan_lampiran']?>' != '') {  
     $('#previewImg').attr('src', '<?=base_url('assets/gambar/penjualan/'.@$data['penjualan_lampiran'])?>');
   }
 
-  //get penjualan
+  //get penjualan 
   $.ajax({
       url: "<?=base_url('penjualan/get_penjualan/'.$data['penjualan_nomor'])?>",
       type: 'GET',
@@ -74,6 +74,7 @@
           $('#copy:nth-child('+i+') > td:nth-child(3) > input').val(konversi);
           $('#copy:nth-child('+i+') > td:nth-child(4) > input').val(val.penjualan_barang_batang);  
           $('#copy:nth-child('+i+') > td:nth-child(5) > input').val(val.penjualan_barang_panjang); 
+          
           $('#copy:nth-child('+i+') > td:nth-child(6) > input').val(val.penjualan_barang_qty); 
           $('#copy:nth-child('+i+') > td:nth-child(7) > input').val(val.penjualan_barang_panjang_total);
           $('#copy:nth-child('+i+') > td:nth-child(8) > input').val(val.penjualan_barang_harga);          

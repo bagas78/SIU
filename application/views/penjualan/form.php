@@ -293,7 +293,7 @@ $(document).on('blur focus change', '#gudang', function() {
 
 });
 
-//get barang
+//get barang 
 $(document).on('change', '#produk', function() {
     var id = $(this).val();
     var text = $(this).text();
@@ -412,7 +412,11 @@ function clone(){
   $('#paste').prepend($('#copy').clone());
 
   //blank new input
-  $('#copy').find('select').val(produk).change();
+  if ('<?=$this->uri->segment(3)?>' == '') {
+
+    $('#copy').find('select').val(produk).change();
+  }
+
   $('#copy').find('.stok').val(0);
   $('#copy').find('.panjang').val(0);
   $('#copy').find('.harga').val(0);

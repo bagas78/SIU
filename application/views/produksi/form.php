@@ -329,14 +329,14 @@ $(document).on('change', '.produk', function() {
       if ($.inArray(id, arr) != -1) {
         var i = index + 1;
 
-        alert_sweet('Produk sudah ada');
+        // alert_sweet('Produk sudah ada');
 
-        //empty
-        target.find('.produk').val('').change();
-        target.find('.produk_batang').val(0);
-        target.find('.produk_panjang').val(0);
-        target.find('.produk_qty').val(0);
-        target.find('.produk_panjang_total').val(0);
+        // //empty
+        // target.find('.produk').val('').change();
+        // target.find('.produk_batang').val(0);
+        // target.find('.produk_panjang').val(0);
+        // target.find('.produk_qty').val(0);
+        // target.find('.produk_panjang_total').val(0);
         
       }else{
 
@@ -409,16 +409,16 @@ $(document).on('change', '.produk', function() {
       if ($.inArray(id, arr) != -1) {
         var i = index + 1;
 
-        alert_sweet('Bahan sudah ada');
+        // alert_sweet('Bahan sudah ada');
 
-        //empty
-        bahan.val('').change();
-        kategori.val('');
-        stok.val(0);
-        berat.val(0);
-        harga.val(0);
-        panjang.val(0);
-        total.val(0);
+        // //empty
+        // bahan.val('').change();
+        // kategori.val('');
+        // stok.val(0);
+        // berat.val(0);
+        // harga.val(0);
+        // panjang.val(0);
+        // total.val(0);
         
       }else{
 
@@ -476,17 +476,28 @@ $(document).on('change', '.produk', function() {
   //copy paste
   function clone(target){
     //paste
+
+    if (target == 1) {
+      //produk
+      var x = $('.produk').val();
+
+    }else{
+      //bahan
+      var x = $('.bahan').val();
+
+    }
+
     $('#paste'+target).prepend($('#copy'+target).clone());
     
     //blank new input
-    $('#copy'+target).find('select').val('');
+    $('#copy'+target).find('select').val(x).change();
     $('#copy'+target).find('.kategori').val('');
     $('#copy'+target).find('.harga').val(0);
     $('#copy'+target).find('.stok').val(0);
     $('#copy'+target).find('.total').val(0);
     $('#copy'+target).find('.panjang').val(0);
     $('#copy'+target).find('.produk_panjang').val(0);
-    $('#copy'+target).find('.produk_batang').val(0);
+    $('#copy'+target).find('.produk_batang').val(0); 
     $('#copy'+target).find('.id').val(0);
 
     //produk
