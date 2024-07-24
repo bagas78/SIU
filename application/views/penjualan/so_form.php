@@ -19,7 +19,7 @@
 <!-- Main content -->  
 <section class="content">
 
-  <!-- Default box -->        
+  <!-- Default box -->         
   <div class="box"> 
     <div class="box-header with-border"> 
 
@@ -404,7 +404,7 @@ function clone(){
   $('#paste').prepend($('#copy').clone());
 
   //blank new input
-  $('#copy').find('select').val(produk);
+  $('#copy').find('select').val(produk).change();
   $('#copy').find('.stok').val(0);
   $('#copy').find('.panjang').val(0);
   $('#copy').find('.harga').val(0);

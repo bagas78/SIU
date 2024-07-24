@@ -20,7 +20,7 @@
   		.box{ 
   			padding: 3%;
   		}
-  		.tit{
+  		.tit{ 
   			border-width: 2px;
 		    border-style: solid;
 		    padding: 0.5%;
@@ -98,14 +98,14 @@
 							<tr>
 								<td><?=$i?></td>
 								<td><?=@$val['bahan_nama']?></td>
-								<td class="r"><span class="number berat"><?=@$val['pembelian_barang_berat']?></span> Kg</td>
-								<td class="r"><span class="number"><?=@$val['pembelian_barang_panjang']?></span> Mtr</td>
-								<td class="r"><span class="number"><?=round(@$val['pembelian_barang_berat'] / @$val['pembelian_barang_panjang'], 3)?></span> Kg</td>
+								<td class="r"><span class="berat"><?=@$val['pembelian_barang_berat']?></span> Kg</td>
+								<td class="r"><span><?=@$val['pembelian_barang_panjang']?></span> Mtr</td>
+								<td class="r"><span><?=round(@$val['pembelian_barang_berat'] / @$val['pembelian_barang_panjang'], 3)?></span> Kg</td>
 								<td hidden class="r">
-									Rp. <span class="number"><?=@$val['pembelian_barang_harga']?><span class="number">
+									Rp. <span><?=@$val['pembelian_barang_harga']?><span class="number">
 								</td>
 								<td hidden class="r">
-									Rp. <span class="total number"><?=@$val['pembelian_barang_total']?><span class="number">
+									Rp. <span class="total"><?=@$val['pembelian_barang_total']?><span class="number">
 								</td>
 							</tr>
 						
