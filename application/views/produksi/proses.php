@@ -9,7 +9,7 @@
     <!-- Main content --> 
     <section class="content">
   
-      <div class="box">   
+      <div class="box">    
         <div class="box-header with-border">
  
           <div class="box-tools pull-right">
@@ -21,6 +21,10 @@
         </div>
         <div class="box-body">
           <h4 align="center" class="tit">Antrean Pesanan (SO)</h4>
+
+          <button onclick="fil()" class="btn btn-info">Urutkan Produksi <i class="fa fa-filter"></i></button>
+          <br/><br/>
+
           <table id="example1" class="table table-bordered table-hover" style="width: 100%;">
             <thead>
             <tr>
@@ -111,6 +115,7 @@
 <script type="text/javascript">
     var table1;
     $(document).ready(function() {
+
         //datatables
         table1 = $('#example1').DataTable({ 
 
@@ -161,6 +166,14 @@
         });
 
     });
+
+    function fil(){
+
+        var table = $('#example1').DataTable();
+
+        table.ajax.url('<?=site_url('produksi/so_get_data/1')?>');
+        table.draw();
+    }
 
 /////////////////////////////////// PROSES ///////////////////
 
@@ -284,13 +297,29 @@ function auto() {
        var proses = $(this);
        var icon = $(this).closest('tr').find('.so_icon');
        var i = $(this).text();
-       if (i == '1') {
-          proses.closest('tr').find('.so_action_proses').attr('hidden', true);
-          icon.html('<center><i class="fa fa-check"></i></center>');
-       }else{
-          proses.closest('tr').find('.so_action_view').attr('hidden', true);
-          icon.html('<center><i class="fa fa-refresh"></i></center>');
-       }
+
+       switch(i) {
+
+          case '0':
+
+            proses.closest('tr').find('.so_action_view').attr('hidden', true);
+            icon.html('<center><i class="fa fa-refresh"></i></center>');
+
+            break;
+          case '1':
+            
+            proses.closest('tr').find('.so_action_view').attr('hidden', true);
+            icon.html('<center><i class="fa fa-refresh"></i></center>');
+            proses.closest('tr').find('.btn-primary').html('Partial <i class="fa fa-angle-double-right"></i>');
+
+            break;
+          case '2':
+            
+            proses.closest('tr').find('.so_action_proses').attr('hidden', true);
+            icon.html('<center><i class="fa fa-check"></i></center>');
+
+            break;
+        }
 
     });
 

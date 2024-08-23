@@ -99,14 +99,14 @@ class Produk extends CI_Controller{
 			$db = $this->query_builder->add('t_produk',$set);
 
 			if ($db == 1) {
-				$this->session->set_flashdata('success','Data berhasil di tambah');
+				$this->session->set_userdata('success','Data berhasil di tambah');
 			} else {
-				$this->session->set_flashdata('gagal','Data gagal di tambah');
+				$this->session->set_userdata('gagal','Data gagal di tambah');
 			}
 
 		} else {
 
-			$this->session->set_flashdata('gagal','Kode barang sudah ada');
+			$this->session->set_userdata('gagal','Kode barang sudah ada');
 		}
 		
 		redirect(base_url('produk'));
@@ -149,14 +149,14 @@ class Produk extends CI_Controller{
 			$db = $this->query_builder->update('t_produk',$set,$where);
 			
 			if ($db == 1) {
-				$this->session->set_flashdata('success','Data berhasil di rubah');
+				$this->session->set_userdata('success','Data berhasil di rubah');
 			} else {
-				$this->session->set_flashdata('gagal','Data gagal di rubah');
+				$this->session->set_userdata('gagal','Data gagal di rubah');
 			}
 
 		}else{
 
-			$this->session->set_flashdata('gagal','Kode produk sudah ada');
+			$this->session->set_userdata('gagal','Kode produk sudah ada');
 		}
 		
 		redirect(base_url('produk'));
@@ -168,9 +168,9 @@ class Produk extends CI_Controller{
 		$db = $this->query_builder->update('t_produk',$set,$where);
 		
 		if ($db == 1) {
-			$this->session->set_flashdata('success','Data berhasil di hapus');
+			$this->session->set_userdata('success','Data berhasil di hapus');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di hapus');
+			$this->session->set_userdata('gagal','Data gagal di hapus');
 		}
 		
 		redirect(base_url('produk'));
@@ -188,9 +188,9 @@ class Produk extends CI_Controller{
 		$db = $this->query_builder->update('t_produk_gudang',$set,$where);
 		
 		if ($db == 1) {
-			$this->session->set_flashdata('success','Data berhasil di rubah');
+			$this->session->set_userdata('success','Data berhasil di rubah');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di rubah');
+			$this->session->set_userdata('gagal','Data gagal di rubah');
 		}
 		
 		redirect(base_url('produk'));

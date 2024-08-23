@@ -1,4 +1,4 @@
-
+ 
 <style type="text/css">
   .mb-7{
     margin-bottom: 7%;
@@ -15,7 +15,7 @@
 </style> 
     
 <!-- Main content -->  
-<section class="content">
+<section class="content"> 
  
   <!-- Default box -->         
   <div class="box">  
@@ -454,11 +454,9 @@ $('form').on('submit', function() {
        var stok = $(this).closest('tr').find('.stok').val();
        var panjang = $(this).closest('tr').find('.panjang_total').val();
 
-       if (Number(stok) < Number(panjang)) {
+       if (Number(stok) == 0 || Number(panjang) == 0) {
 
-        // err += 1;
-        // disable cek stok
-        err = 0;
+        err += 1;
 
        }
 
@@ -466,7 +464,7 @@ $('form').on('submit', function() {
 
     if (err != 0) {
 
-      alert_sweet('Terdapat panjang yang lebih dari stok');
+      alert_sweet('Terdapat panjang dan qty yang masih 0');
       return false;
     }else{
 

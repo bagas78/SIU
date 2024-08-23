@@ -84,9 +84,9 @@ class Pembelian extends CI_Controller{
 			// 	$this->stok->jurnal_delete($nomor, 1);	
 			// }
 
-			$this->session->set_flashdata('success','Data berhasil di hapus');
+			$this->session->set_userdata('success','Data berhasil di hapus');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di hapus');
+			$this->session->set_userdata('gagal','Data gagal di hapus');
 		}
 
 		redirect(base_url('pembelian/'.$redirect));
@@ -226,9 +226,9 @@ class Pembelian extends CI_Controller{
 			// 	 }	
 			// }
 
-			$this->session->set_flashdata('success','Data berhasil di tambah');
+			$this->session->set_userdata('success','Data berhasil di tambah');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di tambah');
+			$this->session->set_userdata('gagal','Data gagal di tambah');
 		}
 
 		redirect(base_url('pembelian/'.$redirect));
@@ -387,9 +387,9 @@ class Pembelian extends CI_Controller{
 			// 	}	
 			// }
 
-			$this->session->set_flashdata('success','Data berhasil di rubah');
+			$this->session->set_userdata('success','Data berhasil di rubah');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di rubah');
+			$this->session->set_userdata('gagal','Data gagal di rubah');
 		}
 
 		redirect(base_url('pembelian/'.$redirect));
@@ -737,10 +737,10 @@ class Pembelian extends CI_Controller{
 			//stok
 			$this->stok->transaksi();
 
-			$this->session->set_flashdata('success','Data berhasil di tambah');
+			$this->session->set_userdata('success','Data berhasil di tambah');
 		} else {
 			
-			$this->session->set_flashdata('gagal','Data gagal di tambah');
+			$this->session->set_userdata('gagal','Data gagal di tambah');
 		}
 
 		redirect(base_url('pembelian/utama'));
@@ -858,9 +858,9 @@ class Pembelian extends CI_Controller{
 				$this->saldo_stok->add($nomor, 'pembelian_umum');
 			}
 			
-			$this->session->set_flashdata('success','Data berhasil di tambah');
+			$this->session->set_userdata('success','Data berhasil di tambah');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di tambah');
+			$this->session->set_userdata('gagal','Data gagal di tambah');
 		}
 
 		redirect(base_url('pembelian/umum'));
@@ -980,9 +980,9 @@ class Pembelian extends CI_Controller{
 				$this->saldo_stok->add($nomor, 'pembelian_umum');
 			}
 
-			$this->session->set_flashdata('success','Data berhasil di rubah');
+			$this->session->set_userdata('success','Data berhasil di rubah');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di rubah');
+			$this->session->set_userdata('gagal','Data gagal di rubah');
 		}
 
 		redirect(base_url('pembelian/umum'));
@@ -1000,9 +1000,9 @@ class Pembelian extends CI_Controller{
 			//update library
 			$this->saldo_stok->delete($nomor);
 
-			$this->session->set_flashdata('success','Data berhasil di hapus');
+			$this->session->set_userdata('success','Data berhasil di hapus');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di hapus');
+			$this->session->set_userdata('gagal','Data gagal di hapus');
 		}
 
 		redirect(base_url('pembelian/umum'));
@@ -1069,9 +1069,9 @@ class Pembelian extends CI_Controller{
 				$this->stok->transaksi();
 				$this->saldo_stok->add($nomor, 'pembelian_bahan');
 
-				$this->session->set_flashdata('success','Berhasil di bayar');
+				$this->session->set_userdata('success','Berhasil di bayar');
 			} else {
-				$this->session->set_flashdata('gagal','Gagal di bayar');
+				$this->session->set_userdata('gagal','Gagal di bayar');
 			}	
 		}else{
 
@@ -1091,9 +1091,9 @@ class Pembelian extends CI_Controller{
 				$this->stok->transaksi();
 				$this->saldo_stok->add($nomor, 'pembelian_umum');
 
-				$this->session->set_flashdata('success','Berhasil di bayar');
+				$this->session->set_userdata('success','Berhasil di bayar');
 			} else {
-				$this->session->set_flashdata('gagal','Gagal di bayar');
+				$this->session->set_userdata('gagal','Gagal di bayar');
 			}	
 		}
 
@@ -1161,9 +1161,9 @@ class Pembelian extends CI_Controller{
         	$this->stok->transaksi();
             $this->kartu->add($nomor, 'pembelian');
 
-            $this->session->set_flashdata('success', 'Data berhasil di simpan');
+            $this->session->set_userdata('success', 'Data berhasil di simpan');
         }else{
-            $this->session->set_flashdata('gagal', 'Data gagal di simpan');
+            $this->session->set_userdata('gagal', 'Data gagal di simpan');
         }
 
         redirect(base_url('pembelian/utama'));

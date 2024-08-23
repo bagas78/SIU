@@ -7,9 +7,10 @@
   $('#keterangan').val('<?=@$data['produksi_keterangan']?>'); 
   $('#mesin').val('<?=@$data['produksi_mesin']?>').change();   
   $('#gudang').val('<?=@$data['produksi_gudang']?>');
+  $('#proses').val('<?=@$data['produksi_proses']?>');
  
   if ('<?=@$data['produksi_pekerja']?>' != '') { 
-    $('#pekerja').val(<?=@$data['produksi_pekerja']?>).change(); 
+    $('#pekerja').val(<?=@$data['produksi_pekerja']?>).change();  
   }
   
   if ('<?=@$data['produksi_lampiran_1']?>' != '') {
@@ -20,10 +21,17 @@
     $('#previewImg2').attr('src', '<?=base_url('assets/gambar/produksi/'.@$data['produksi_lampiran_2'])?>');
   }
  
-  //get produk
+  //cek SO
+  if ('<?=$this->uri->segment(2)?>' == 'proses_so') {
+
+    var url = "<?=base_url('produksi/get_produksi/'.$data['produksi_nomor'].'/0')?>";
+  }else{
+
+    var url = "<?=base_url('produksi/get_produksi/'.$data['produksi_nomor'])?>";
+  }
 
   $.ajax({
-      url: "<?=base_url('produksi/get_produksi/'.$data['produksi_nomor'])?>",
+      url: url,
       type: 'GET',
       dataType: 'json', 
       success: function(json) {
@@ -58,6 +66,7 @@
           $('#copy1:nth-child('+i+') > td:nth-child(4) > input').val(val.produksi_produksi_panjang);
           $('#copy1:nth-child('+i+') > td:nth-child(5) > input').val(val.produksi_produksi_qty);
           $('#copy1:nth-child('+i+') > td:nth-child(6) > input').val(val.produksi_produksi_panjang_total);  
+          $('#copy1:nth-child('+i+') > td:nth-child(7) > input').val(val.produksi_produksi_id);  
 
         });
 

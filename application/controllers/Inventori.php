@@ -54,9 +54,9 @@ class Inventori extends CI_Controller{
 			$this->stok->update_bahan();
 			$this->stok->update_produk();
 
-			$this->session->set_flashdata('success','Data berhasil di hapus');
+			$this->session->set_userdata('success','Data berhasil di hapus');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di hapus');
+			$this->session->set_userdata('gagal','Data gagal di hapus');
 		}
 		
 		redirect(base_url('inventori/penyesuaian'));	
@@ -163,7 +163,7 @@ class Inventori extends CI_Controller{
 				$this->query_builder->add('t_penyesuaian_barang', $set2);
 			}
 			
-			$this->session->set_flashdata('success','Data berhasil di tambah');
+			$this->session->set_userdata('success','Data berhasil di tambah');
 
 			//update stok
 			$this->stok->update_bahan();
@@ -171,7 +171,7 @@ class Inventori extends CI_Controller{
 			
 		} else {
 
-			$this->session->set_flashdata('gagal','Data gagal di tambah');
+			$this->session->set_userdata('gagal','Data gagal di tambah');
 		}
 
 		redirect(base_url('inventori/penyesuaian'));
@@ -281,9 +281,9 @@ class Inventori extends CI_Controller{
 			// $this->stok->update_pewarnaan();
 			// $this->stok->penggudangan();	// disable dulu
 			
-			$this->session->set_flashdata('success','Data berhasil di simpan');
+			$this->session->set_userdata('success','Data berhasil di simpan');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di simpan');
+			$this->session->set_userdata('gagal','Data gagal di simpan');
 		}
 
 		redirect(base_url('inventori/transfer'));

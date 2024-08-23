@@ -21,7 +21,7 @@
 
   <!-- Default box -->         
   <div class="box"> 
-    <div class="box-header with-border"> 
+    <div class="box-header with-border">  
 
       <div class="back" align="left" hidden>
         <a href="<?= @$_SERVER['HTTP_REFERER'] ?>"><button class="btn btn-danger"><i class="fa fa-arrow-left"></i> Kembali</button></a>
@@ -164,20 +164,20 @@
 
                 <!--panjang total -->
                 <td>
-                  <input type="text" name="panjang[]" class="panjang form-control" value="0" min="1" step="any">
+                  <input type="number" name="panjang[]" class="panjang form-control" value="0" min="1" step="any">
                 </td>
 
                 <td>
-                  <input type="text" name="qty[]" class="qty form-control" value="0" min="1" step="any">
+                  <input type="number" name="qty[]" class="qty form-control" value="0" min="1" step="any">
                 </td>
 
                 <!--panjang X qty -->
                 <td>
-                  <input type="text" name="panjang_total[]" class="panjang_total form-control" value="0" min="1" step="any">
+                  <input type="number" name="panjang_total[]" class="panjang_total form-control" value="0" min="1" step="any">
                 </td>
 
                 <td>
-                  <input type="text" name="harga[]" class="harga form-control" value="0" min="1" step="any">
+                  <input type="number" name="harga[]" class="harga form-control" value="0" min="1" step="any">
                 </td>
                 <td><input type="text" name="total[]" class="total form-control readonly" value="0" min="1" step="any"></td>
 

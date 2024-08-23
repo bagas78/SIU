@@ -68,6 +68,19 @@
 
 <script>
 
+//alert
+<?php if($this->session->userdata('success')): ?>
+swal("Sukses", "<?php echo $this->session->userdata('success');?>", "success");
+$('.swal-footer').remove();
+<?php echo $this->session->unset_userdata('success');?>
+<?php endif ?>
+
+<?php if($this->session->userdata('gagal')): ?>
+swal("Gagal", "<?php echo $this->session->userdata('gagal'); ?>", "warning");
+$('.swal-footer').remove();
+<?php echo $this->session->unset_userdata('gagal');?>
+<?php endif ?>    
+
 //footer
 var content = $('.content').height();
 if (Number(content) < 500) {
@@ -152,17 +165,6 @@ $(function () {
     }
     setInterval(showTime, 500);
 
-
-//alert
-   <?php if($this->session->flashdata('success')): ?>
-    swal("Sukses", "<?php echo $this->session->flashdata('success');?>", "success");
-    $('.swal-footer').remove();
-   <?php endif ?>
- 
-   <?php if($this->session->flashdata('gagal')): ?>
-    swal("Gagal", "<?php echo $this->session->flashdata('gagal'); ?>", "warning");
-    $('.swal-footer').remove();
-  <?php endif ?>
 
   //delete
   function del(url){
@@ -290,7 +292,7 @@ function notif(){
     }, 100);
 }
 
-notif();
+//notif();
 
 
 //ubah text to number

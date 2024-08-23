@@ -71,9 +71,9 @@ class Penjualan extends CI_Controller{
 				// $this->stok->jurnal_delete($nomor, 1);	
 			}
 
-			$this->session->set_flashdata('success','Data berhasil di hapus');
+			$this->session->set_userdata('success','Data berhasil di hapus');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di hapus');
+			$this->session->set_userdata('gagal','Data gagal di hapus');
 		}
 
 		redirect(base_url('penjualan/'.$redirect));
@@ -240,11 +240,11 @@ class Penjualan extends CI_Controller{
 				
 			// }
 
-			$this->session->set_flashdata('success','Data berhasil di tambah');
+			$this->session->set_userdata('success','Data berhasil di tambah');
 		
 		} else {
 
-			$this->session->set_flashdata('gagal','Data gagal di tambah');
+			$this->session->set_userdata('gagal','Data gagal di tambah');
 		}
 
 		redirect(base_url('penjualan/'.$redirect));
@@ -398,9 +398,9 @@ class Penjualan extends CI_Controller{
 				
 			// }
 
-			$this->session->set_flashdata('success','Data berhasil di tambah');
+			$this->session->set_userdata('success','Data berhasil di tambah');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di tambah');
+			$this->session->set_userdata('gagal','Data gagal di tambah');
 		}
 
 		redirect(base_url('penjualan/'.$redirect));
@@ -729,9 +729,9 @@ class Penjualan extends CI_Controller{
 			// $this->stok->jurnal($nomor, 3, 'kredit', 'stok produk', $total);
 			//
 
-			$this->session->set_flashdata('success','Berhasil di bayar');
+			$this->session->set_userdata('success','Berhasil di bayar');
 		} else {
-			$this->session->set_flashdata('gagal','Gagal di bayar');
+			$this->session->set_userdata('gagal','Gagal di bayar');
 		}
 
 		redirect(base_url('penjualan/bayar'));

@@ -4,8 +4,9 @@ class Produksi extends CI_Controller{
 	function __construct(){
 		parent::__construct();  
 		$this->load->model('m_produksi'); 
+		$this->load->model('m_produksi_so'); 
 		$this->load->model('m_produk');
-		$this->load->model('m_bahan'); 
+		$this->load->model('m_bahan');  
 	}     
 
 ///////////////// atribut //////////////////////////////////////////
@@ -101,7 +102,8 @@ class Produksi extends CI_Controller{
 							'produksi_produksi_batang' => strip_tags(str_replace(',', '', @$_POST['produk_batang'][$i])),
 							'produksi_produksi_panjang' => strip_tags(str_replace(',', '', @$_POST['produk_panjang'][$i])),
 							'produksi_produksi_qty' => strip_tags(str_replace(',', '', @$_POST['produk_qty'][$i])),	
-							'produksi_produksi_panjang_total' => strip_tags(str_replace(',', '', @$_POST['produk_panjang_total'][$i])),			
+							'produksi_produksi_panjang_total' => strip_tags(str_replace(',', '', @$_POST['produk_panjang_total'][$i])),	
+							'produksi_produksi_status' => @$_POST['produk_status'][$i],		
 						);	
 
 				$this->query_builder->add('t_produksi_produksi',$set2);
@@ -116,6 +118,7 @@ class Produksi extends CI_Controller{
 				$set3 = array(
 							'produksi_barang_nomor' => $nomor,
 							'produksi_barang_barang' => strip_tags(@$barang[$i]),
+							'produksi_barang_kode' => @$_POST['kode'][$i],
 							'produksi_barang_panjang' => strip_tags(str_replace(',', '', @$_POST['panjang'][$i])),
 							'produksi_barang_stok' => strip_tags(str_replace(',', '', @$_POST['stok'][$i])),
 							'produksi_barang_harga' => strip_tags(str_replace(',', '', @$_POST['harga'][$i])),	
@@ -135,24 +138,30 @@ class Produksi extends CI_Controller{
 			// $this->stok->jurnal($nomor, 9, 'debit', 'biaya produksi', $total);
 			// $this->stok->jurnal($nomor, 4, 'kredit', 'stok bahan baku', $total);	
 
-			$this->session->set_flashdata('success','Data berhasil di tambah');
+			$this->session->set_userdata('success','Data berhasil di tambah');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di tambah');
+			$this->session->set_userdata('gagal','Data gagal di tambah');
 		}
 
 		redirect(base_url('produksi/'.$redirect));
 	}
 
-	function update($redirect, $so = 0, $so_proses){
+	function update($redirect, $so = 0){
 
 		//get id
 		$xnomor = strip_tags(@$_POST['nomor']);
 		$xdb = $this->query_builder->view_row("SELECT * FROM t_produksi WHERE produksi_nomor = '$xnomor'");
 		$id = $xdb['produksi_id'];
+		$so_proses = strip_tags(@$_POST['proses']);
 
-		if ($so == 1 && $so_proses == 1) {
+		if ($so == 1 && $so_proses == 2) {
 			//SO jadi PR
 			$nomor = str_replace('SO', 'PR', $xnomor);
+
+			//update produksi & barang
+			$this->query_builder->update('t_produksi_produksi', ['produksi_produksi_nomor' => $nomor], ['produksi_produksi_nomor' => $xnomor]);
+
+			$this->query_builder->update('t_produksi_barang', ['produksi_barang_nomor' => $nomor], ['produksi_barang_nomor' => $xnomor]);
 		}else{
 			//tetap
 			$nomor = $xnomor;
@@ -196,7 +205,6 @@ class Produksi extends CI_Controller{
 		if ($db == 1) {
 
 			//delete
-			$this->query_builder->delete('t_produksi_produksi', ['produksi_produksi_nomor' => $nomor]);
 			$this->query_builder->delete('t_produksi_barang', ['produksi_barang_nomor' => $nomor]);
 
 			//produk
@@ -205,6 +213,9 @@ class Produksi extends CI_Controller{
 
 			for ($i = 0; $i < $jum_produk; ++$i) {
 
+				$produk_id = @$_POST['produk_id'][$i];
+				$produk_status = @$_POST['produk_status'][$i];
+
 				$set2 = array(
 							'produksi_produksi_nomor' => $nomor,
 							'produksi_produksi_produk' => strip_tags(@$produk[$i]),
@@ -212,10 +223,17 @@ class Produksi extends CI_Controller{
 							'produksi_produksi_batang' => strip_tags(str_replace(',', '', @$_POST['produk_batang'][$i])),
 							'produksi_produksi_panjang' => strip_tags(str_replace(',', '', @$_POST['produk_panjang'][$i])),
 							'produksi_produksi_qty' => strip_tags(str_replace(',', '', @$_POST['produk_qty'][$i])),	
-							'produksi_produksi_panjang_total' => strip_tags(str_replace(',', '', @$_POST['produk_panjang_total'][$i])),			
+							'produksi_produksi_panjang_total' => strip_tags(str_replace(',', '', @$_POST['produk_panjang_total'][$i])),
+							'produksi_produksi_status' => $produk_status,			
 						);	
 
-				$this->query_builder->add('t_produksi_produksi',$set2);
+				$this->query_builder->update('t_produksi_produksi', $set2, ['produksi_produksi_id' => $produk_id]);
+
+				if ($produk_status == 0) {
+
+					//ubah status ke 1
+					$this->query_builder->update('t_produksi',['produksi_proses' => 1], ['produksi_id' => $id]);
+				}
 			}
 
 			//bahan baku
@@ -227,7 +245,7 @@ class Produksi extends CI_Controller{
 				$set3 = array(
 							'produksi_barang_nomor' => $nomor,
 							'produksi_barang_barang' => strip_tags(@$barang[$i]),
-							'produksi_barang_kode' => strip_tags(str_replace(',', '', @$_POST['kode'][$i])),
+							'produksi_barang_kode' => @$_POST['kode'][$i],
 							'produksi_barang_panjang' => strip_tags(str_replace(',', '', @$_POST['panjang'][$i])),
 							'produksi_barang_berat' => strip_tags(str_replace(',', '', @$_POST['berat'][$i])),
 							'produksi_barang_stok' => strip_tags(str_replace(',', '', @$_POST['stok'][$i])),	
@@ -247,9 +265,9 @@ class Produksi extends CI_Controller{
 			// $this->stok->jurnal($nomor, 9, 'debit', 'biaya produksi', $total);
 			// $this->stok->jurnal($nomor, 4, 'kredit', 'stok bahan baku', $total);	
 
-			$this->session->set_flashdata('success','Data berhasil di tambah');
+			$this->session->set_userdata('success','Data berhasil di tambah');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di tambah');
+			$this->session->set_userdata('gagal','Data gagal di tambah');
 		}
 
 		redirect(base_url('produksi/'.$redirect));
@@ -268,9 +286,9 @@ class Produksi extends CI_Controller{
 			$this->stok->transaksi();
 			$this->kartu->delete($get[$table.'_nomor']);
 
-			$this->session->set_flashdata('success','Data berhasil di hapus');
+			$this->session->set_userdata('success','Data berhasil di hapus');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di hapus');
+			$this->session->set_userdata('gagal','Data gagal di hapus');
 		}
 
 		redirect(base_url('produksi/'.$redirect));
@@ -305,9 +323,9 @@ class Produksi extends CI_Controller{
 
 		echo json_encode($data);
 	}
-	function get_produksi($nomor){
+	function get_produksi($nomor, $status = 1){
 
-		$data = $this->query_builder->view("SELECT * FROM t_produksi_produksi AS a LEFT JOIN t_produk AS b ON a.produksi_produksi_produk = b.produk_id WHERE a.produksi_produksi_nomor = '$nomor'");
+		$data = $this->query_builder->view("SELECT * FROM t_produksi_produksi AS a LEFT JOIN t_produk AS b ON a.produksi_produksi_produk = b.produk_id WHERE a.produksi_produksi_nomor = '$nomor' AND a.produksi_produksi_status = '$status'");
 
 		echo json_encode($data);
 	}
@@ -322,13 +340,74 @@ class Produksi extends CI_Controller{
 
 //////////////// so /////////////////////////////
 
-	function so_get_data(){
-		$model = 'm_produksi';
-		$where = array('produksi_hapus' => '0', 'produksi_so' => 1);
-		$output = $this->serverside($where, $model);
-		echo json_encode($output);
+	function filter_json($array,$val){
+
+       $temp_array = array();
+       foreach ($array as &$v) {
+
+           if (!isset($temp_array[$v[$val]])){
+
+           		$temp_array[$v[$val]] =& $v;
+           }
+
+       }
+       $array = array_values($temp_array);
+       return $array;
+    }
+
+    function sort(){
+
+    	//filter produk request terbanyak
+		$db = $this->db->query("SELECT *, count(b.produksi_produksi_produk) as jum FROM t_produksi as a JOIN t_produksi_produksi as b ON b.produksi_produksi_nomor = a.produksi_nomor WHERE a.produksi_hapus = 0 AND a.produksi_so = 1 AND a.produksi_proses != 2 GROUP BY b.produksi_produksi_produk ORDER BY b.produksi_produksi_status")->result_array();
+    	
+    	//delete
+    	$this->db->query("DELETE FROM t_filter");
+
+    	foreach ($db as $v) {
+    		
+    		$nomor = $v['produksi_produksi_nomor'];
+    		$barang = $v['produksi_produksi_produk'];
+    		$produksi = $v['produksi_produksi_id'];
+
+    		//insert
+    		$this->db->query("INSERT INTO t_filter SET filter_nomor='$nomor', filter_produksi='$produksi', filter_barang='$barang' ON DUPLICATE KEY UPDATE filter_nomor='$nomor', filter_produksi='$produksi', filter_barang='$barang'");
+    	}
 	}
-	function proses_so($id){
+
+	function so_get_data($filter = ''){
+
+		if ($filter != '') {
+
+			$db = $this->db->query("SELECT * FROM t_filter")->result_array();
+
+			$nomor = array();
+			foreach ($db as $v) {
+				$nomor[] = $v['filter_nomor'];
+			}
+
+			$order = '"'.implode('","', $nomor).'"';
+		}else{
+			
+			$order = '';
+		}
+
+		$model = 'm_produksi_so';
+		$where = array('produksi_hapus' => '0', 'produksi_so' => 1, 'produksi_proses !=' => 2);
+
+		$data = $this->$model->get_datatables($where, $order);
+		$total = $this->$model->count_all($where);
+		$filter = $this->$model->count_filtered($where);
+
+		$output = array(  
+			"draw" => $_GET["draw"],
+			"recordsTotal" => $total,
+			"recordsFiltered" => $filter,
+			"data" => $data,
+		);
+    
+	    echo json_encode($output);		
+	}
+	function proses_so($id){ 
 		$data = $this->add();
 		$data['data'] = $this->query_builder->view_row("SELECT * FROM t_produksi WHERE produksi_id = '$id'");
 
@@ -343,10 +422,9 @@ class Produksi extends CI_Controller{
 	function rotate_save(){
 		
 		$redirect = 'proses';
-		$proses = 1;
 		$so = 1;
 
-		$this->update($redirect, $so, $proses);
+		$this->update($redirect, $so);
 	}
 ///////////////////////////////////////////////////
 
@@ -358,6 +436,9 @@ class Produksi extends CI_Controller{
 		$data["title"] = $title;	
 		$data['url'] = $title;
 
+		//filter run
+		$this->sort();
+
 	    $this->load->view('v_template_admin/admin_header',$data);
 	    $this->load->view('produksi/proses');
 	    $this->load->view('v_template_admin/admin_footer');
@@ -365,7 +446,7 @@ class Produksi extends CI_Controller{
 	function proses_get_data()
 	{
 		$model = 'm_produksi';
-		$where = array('produksi_hapus' => '0', 'produksi_proses' => '1');
+		$where = array('produksi_hapus' => '0', 'produksi_proses !=' => '0');
 
 		$output = $this->serverside($where, $model);
 		echo json_encode($output);
@@ -373,7 +454,7 @@ class Produksi extends CI_Controller{
 	function selesai_get_data()
 	{
 		$model = 'm_produksi';
-		$where = array('produksi_hapus' => '0', 'produksi_proses' => '1', 'produksi_selesai' => 1);
+		$where = array('produksi_hapus' => '0', 'produksi_selesai' => '1');
 
 		$output = $this->serverside($where, $model);
 		echo json_encode($output);
@@ -404,7 +485,7 @@ class Produksi extends CI_Controller{
 	
 	function proses_save()
 	{
-		$proses = 1;
+		$proses = 2;
 		$redirect = 'proses';
 		$so = 0;
 		$nomor = strip_tags(@$_POST['nomor']);
@@ -521,13 +602,13 @@ class Produksi extends CI_Controller{
 	function selesai($nomor){
 
 		$set = ["produksi_selesai" => 1];
-		$where = ["produksi_nomor" => $nomor];
+		$where = ["produksi_nomor" => $nomor, "produksi_proses" => 2];
 		$db = $this->query_builder->update("t_produksi",$set,$where);
 
 		if ($db == 1) {
-			$this->session->set_flashdata('success','Data berhasil di simpan');
+			$this->session->set_userdata('success', "Data berhasil di simpan");
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di simpan');
+			$this->session->set_userdata('gagal','Masih ada barang yang belum di proses');
 		}
 
 		redirect(base_url('produksi/proses'));
@@ -566,7 +647,7 @@ class Produksi extends CI_Controller{
 					$this->query_builder->update('t_cetak',['cetak_jumlah' => $jumlah],['cetak_user' => $user, 'cetak_nomor' => $nomor]);
 
 					// menunggu
-					$this->session->set_flashdata('gagal', 'menunggu persetujuan terlebih dahulu');
+					$this->session->set_userdata('gagal', 'menunggu persetujuan terlebih dahulu');
 					redirect(base_url('produksi/proses'));	
 				}
 

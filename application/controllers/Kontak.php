@@ -51,9 +51,9 @@ class Kontak extends CI_Controller{
 		$this->db->set($set);
 
 		if ($this->db->insert('t_karyawan')) {
-			$this->session->set_flashdata('success','Data berhasil di simpan');
+			$this->session->set_userdata('success','Data berhasil di simpan');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di simpan');
+			$this->session->set_userdata('gagal','Data gagal di simpan');
 		}
 
 		redirect(base_url('kontak'));
@@ -65,9 +65,9 @@ class Kontak extends CI_Controller{
 		$db = $this->query_builder->update('t_karyawan',$set,$where);
 		
 		if ($db == 1) {
-			$this->session->set_flashdata('success','Data berhasil di hapus');
+			$this->session->set_userdata('success','Data berhasil di hapus');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di hapus');
+			$this->session->set_userdata('gagal','Data gagal di hapus');
 		}
 		
 		redirect(base_url('kontak'));	
@@ -92,9 +92,9 @@ class Kontak extends CI_Controller{
 		$db = $this->query_builder->update('t_karyawan',$set,$where);
 		
 		if ($db == 1) {
-			$this->session->set_flashdata('success','Data berhasil di rubah');
+			$this->session->set_userdata('success','Data berhasil di rubah');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di rubah');
+			$this->session->set_userdata('gagal','Data gagal di rubah');
 		}
 
 		redirect(base_url('kontak'));
@@ -177,9 +177,9 @@ class Kontak extends CI_Controller{
 		$db = $this->query_builder->add('t_kontak',$set);
 
 		if ($db == 1) {
-			$this->session->set_flashdata('success','Data berhasil di tambah');
+			$this->session->set_userdata('success','Data berhasil di tambah');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di tambah');
+			$this->session->set_userdata('gagal','Data gagal di tambah');
 		}
 		
 		if ($_POST['jenis'] == 's') {
@@ -197,9 +197,9 @@ class Kontak extends CI_Controller{
 		$db = $this->query_builder->update('t_kontak',$set,$where);
 		
 		if ($db == 1) {
-			$this->session->set_flashdata('success','Data berhasil di hapus');
+			$this->session->set_userdata('success','Data berhasil di hapus');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di hapus');
+			$this->session->set_userdata('gagal','Data gagal di hapus');
 		}
 		
 		if ($jenis == 's') {
@@ -234,9 +234,9 @@ class Kontak extends CI_Controller{
 		$db = $this->query_builder->update('t_kontak',$set,$where);
 		
 		if ($db == 1) {
-			$this->session->set_flashdata('success','Data berhasil di rubah');
+			$this->session->set_userdata('success','Data berhasil di rubah');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di rubah');
+			$this->session->set_userdata('gagal','Data gagal di rubah');
 		}
 		
 		if ($_POST['jenis'] == 's') {
@@ -294,9 +294,9 @@ class Kontak extends CI_Controller{
 		$this->db->set($set);
 
 		if ($this->db->insert('t_rekening')) {
-			$this->session->set_flashdata('success','Data berhasil di simpan');
+			$this->session->set_userdata('success','Data berhasil di simpan');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di simpan');
+			$this->session->set_userdata('gagal','Data gagal di simpan');
 		}
 
 		redirect(base_url('kontak/rekening'));
@@ -308,9 +308,9 @@ class Kontak extends CI_Controller{
 		$db = $this->query_builder->update('t_rekening',$set,$where);
 		
 		if ($db == 1) {
-			$this->session->set_flashdata('success','Data berhasil di hapus');
+			$this->session->set_userdata('success','Data berhasil di hapus');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di hapus');
+			$this->session->set_userdata('gagal','Data gagal di hapus');
 		}
 		
 		redirect(base_url('kontak/rekening'));	
@@ -336,9 +336,9 @@ class Kontak extends CI_Controller{
 		$db = $this->query_builder->update('t_rekening',$set,$where);
 		
 		if ($db == 1) {
-			$this->session->set_flashdata('success','Data berhasil di rubah');
+			$this->session->set_userdata('success','Data berhasil di rubah');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di rubah');
+			$this->session->set_userdata('gagal','Data gagal di rubah');
 		}
 
 		redirect(base_url('kontak/rekening'));

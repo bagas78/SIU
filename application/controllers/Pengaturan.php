@@ -32,9 +32,9 @@ class Pengaturan extends CI_Controller{
 		$db = $this->query_builder->update('t_pajak',$set,$where);
 
 		if ($db == 1) {
-			$this->session->set_flashdata('success','Data berhasil di rubah');
+			$this->session->set_userdata('success','Data berhasil di rubah');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di rubah');
+			$this->session->set_userdata('gagal','Data gagal di rubah');
 		}
 		
 		redirect(base_url('pengaturan/pajak'));
@@ -147,9 +147,9 @@ class Pengaturan extends CI_Controller{
 		}
 
 		if ($db == 1) {
-			$this->session->set_flashdata('success','Data berhasil di rubah');
+			$this->session->set_userdata('success','Data berhasil di rubah');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di rubah');
+			$this->session->set_userdata('gagal','Data gagal di rubah');
 		}
 		
 		redirect(base_url('pengaturan/informasi'));

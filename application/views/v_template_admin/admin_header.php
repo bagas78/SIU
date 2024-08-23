@@ -66,6 +66,10 @@
   <!--alert-->
   <script src="<?php echo base_url('assets/') ?>sweetalert/sweet-alert.js"></script>
 
+  <script type="text/javascript">
+    
+  </script>
+
 <style type="text/css">
   .stn{
     background: #3c8dbc;

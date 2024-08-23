@@ -18,36 +18,22 @@ class Query_builder{
   }
   function add($table,$set){
     $this->sql->db->set($set);
+    $this->sql->db->insert($table);
 
-    if ($this->sql->db->insert($table)) {
-      $db = 1;
-    } else {
-      $db = 0;
-    }
-    
-    return $db;
+    return $this->sql->db->affected_rows();
   }
   function update($table,$set,$where){
     $this->sql->db->set($set);
     $this->sql->db->where($where);
+    $this->sql->db->update($table);
 
-    if ($this->sql->db->update($table)) {
-      $db = 1;
-    } else {
-      $db = 0;
-    }
+    return $this->sql->db->affected_rows();
 
-    return $db;
   }
   function delete($table,$where){
     $this->sql->db->where($where);
+    $this->sql->db->delete($table);
 
-    if ($this->sql->db->delete($table)) {
-      $db = 1;
-    } else {
-      $db = 0;
-    }
-
-    return $db;
+    return $this->sql->db->affected_rows();
   }
 }

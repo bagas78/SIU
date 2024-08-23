@@ -15,8 +15,8 @@
 </style> 
  
 <!-- Main content -->  
-<section class="content">
-    
+<section class="content"> 
+     
   <!-- Default box -->  
   <div class="box"> 
     <div class="box-header with-border">  
@@ -41,6 +41,7 @@
             <div class="form-group">
               <label>Nomor Produksi</label>
               <input type="text" name="nomor" class="form-control" required id="nomor">
+              <input type="hidden" name="proses" class="form-control" required id="proses" value="0">
             </div>
             <div class="form-group">
               <label>Tanggal Produksi</label>
@@ -118,7 +119,7 @@
         <table class="table table-responsive table-borderless">
           <thead>
             <tr>
-              <th>Produk</th> 
+              <th>Produk</th>
              
               <th width="150">Konversi <span class="stn">Mtr</span></th>
               <th width="150">Batang <span class="stn">Btg</span></th>
@@ -126,7 +127,7 @@
               <th width="150">Qty <span class="stn">text</span></th>  
 
               <th>Panjang <span class="stn">Mtr</span></th>
-              <th width="1"><button type="button" onclick="clone('1')" class="add btn btn-success btn-sm"><i class="fa fa-plus"></i></button></th>
+              <th width="1"><button type="button" onclick="clone('1')" class="add_produk btn btn-success btn-sm"><i class="fa fa-plus"></i></button></th>
             </tr>
           </thead>
           <tbody id="paste1"> 
@@ -151,16 +152,24 @@
 
               <!--panjang total -->
               <td>
-                <input type="text" name="produk_panjang[]" class="produk_panjang form-control" value="0" min="1" step="any" required>
+                <input type="number" name="produk_panjang[]" class="produk_panjang form-control" value="0" min="1" step="any" required>
               </td>
 
               <td>
-                <input type="text" name="produk_qty[]" class="produk_qty form-control" value="0" min="1" step="any" required>
+                <input type="number" name="produk_qty[]" class="produk_qty form-control" value="0" min="1" step="any" required>
               </td>
 
               <!--panjang X qty -->
               <td>
                 <input readonly type="text" name="produk_panjang_total[]" class="produk_panjang_total form-control" value="0" min="1" step="any">
+              </td>
+
+              <td hidden>
+                <input type="text" name="produk_id[]" class="produk_id">
+              </td>
+
+              <td hidden>
+                <input type="text" name="produk_status[]" value="1" class="produk_status">
               </td>
               
               <td><button type="button" class="remove btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></td>
@@ -237,7 +246,7 @@
                 </td>
 
                 <td>
-                  <input type="text" name="panjang[]" class="panjang form-control" required value="0" min="0" step="any">
+                  <input type="number" name="panjang[]" class="panjang form-control" required value="0" min="1" step="any">
                 </td>
 
                 <td hidden>
@@ -290,10 +299,16 @@
 
 <script type="text/javascript">
 
+//partial stok
+if ('<?=$this->uri->segment(2)?>' == 'proses_so') {
+  $('.add_produk').hide();
+}
+
 //view UI
 <?php if(@$view == 1):?>
   $('.back').removeAttr('hidden');
   $('.add').remove();
+  $('.add_produk').remove();
   $('.remove').remove();
   $('.save').remove();
   $('.form-group, td').css('pointer-events', 'none');
@@ -316,8 +331,6 @@ $(document).on('change', '.produk', function() {
 
    /////// cek exist barang ///////////
     $.each($('.produk'), function(idx, val) {
-        
-        console.log(idx);
 
         if (index != idx)
         arr.push($(this).val());
@@ -487,11 +500,11 @@ $(document).on('change', '.produk', function() {
 
     }
 
-    $('#paste'+target).prepend($('#copy'+target).clone());
+    $('#paste'+target).prepend($('#copy'+target).clone().removeAttr('hidden'));
     
     //blank new input
     $('#copy'+target).find('select').val(x).change();
-    $('#copy'+target).find('.kategori').val('');
+    //$('#copy'+target).find('.kategori').val('');
     $('#copy'+target).find('.harga').val(0);
     $('#copy'+target).find('.stok').val(0);
     $('#copy'+target).find('.total').val(0);
@@ -507,7 +520,12 @@ $(document).on('change', '.produk', function() {
   //remove
   $(document).on('click', '.remove', 'tr a.remove', function(e) {
     e.preventDefault();
-    $(this).closest('tr').remove();
+
+    //ubah status value
+    $(this).closest('tr').find('.produk_status').val(0);
+    $(this).closest('tr').hide();
+
+    //$(this).closest('tr').remove();
   });
 
   //foto preview
@@ -554,7 +572,7 @@ $(document).on('change', '.produk', function() {
   $(document).on('change', '.bahan', function() {
 
     //empty
-    $('.kode').empty();
+    $(this).closest('tr').find('.kode').empty();
       
     var id = $(this).val();
     var gudang = $('#gudang').val();
@@ -613,7 +631,7 @@ $(document).on('change', '.produk', function() {
          var stok = $(this).closest('tr').find('.stok').val().replaceAll(',', '');
          var panjang = $(this).closest('tr').find('.panjang').val().replaceAll(',', '');
 
-         if (Number(stok) < Number(panjang)) {
+         if (Number(stok) < panjang) {
 
           err += 1;
 
@@ -634,11 +652,13 @@ $(document).on('change', '.produk', function() {
 
   function auto() { 
 
+    var s = 1;
     $.each($('.produk_qty'), function(index, val) {
 
       //konversi * batang
       var batang = Number($(this).closest('tr').find('.produk_batang').val());
       var konversi = Number($(this).closest('tr').find('.produk_konversi').val());
+      var status = $(this).closest('tr').find('.produk_status').val();
 
       if (konversi != 0) {
       
@@ -657,7 +677,19 @@ $(document).on('change', '.produk', function() {
           
       }
 
+      if (status == 0) {
+        s = status;
+      }
+
     });
+
+    if (s == 0) {
+
+      $('#proses').val(1);
+    }else{
+
+      $('#proses').val(2);
+    }
 
     //total produksi
     var jasa = Number($('#jasa').val());
@@ -674,26 +706,48 @@ $(document).on('change', '.produk', function() {
     // Produk Panjang Total
     var produk_panjang_total = 0;
     $.each($('.produk_panjang_total'), function(index, val) {
-      produk_panjang_total += round($(this).val().replaceAll(',',''), 2);
+
+      var status = $(this).closest('tr').find('.produk_status').val();
+
+      if (status == 1) {
+
+        produk_panjang_total += round($(this).val().replaceAll(',',''), 2);
+      }
+    
     });
     $('#produk_panjang_total').val(produk_panjang_total);
 
     // Produk qty
     var produk_qty = 0;
     $.each($('.produk_qty'), function(index, val) {
-      produk_qty += round($(this).val().replaceAll(',',''), 2);
+
+      var status = $(this).closest('tr').find('.produk_status').val();
+
+      if (status == 1) {
+
+        produk_qty += round($(this).val().replaceAll(',',''), 2);
+      }
+
     });
     $('#produk_qty').val(produk_qty);
 
     // Produk panjang
     var produk_panjang = 0;
     $.each($('.produk_panjang'), function(index, val) {
-      produk_panjang += round($(this).val().replaceAll(',',''), 2);
+
+      var status = $(this).closest('tr').find('.produk_status').val();
+
+      if (status == 1) {
+
+        produk_panjang += round($(this).val().replaceAll(',',''), 2);
+      }
+
     });
     $('#produk_panjang').val(produk_panjang);
 
     //border none
     $('td').css('border-top', 'none');
+
 
     setTimeout(function() {
         auto();

@@ -79,11 +79,11 @@ class Profile extends CI_Controller{
 				$this->db->where('user_id',$id);
 				$this->db->update('t_user');
 
-				$this->session->set_flashdata('success','Data berhasil di perbaharui');
+				$this->session->set_userdata('success','Data berhasil di perbaharui');
 
 			} else {
 				
-				$this->session->set_flashdata('gagal','Data gagal di perbaharui');
+				$this->session->set_userdata('gagal','Data gagal di perbaharui');
 			}
 
 		}else{
@@ -102,7 +102,7 @@ class Profile extends CI_Controller{
 			$this->db->where('user_id',$id);
 			$this->db->update('t_user');
 
-			$this->session->set_flashdata('success','Data berhasil di perbaharui');
+			$this->session->set_userdata('success','Data berhasil di perbaharui');
 		}		
 
 		redirect(base_url('profile'));
@@ -115,7 +115,7 @@ class Profile extends CI_Controller{
 		$this->db->where('user_id',$id);
 		$this->db->update('t_user');
 
-		$this->session->set_flashdata('success','Data berhasil di perbaharui');
+		$this->session->set_userdata('success','Data berhasil di perbaharui');
 
 		redirect(base_url('profile'));
 	}

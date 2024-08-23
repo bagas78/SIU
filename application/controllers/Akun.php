@@ -55,7 +55,7 @@ class Akun extends CI_Controller{
 		$cek = $this->query_builder->count("SELECT * FROM t_user WHERE user_email = '$email'");
 
 		if (@$cek) {
-			$this->session->set_flashdata('gagal','Email sudah di gunakan !!');
+			$this->session->set_userdata('gagal','Email sudah di gunakan !!');
 			redirect(base_url('akun/admin'));
 		}else{
 			
@@ -68,9 +68,9 @@ class Akun extends CI_Controller{
 			$db = $this->query_builder->add('t_user',$set);
 
 			if ($db == 1) {
-				$this->session->set_flashdata('success','Data berhasil di tambah');
+				$this->session->set_userdata('success','Data berhasil di tambah');
 			} else {
-				$this->session->set_flashdata('gagal','Data gagal di tambah');
+				$this->session->set_userdata('gagal','Data gagal di tambah');
 			}
 			
 			redirect(base_url('akun/admin'));
@@ -107,9 +107,9 @@ class Akun extends CI_Controller{
 		$db = $this->query_builder->update('t_user',$set,$where);
 
 		if ($db == 1) {
-			$this->session->set_flashdata('success','Data berhasil di rubah');
+			$this->session->set_userdata('success','Data berhasil di rubah');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di rubah');
+			$this->session->set_userdata('gagal','Data gagal di rubah');
 		}
 		
 		redirect(base_url('akun/admin'));
@@ -119,7 +119,7 @@ class Akun extends CI_Controller{
 		$user = $this->session->userdata('id');
 
 		if ($id == $user) {
-			$this->session->set_flashdata('gagal','Tidak bisa menghapus akun sendiri');
+			$this->session->set_userdata('gagal','Tidak bisa menghapus akun sendiri');
 		} else {
 
 			$set = ['user_hapus' => 1];
@@ -127,9 +127,9 @@ class Akun extends CI_Controller{
 			$db = $this->query_builder->update('t_user',$set,$where);
 			
 			if ($db == 1) {
-				$this->session->set_flashdata('success','Data berhasil di hapus');
+				$this->session->set_userdata('success','Data berhasil di hapus');
 			} else {
-				$this->session->set_flashdata('gagal','Data gagal di hapus');
+				$this->session->set_userdata('gagal','Data gagal di hapus');
 			}
 		}
 		
@@ -183,9 +183,9 @@ class Akun extends CI_Controller{
 
 		$db = $this->query_builder->add('t_level', $set);
 		if ($db == 1) {
-			$this->session->set_flashdata('success','Data berhasil di hapus');
+			$this->session->set_userdata('success','Data berhasil di hapus');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di hapus');
+			$this->session->set_userdata('gagal','Data gagal di hapus');
 		}
 
 		redirect(base_url('akun/akses'));
@@ -196,9 +196,9 @@ class Akun extends CI_Controller{
 		$db = $this->query_builder->update('t_level',$set,$where);
 		
 		if ($db == 1) {
-			$this->session->set_flashdata('success','Data berhasil di hapus');
+			$this->session->set_userdata('success','Data berhasil di hapus');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di hapus');
+			$this->session->set_userdata('gagal','Data gagal di hapus');
 		}
 
 		redirect(base_url('akun/akses'));
@@ -228,9 +228,9 @@ class Akun extends CI_Controller{
 		$db = $this->query_builder->update('t_level',$set,$where);
 		
 		if ($db == 1) {
-			$this->session->set_flashdata('success','Data berhasil di simpan');
+			$this->session->set_userdata('success','Data berhasil di simpan');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di simpan');
+			$this->session->set_userdata('gagal','Data gagal di simpan');
 		}
 
 		redirect(base_url('akun/akses'));
@@ -290,7 +290,7 @@ class Akun extends CI_Controller{
 		$cek = $this->query_builder->count("SELECT * FROM t_user WHERE user_email = '$email'");
 
 		if (@$cek) {
-			$this->session->set_flashdata('gagal','Email sudah di gunakan !!');
+			$this->session->set_userdata('gagal','Email sudah di gunakan !!');
 			redirect(base_url('akun/admin'));
 		}else{
 			
@@ -303,9 +303,9 @@ class Akun extends CI_Controller{
 			$db = $this->query_builder->add('t_user',$set);
 
 			if ($db == 1) {
-				$this->session->set_flashdata('success','Data berhasil di tambah');
+				$this->session->set_userdata('success','Data berhasil di tambah');
 			} else {
-				$this->session->set_flashdata('gagal','Data gagal di tambah');
+				$this->session->set_userdata('gagal','Data gagal di tambah');
 			}
 			
 			redirect(base_url('akun/user'));
@@ -346,9 +346,9 @@ class Akun extends CI_Controller{
 		$db = $this->query_builder->update('t_user',$set,$where);
 
 		if ($db == 1) {
-			$this->session->set_flashdata('success','Data berhasil di rubah');
+			$this->session->set_userdata('success','Data berhasil di rubah');
 		} else {
-			$this->session->set_flashdata('gagal','Data gagal di rubah');
+			$this->session->set_userdata('gagal','Data gagal di rubah');
 		}
 		
 		redirect(base_url('akun/user'));
@@ -358,7 +358,7 @@ class Akun extends CI_Controller{
 		$user = $this->session->userdata('id');
 
 		if ($id == $user) {
-			$this->session->set_flashdata('gagal','Tidak bisa menghapus akun sendiri');
+			$this->session->set_userdata('gagal','Tidak bisa menghapus akun sendiri');
 		} else {
 
 			$set = ['user_hapus' => 1];
@@ -366,9 +366,9 @@ class Akun extends CI_Controller{
 			$db = $this->query_builder->update('t_user',$set,$where);
 			
 			if ($db == 1) {
-				$this->session->set_flashdata('success','Data berhasil di hapus');
+				$this->session->set_userdata('success','Data berhasil di hapus');
 			} else {
-				$this->session->set_flashdata('gagal','Data gagal di hapus');
+				$this->session->set_userdata('gagal','Data gagal di hapus');
 			}
 		}
 		

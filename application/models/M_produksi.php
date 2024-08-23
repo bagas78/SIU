@@ -2,7 +2,7 @@
 
 class M_produksi extends CI_Model { 
 
-	//nama tabel
+	//nama tabel 
 	var $table = 't_produksi';  
 
 	//kolom yang di tampilkan
@@ -63,11 +63,11 @@ class M_produksi extends CI_Model {
 	{
 		$this->_get_datatables_query();
 		if($_GET['length'] != -1)
-		$this->db->where($where);
+		$this->db->where($where); 
 		$this->db->join('t_user', 't_produksi.produksi_shift = t_user.user_id', 'LEFT');
 		$this->db->join('t_kontak', 't_produksi.produksi_pelanggan = t_kontak.kontak_id', 'LEFT');
 
-		$this->db->join('t_penjualan', 't_produksi.produksi_nomor = t_penjualan.penjualan_nomor', 'LEFT');	// tambhan 06-03
+		$this->db->join('t_penjualan', 't_produksi.produksi_nomor = t_penjualan.penjualan_nomor', 'LEFT');
 		$this->db->join('t_produksi_produksi', 't_produksi_produksi.produksi_produksi_nomor = t_produksi.produksi_nomor');
 		$this->db->join('t_produksi_barang', 't_produksi_barang.produksi_barang_nomor = t_produksi.produksi_nomor', 'LEFT');
 		$this->db->group_by('produksi_nomor');

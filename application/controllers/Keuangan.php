@@ -130,7 +130,7 @@ class Keuangan extends CI_Controller{
 		//debit
 		$this->stok->jurnal($nomor, 1 ,'debit', 'kas ( penyesuaian saldo )', $nominal);
 
-		$this->session->set_flashdata('success','Data berhasil di tambah');
+		$this->session->set_userdata('success','Data berhasil di tambah');
 		
 		redirect(base_url('keuangan/saldo'));
 	}
@@ -147,7 +147,7 @@ class Keuangan extends CI_Controller{
 		//debit
 		$this->stok->jurnal($nomor, 1 ,'debit', 'kas ( penyesuaian saldo )', $nominal, $tgl);
 
-		$this->session->set_flashdata('success','Data berhasil di tambah');
+		$this->session->set_userdata('success','Data berhasil di tambah');
 		
 		redirect(base_url('keuangan/saldo'));
 	}

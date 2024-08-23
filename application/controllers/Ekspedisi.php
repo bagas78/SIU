@@ -55,9 +55,9 @@ class Ekspedisi extends CI_Controller
         $db = $this->query_builder->add('t_ekspedisi',$set);
 
         if ($db == 1) {
-            $this->session->set_flashdata('success','Data berhasil di tambah');
+            $this->session->set_userdata('success','Data berhasil di tambah');
         } else {
-            $this->session->set_flashdata('gagal','Data gagal di tambah');
+            $this->session->set_userdata('gagal','Data gagal di tambah');
         }        
         redirect(base_url('ekspedisi'));
     }
@@ -80,9 +80,9 @@ class Ekspedisi extends CI_Controller
         $db = $this->query_builder->update('t_ekspedisi', $set, ['ekspedisi_id' => $id]);
 
         if ($db == 1) {
-            $this->session->set_flashdata('success','Data berhasil di rubah');
+            $this->session->set_userdata('success','Data berhasil di rubah');
         } else {
-            $this->session->set_flashdata('gagal','Data gagal di rubah');
+            $this->session->set_userdata('gagal','Data gagal di rubah');
         }       
 
         redirect(base_url('ekspedisi'));
@@ -92,9 +92,9 @@ class Ekspedisi extends CI_Controller
         $db = $this->query_builder->update('t_ekspedisi', ['ekspedisi_hapus' => 1], ['ekspedisi_id' => $id]);
 
         if ($db == 1) {
-            $this->session->set_flashdata('success','Data berhasil di hapus');
+            $this->session->set_userdata('success','Data berhasil di hapus');
         } else {
-            $this->session->set_flashdata('gagal','Data gagal di hapus');
+            $this->session->set_userdata('gagal','Data gagal di hapus');
         }       
 
         redirect(base_url('ekspedisi'));
