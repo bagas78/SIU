@@ -289,7 +289,7 @@ function notif(){
 
     setTimeout(function() {
         notif();
-    }, 100);
+    }, 10000000);
 }
 
 //notif();

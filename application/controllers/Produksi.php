@@ -568,7 +568,7 @@ class Produksi extends CI_Controller{
 	    $this->load->view('produksi/produksi-cetak',$data);
 	}	
 
-	function cetak3($nomor){
+	function cetak3($nomor){ 
 
 		$data['data_produksi'] = $this->query_builder->view("SELECT * FROM t_produksi_produksi AS a JOIN t_produk AS b ON a.produksi_produksi_produk = b.produk_id WHERE a.produksi_produksi_nomor = '$nomor'");
 

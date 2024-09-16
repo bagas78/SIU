@@ -451,8 +451,8 @@ $('form').on('submit', function() {
     var err = 0;
     $.each($('.produk'), function(index, val) {
        
-       var stok = $(this).closest('tr').find('.stok').val();
-       var panjang = $(this).closest('tr').find('.panjang_total').val();
+       var stok = Number($(this).closest('tr').find('.stok').val());
+       var panjang = Number($(this).closest('tr').find('.panjang_total').val());
 
        if (Number(stok) == 0 || Number(panjang) == 0) {
 

@@ -20,7 +20,7 @@ class Penjualan extends CI_Controller{
 			"draw" => $_GET["draw"],    
 			"recordsTotal" => $total, 
 			"recordsFiltered" => $filter,
-			"data" => $data,
+			"data" => $data, 
 		);
   
 		return $output; 
@@ -628,8 +628,8 @@ class Penjualan extends CI_Controller{
 		$data["title"] = 'edit';
 
 	    $this->load->view('v_template_admin/admin_header',$data);
-	    $this->load->view('penjualan/form');
-	    $this->load->view('penjualan/form_edit');
+	    $this->load->view('penjualan/so_form');
+	    $this->load->view('penjualan/so_form_edit');
 	    $this->load->view('v_template_admin/admin_footer');
 	}	
 	function produk_view($id){

@@ -434,62 +434,62 @@ function previewFile(input){
 }
 
 //submit validation
-$('form').on('submit', function() {
+// $('form').on('submit', function() {
     
-    var err = 0;
-    $.each($('.produk'), function(index, val) {
+//     var err = 0;
+//     $.each($('.produk'), function(index, val) {
        
-       var stok = $(this).closest('tr').find('.stok').val();
-       var panjang = $(this).closest('tr').find('.panjang_total').val();
+//        var stok = $(this).closest('tr').find('.stok').val();
+//        var panjang = $(this).closest('tr').find('.panjang_total').val();
 
-       if (Number(stok) < Number(panjang)) {
+//        if (Number(stok) < Number(panjang)) {
 
-        err += 1;
+//         err += 1;
 
-       } else {
-        // tetep tanya masuk proses produksi
-        err += 1;
-       }
+//        } else {
+//         // tetep tanya masuk proses produksi
+//         err += 1;
+//        }
 
-    });
+//     });
 
-    if (err != 0) {
+//     if (err != 0) {
 
-      swal({
-        // title: "Terdapat Produk Yang Lebih",
-        title: "Proses produksi",
-        text: "Akan masuk ke pesanan produksi",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-      .then((willDelete) => {
-        if (willDelete) {
+//       swal({
+//         // title: "Terdapat Produk Yang Lebih",
+//         title: "Proses produksi",
+//         text: "Akan masuk ke pesanan produksi",
+//         icon: "warning",
+//         buttons: true,
+//         dangerMode: true,
+//       })
+//       .then((willDelete) => {
+//         if (willDelete) {
           
-          //save database
-          var url = $('form').prop('action');
+//           //save database
+//           var url = $('form').prop('action');
 
-          $.ajax({   
-              type: "POST",
-              data : $(this).serialize(),
-              url: url,   
-              success: function(data){
+//           $.ajax({   
+//               type: "POST",
+//               data : $(this).serialize(),
+//               url: url,   
+//               success: function(data){
 
-                  window.location.replace("<?=base_url('penjualan/so')?>");                      
-              }   
-          });            
+//                   window.location.replace("<?=base_url('penjualan/so')?>");                      
+//               }   
+//           });            
           
-        }
+//         }
 
-      });
+//       });
       
-      return false;
-    }else{
+//       return false;
+//     }else{
 
-      return true;
-    }
+//       return true;
+//     }
 
-});
+// });
 
 function auto(){
 
