@@ -16,7 +16,7 @@
  
 <!-- Main content -->  
 <section class="content"> 
-     
+      
   <!-- Default box -->  
   <div class="box"> 
     <div class="box-header with-border">  
@@ -208,6 +208,7 @@
                 <th width="200">Stok <span class="stn">Mtr</span></th>   
                 <th hidden width="200">Berat / Meter <span class="stn">Kg</span></th>           
                 <th width="200">Panjang <span class="stn">Mtr</span></th>
+                <th width="200" hidden>Status</th>
                 <th width="200" hidden>Total <span class="stn">Rp</span></th>
                 <th><button type="button" onclick="clone('2')" class="add btn btn-success btn-sm"><i class="fa fa-plus"></i></button></th>
               </tr>
@@ -247,6 +248,10 @@
 
                 <td>
                   <input type="number" name="panjang[]" class="panjang form-control" required value="0" min="1" step="any">
+                </td>
+
+                <td hidden>
+                  <input type="number" name="status[]" class="status form-control" required value="1" min="1" step="any">
                 </td>
 
                 <td hidden>
@@ -521,11 +526,15 @@ $(document).on('change', '.produk', function() {
   $(document).on('click', '.remove', 'tr a.remove', function(e) {
     e.preventDefault();
 
-    //ubah status value
-    $(this).closest('tr').find('.produk_status').val(0);
+    //hide row
     $(this).closest('tr').hide();
 
-    //$(this).closest('tr').remove();
+    //produk status
+    $(this).closest('tr').find('.produk_status').val(0);
+
+    //bahan status
+    $(this).closest('tr').find('.status').val(0);
+
   });
 
   //foto preview

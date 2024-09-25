@@ -329,9 +329,9 @@ class Produksi extends CI_Controller{
 
 		echo json_encode($data);
 	}
-	function get_bahan_baku($nomor){
+	function get_bahan_baku($nomor, $status = 1){
 
-		$data = $this->query_builder->view("SELECT * FROM t_produksi_barang as a LEFT JOIN t_produksi as b ON a.produksi_barang_nomor = b.produksi_nomor LEFT JOIN t_bahan as c ON a.produksi_barang_barang = c.bahan_id LEFT JOIN t_satuan as d ON c.bahan_satuan = d.satuan_id WHERE a.produksi_barang_nomor = '$nomor'");
+		$data = $this->query_builder->view("SELECT * FROM t_produksi_barang as a LEFT JOIN t_produksi as b ON a.produksi_barang_nomor = b.produksi_nomor LEFT JOIN t_bahan as c ON a.produksi_barang_barang = c.bahan_id LEFT JOIN t_satuan as d ON c.bahan_satuan = d.satuan_id WHERE a.produksi_barang_nomor = '$nomor' AND a.produksi_barang_status = '$status'");
 
 		echo json_encode($data); 
 	}

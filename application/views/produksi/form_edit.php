@@ -75,8 +75,18 @@
     });
 
     //get bahan baku
+
+    //cek SO
+    if ('<?=$this->uri->segment(2)?>' == 'proses_so') {
+
+      var url_1 = "<?=base_url('produksi/get_bahan_baku/'.$data['produksi_nomor'].'/0')?>";
+    }else{
+
+      var url_1 = "<?=base_url('produksi/get_bahan_baku/'.$data['produksi_nomor'])?>";
+    }
+
     $.ajax({
-      url: "<?=base_url('produksi/get_bahan_baku/'.$data['produksi_nomor'])?>",
+      url: url_1,
       type: 'GET',
       dataType: 'json', 
       success: function(json) {
