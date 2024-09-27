@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 25, 2024 at 05:04 AM
+-- Generation Time: Sep 27, 2024 at 12:31 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -448,13 +448,6 @@ CREATE TABLE `t_filter` (
   `filter_barang` text DEFAULT NULL,
   `filter_tanggal` date DEFAULT curdate()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `t_filter`
---
-
-INSERT INTO `t_filter` (`filter_id`, `filter_nomor`, `filter_produksi`, `filter_barang`, `filter_tanggal`) VALUES
-(220, 'PR-25092024-1', '112', '6', '2024-09-25');
 
 -- --------------------------------------------------------
 
@@ -1257,7 +1250,7 @@ CREATE TABLE `t_produksi` (
 --
 
 INSERT INTO `t_produksi` (`produksi_id`, `produksi_nomor`, `produksi_proses`, `produksi_selesai`, `produksi_so`, `produksi_so_tanggal`, `produksi_pelanggan`, `produksi_tanggal`, `produksi_jam`, `produksi_shift`, `produksi_pekerja`, `produksi_gudang`, `produksi_keterangan`, `produksi_mesin`, `produksi_lampiran_1`, `produksi_lampiran_2`, `produksi_subtotal`, `produksi_jasa`, `produksi_grandtotal`, `produksi_hapus`) VALUES
-(38, 'PR-25092024-1', 1, 0, 1, NULL, '20', '2024-09-25 09:41:25', '09:41:25', '78', '[\"11\"]', '0', 'sebagian', '6', NULL, NULL, 'NaN', '0', 'NaN', 0);
+(38, 'PR-25092024-1', 2, 0, 1, NULL, '20', '2024-09-25 09:41:25', '09:41:25', '78', '[\"11\"]', '0', 'sebagian', '6', NULL, NULL, 'NaN', '0', 'NaN', 0);
 
 -- --------------------------------------------------------
 
@@ -1284,7 +1277,8 @@ CREATE TABLE `t_produksi_barang` (
 --
 
 INSERT INTO `t_produksi_barang` (`produksi_barang_id`, `produksi_barang_nomor`, `produksi_barang_barang`, `produksi_barang_kode`, `produksi_barang_stok`, `produksi_barang_panjang`, `produksi_barang_berat`, `produksi_barang_harga`, `produksi_barang_total`, `produksi_barang_status`, `produksi_barang_tanggal`) VALUES
-(58, 'PR-25092024-1', '29', '35', '2003.00', '100.00', '2.21', '17100.90', '171009000', '1', '2024-09-25');
+(61, 'PR-25092024-1', '29', '35', '2003.00', '70.00', '2.21', '17100.90', '119706300', '1', '2024-09-27'),
+(63, 'PR-25092024-1', '29', '35', '1933.00', '10.00', '2.21', '17100.90', '17100900', '1', '2024-09-27');
 
 -- --------------------------------------------------------
 
@@ -1311,7 +1305,7 @@ CREATE TABLE `t_produksi_produksi` (
 
 INSERT INTO `t_produksi_produksi` (`produksi_produksi_id`, `produksi_produksi_nomor`, `produksi_produksi_produk`, `produksi_produksi_konversi`, `produksi_produksi_batang`, `produksi_produksi_panjang`, `produksi_produksi_qty`, `produksi_produksi_panjang_total`, `produksi_produksi_status`, `produksi_produksi_tanggal`) VALUES
 (112, 'PR-25092024-1', '6', '0', '0', '5', '5', '25.00', 1, '2024-09-25'),
-(113, 'PR-25092024-1', '6', '0', '0', '10', '10', '100.00', 0, '2024-09-25');
+(113, 'PR-25092024-1', '6', '0', '0', '10', '10', '100.00', 1, '2024-09-25');
 
 -- --------------------------------------------------------
 
@@ -1742,7 +1736,7 @@ ALTER TABLE `t_ekspedisi`
 -- AUTO_INCREMENT for table `t_filter`
 --
 ALTER TABLE `t_filter`
-  MODIFY `filter_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=221;
+  MODIFY `filter_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=242;
 
 --
 -- AUTO_INCREMENT for table `t_gudang`
@@ -1874,7 +1868,7 @@ ALTER TABLE `t_produksi`
 -- AUTO_INCREMENT for table `t_produksi_barang`
 --
 ALTER TABLE `t_produksi_barang`
-  MODIFY `produksi_barang_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `produksi_barang_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `t_produksi_produksi`
