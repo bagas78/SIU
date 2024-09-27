@@ -204,9 +204,6 @@ class Produksi extends CI_Controller{
 
 		if ($db == 1) {
 
-			//delete
-			$this->query_builder->delete('t_produksi_barang', ['produksi_barang_nomor' => $nomor]);
-
 			//produk
 			$produk = @$_POST['produk'];
 			$jum_produk = count($produk);
@@ -241,6 +238,7 @@ class Produksi extends CI_Controller{
 			$jum_barang = count($barang);
 			
 			for ($i = 0; $i < $jum_barang; ++$i) {
+				$barang_id = @$_POST['id'][$i];
 
 				$set3 = array(
 							'produksi_barang_nomor' => $nomor,
@@ -250,10 +248,17 @@ class Produksi extends CI_Controller{
 							'produksi_barang_berat' => strip_tags(str_replace(',', '', @$_POST['berat'][$i])),
 							'produksi_barang_stok' => strip_tags(str_replace(',', '', @$_POST['stok'][$i])),	
 							'produksi_barang_harga' => strip_tags(str_replace(',', '', @$_POST['harga'][$i])),
-							'produksi_barang_total' => strip_tags(str_replace(',', '', @$_POST['total'][$i])),		
+							'produksi_barang_total' => strip_tags(str_replace(',', '', @$_POST['total'][$i])),
+							'produksi_barang_status' => strip_tags(str_replace(',', '', @$_POST['status'][$i])),		
 						);	
 
-				$this->query_builder->add('t_produksi_barang',$set3);
+				if ($barang_id == 0) {
+
+					$this->query_builder->add('t_produksi_barang',$set3);	
+				}else{
+
+					$this->query_builder->update('t_produksi_barang',$set3, ['produksi_barang_id' => $barang_id]);
+				}
 			}
 			
 			//update kartu stok
@@ -329,7 +334,7 @@ class Produksi extends CI_Controller{
 
 		echo json_encode($data);
 	}
-	function get_bahan_baku($nomor, $status = 1){
+	function get_bahan_baku($nomor, $status = 1){  
 
 		$data = $this->query_builder->view("SELECT * FROM t_produksi_barang as a LEFT JOIN t_produksi as b ON a.produksi_barang_nomor = b.produksi_nomor LEFT JOIN t_bahan as c ON a.produksi_barang_barang = c.bahan_id LEFT JOIN t_satuan as d ON c.bahan_satuan = d.satuan_id WHERE a.produksi_barang_nomor = '$nomor' AND a.produksi_barang_status = '$status'");
 

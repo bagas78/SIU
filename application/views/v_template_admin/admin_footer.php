@@ -247,7 +247,7 @@ $(document).ready(function() {
 
         setTimeout(function() {
             auto();
-        }, 100);
+        }, 10000000);
     }
 
     auto();

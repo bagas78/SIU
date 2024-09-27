@@ -119,8 +119,7 @@
         <table class="table table-responsive table-borderless">
           <thead>
             <tr>
-              <th>Produk</th>
-             
+              <th width="150">Produk</th>
               <th width="150">Konversi <span class="stn">Mtr</span></th>
               <th width="150">Batang <span class="stn">Btg</span></th>
               <th width="150">Panjang <span class="stn">text</span></th>
@@ -201,6 +200,7 @@
           <table class="table table-responsive table-borderless">
             <thead>
               <tr>
+                <th hidden width="300">id</th>
                 <th width="300">Bahan</th>
                 <th width="300">Kode Item</th>
                 <th width="300">Kategori</th>
@@ -216,6 +216,11 @@
             <tbody id="paste2">
 
                <tr id="copy2">
+
+                <td hidden>
+                  <input type="text" name="id[]" class="id form-control" value="0" readonly>                
+                </td>
+
                 <td>
                   <select required id="bahan" class="bahan form-control" name="bahan[]">
                     <option value="" hidden>-- Pilih --</option>
