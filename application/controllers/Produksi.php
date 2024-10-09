@@ -149,12 +149,14 @@ class Produksi extends CI_Controller{
 	function update($redirect, $so = 0){
 
 		//get id
+		$log_id = @$_POST['log_id'];
 		$xnomor = strip_tags(@$_POST['nomor']);
 		$xdb = $this->query_builder->view_row("SELECT * FROM t_produksi WHERE produksi_nomor = '$xnomor'");
 		$id = $xdb['produksi_id'];
 		$so_proses = strip_tags(@$_POST['proses']);
 
 		if ($so == 1 && $so_proses == 2) {
+
 			//SO jadi PR
 			$nomor = str_replace('SO', 'PR', $xnomor);
 
@@ -214,6 +216,7 @@ class Produksi extends CI_Controller{
 				$produk_status = @$_POST['produk_status'][$i];
 
 				$set2 = array(
+							'produksi_produksi_log' => $log_id,
 							'produksi_produksi_nomor' => $nomor,
 							'produksi_produksi_produk' => strip_tags(@$produk[$i]),
 							'produksi_produksi_konversi' => strip_tags(str_replace(',', '', @$_POST['produk_konversi'][$i])),
@@ -221,8 +224,8 @@ class Produksi extends CI_Controller{
 							'produksi_produksi_panjang' => strip_tags(str_replace(',', '', @$_POST['produk_panjang'][$i])),
 							'produksi_produksi_qty' => strip_tags(str_replace(',', '', @$_POST['produk_qty'][$i])),	
 							'produksi_produksi_panjang_total' => strip_tags(str_replace(',', '', @$_POST['produk_panjang_total'][$i])),
-							'produksi_produksi_status' => $produk_status,			
-						);	
+							'produksi_produksi_status' => @$_POST['produk_status'][$i],			
+						);
 
 				$this->query_builder->update('t_produksi_produksi', $set2, ['produksi_produksi_id' => $produk_id]);
 
@@ -241,6 +244,7 @@ class Produksi extends CI_Controller{
 				$barang_id = @$_POST['id'][$i];
 
 				$set3 = array(
+							'produksi_barang_log' => $log_id,
 							'produksi_barang_nomor' => $nomor,
 							'produksi_barang_barang' => strip_tags(@$barang[$i]),
 							'produksi_barang_kode' => @$_POST['kode'][$i],
@@ -260,7 +264,18 @@ class Produksi extends CI_Controller{
 					$this->query_builder->update('t_produksi_barang',$set3, ['produksi_barang_id' => $barang_id]);
 				}
 			}
-			
+
+			//log produksi
+			$set4 = array(
+							'produksi_log_id' => $log_id,
+							'produksi_log_produksi' => $id,
+						);
+
+			//delete & save
+    		$this->db->query("DELETE FROM t_produksi_log WHERE produksi_log_id = '$log_id'");
+			$this->query_builder->add('t_produksi_log',$set4);
+			//
+
 			//update kartu stok
 			$this->stok->transaksi();
 			$this->kartu->add($nomor, 'produksi_keluar');
@@ -417,6 +432,9 @@ class Produksi extends CI_Controller{
 		$data['data'] = $this->query_builder->view_row("SELECT * FROM t_produksi WHERE produksi_id = '$id'");
 
 		$data['url'] = 'rotate';
+
+		//id log
+		$data['log_id'] = $this->query_builder->count("SELECT * FROM t_produksi_log") + 1;
 
 		$data["title"] = 'antrian (so)';
 	    $this->load->view('v_template_admin/admin_header',$data);

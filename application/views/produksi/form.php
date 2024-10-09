@@ -10,7 +10,7 @@
     font-size: large;
     background: black;
     color: white; 
-    margin-bottom: 15px; 
+    margin-bottom: 15px;  
   }
 </style> 
  
@@ -42,6 +42,7 @@
               <label>Nomor Produksi</label>
               <input type="text" name="nomor" class="form-control" required id="nomor">
               <input type="hidden" name="proses" class="form-control" required id="proses" value="0">
+              <input type="hidden" name="log_id" class="form-control" required id="log_id" value="<?=@$log_id?>">
             </div>
             <div class="form-group">
               <label>Tanggal Produksi</label>
@@ -119,6 +120,7 @@
         <table class="table table-responsive table-borderless">
           <thead>
             <tr>
+              <th width="150">id</th>
               <th width="150">Produk</th>
               <th width="150">Konversi <span class="stn">Mtr</span></th>
               <th width="150">Batang <span class="stn">Btg</span></th>
@@ -126,12 +128,19 @@
               <th width="150">Qty <span class="stn">text</span></th>  
 
               <th>Panjang <span class="stn">Mtr</span></th>
+              <th>Status </th>
+
               <th width="1"><button type="button" onclick="clone('1')" class="add_produk btn btn-success btn-sm"><i class="fa fa-plus"></i></button></th>
             </tr>
           </thead>
           <tbody id="paste1"> 
 
              <tr id="copy1">
+
+              <td>
+                <input readonly type="text" name="produk_id[]" class="produk_id form-control" value="0" required>
+              </td>
+
               <td>
                 <select required id="produk" class="produk form-control" name="produk[]">
                   <option value="" hidden>-- Pilih --</option>
@@ -163,11 +172,7 @@
                 <input readonly type="text" name="produk_panjang_total[]" class="produk_panjang_total form-control" value="0" min="1" step="any">
               </td>
 
-              <td hidden>
-                <input type="text" name="produk_id[]" class="produk_id">
-              </td>
-
-              <td hidden>
+              <td>
                 <input type="text" name="produk_status[]" value="1" class="produk_status">
               </td>
               
@@ -208,7 +213,7 @@
                 <th width="200">Stok <span class="stn">Mtr</span></th>   
                 <th hidden width="200">Berat / Meter <span class="stn">Kg</span></th>           
                 <th width="200">Panjang <span class="stn">Mtr</span></th>
-                <th width="200" hidden>Status</th>
+                <th width="200" >Status</th>
                 <th width="200" hidden>Total <span class="stn">Rp</span></th>
                 <th><button type="button" onclick="clone('2')" class="add btn btn-success btn-sm"><i class="fa fa-plus"></i></button></th>
               </tr>
@@ -255,7 +260,7 @@
                   <input type="number" name="panjang[]" class="panjang form-control" required value="0" min="1" step="any">
                 </td>
 
-                <td hidden>
+                <td >
                   <input type="number" name="status[]" class="status form-control" required value="1" min="1" step="any">
                 </td>
 
@@ -522,6 +527,8 @@ $(document).on('change', '.produk', function() {
     $('#copy'+target).find('.produk_panjang').val(0);
     $('#copy'+target).find('.produk_batang').val(0); 
     $('#copy'+target).find('.id').val(0);
+    $('#copy'+target).find('.produk_status').val(1);
+    $('#copy'+target).find('.status').val(1);
 
     //produk
     $('#copy'+target).find('.qty_produk').val(0);

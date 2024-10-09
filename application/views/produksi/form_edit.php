@@ -55,18 +55,18 @@
 
           //spandex or hollow
           if (konversi != 0) {
-            $('#copy1:nth-child('+i+') > td:nth-child(3) > input').removeAttr('readonly');
-            $('#copy1:nth-child('+i+') > td:nth-child(4) > input').attr('readonly', true);
+            $('#copy1:nth-child('+i+') > td:nth-child(4) > input').removeAttr('readonly');
+            $('#copy1:nth-child('+i+') > td:nth-child(5) > input').attr('readonly', true);
           }
 
           //insert value
-          $('#copy1:nth-child('+i+') > td:nth-child(1) > select').val(val.produksi_produksi_produk); 
-          $('#copy1:nth-child('+i+') > td:nth-child(2) > input').val(konversi);
-          $('#copy1:nth-child('+i+') > td:nth-child(3) > input').val(val.produksi_produksi_batang);
-          $('#copy1:nth-child('+i+') > td:nth-child(4) > input').val(val.produksi_produksi_panjang);
-          $('#copy1:nth-child('+i+') > td:nth-child(5) > input').val(val.produksi_produksi_qty);
-          $('#copy1:nth-child('+i+') > td:nth-child(6) > input').val(val.produksi_produksi_panjang_total);  
-          $('#copy1:nth-child('+i+') > td:nth-child(7) > input').val(val.produksi_produksi_id);  
+          $('#copy1:nth-child('+i+') > td:nth-child(1) > input').val(val.produksi_produksi_id);
+          $('#copy1:nth-child('+i+') > td:nth-child(2) > select').val(val.produksi_produksi_produk); 
+          $('#copy1:nth-child('+i+') > td:nth-child(3) > input').val(konversi);
+          $('#copy1:nth-child('+i+') > td:nth-child(4) > input').val(val.produksi_produksi_batang);
+          $('#copy1:nth-child('+i+') > td:nth-child(5) > input').val(val.produksi_produksi_panjang);
+          $('#copy1:nth-child('+i+') > td:nth-child(6) > input').val(val.produksi_produksi_qty);
+          $('#copy1:nth-child('+i+') > td:nth-child(7) > input').val(val.produksi_produksi_panjang_total);
 
         });
 
@@ -115,7 +115,8 @@
           $('#copy2:nth-child('+i+') > td:nth-child(6) > input').val(val.produksi_barang_stok); 
           $('#copy2:nth-child('+i+') > td:nth-child(7) > input').val(val.produksi_barang_berat);  
           $('#copy2:nth-child('+i+') > td:nth-child(8) > input').val(val.produksi_barang_panjang);
-          $('#copy2:nth-child('+i+') > td:nth-child(9) > input').val(val.produksi_barang_total);
+          $('#copy2:nth-child('+i+') > td:nth-child(9) > input').val(val.produksi_barang_status);
+          $('#copy2:nth-child('+i+') > td:nth-child(10) > input').val(val.produksi_barang_total);
 
           //jasa
           $('#jasa').val('<?=@$data['produksi_jasa']?>');
