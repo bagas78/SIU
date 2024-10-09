@@ -205,7 +205,7 @@
                             return "<span>"+moment(data).format("DD/MM/YYYY  LT")+"</span>";
                           }
                         },
-                        { "data": "produksi_nomor",
+                        { "data": "produksi_log_id",
                         "render":  
                         function( data ) {
                             return "<a href='<?php echo base_url('produksi/cetak3/')?>"+data+"'><button class='btn btn-xs btn-warning'><i class='fa fa-file-text' title='cetak'></i> Produksi detail</button></a> ";
@@ -217,7 +217,7 @@
                             return "<a class='action-selesai' href='<?php echo base_url('produksi/selesai/')?>"+data+"'><button class='btn-selesai btn btn-xs btn-success'><i class='fa fa-check' title='selesai produksi'></i> Selesai Produksi</button></a> ";
                           }
                         },
-                        { "data": "produksi_id",
+                        { "data": "produksi_log_id",
                         "render": 
                         function( data ) {
                             return "<a class='view' href='<?php echo base_url('produksi/proses_view/')?>"+data+"'><button class='btn btn-xs btn-success'><i class='fa fa-eye'></i></button></a> "+

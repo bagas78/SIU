@@ -24,10 +24,10 @@
   //cek SO
   if ('<?=$this->uri->segment(2)?>' == 'proses_so') {
 
-    var url = "<?=base_url('produksi/get_produksi/'.$data['produksi_nomor'].'/0')?>";
+    var url = "<?=base_url('produksi/get_produksi/'.@$data['produksi_nomor'].'/0')?>";
   }else{
 
-    var url = "<?=base_url('produksi/get_produksi/'.$data['produksi_nomor'])?>";
+    var url = "<?=base_url('produksi/get_produksi/'.@$data['produksi_nomor'].'/1/'.@$data['produksi_log_id'])?>";
   }
 
   $.ajax({
@@ -79,10 +79,10 @@
     //cek SO
     if ('<?=$this->uri->segment(2)?>' == 'proses_so') {
 
-      var url_1 = "<?=base_url('produksi/get_bahan_baku/'.$data['produksi_nomor'].'/0')?>";
+      var url_1 = "<?=base_url('produksi/get_bahan_baku/'.@$data['produksi_nomor'].'/0')?>";
     }else{
 
-      var url_1 = "<?=base_url('produksi/get_bahan_baku/'.$data['produksi_nomor'])?>";
+      var url_1 = "<?=base_url('produksi/get_bahan_baku/'.@$data['produksi_nomor'].'/1/'.@$data['produksi_log_id'])?>";
     }
 
     $.ajax({

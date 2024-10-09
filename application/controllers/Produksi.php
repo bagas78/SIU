@@ -5,6 +5,7 @@ class Produksi extends CI_Controller{
 		parent::__construct();  
 		$this->load->model('m_produksi'); 
 		$this->load->model('m_produksi_so'); 
+		$this->load->model('m_produksi_log'); 
 		$this->load->model('m_produk');
 		$this->load->model('m_bahan');  
 	}     
@@ -215,8 +216,15 @@ class Produksi extends CI_Controller{
 				$produk_id = @$_POST['produk_id'][$i];
 				$produk_status = @$_POST['produk_status'][$i];
 
+				//filter log
+				if ($produk_status == 1) {
+					$log = $log_id;
+				}else{
+					$log = '';
+				}
+
 				$set2 = array(
-							'produksi_produksi_log' => $log_id,
+							'produksi_produksi_log' => $log,
 							'produksi_produksi_nomor' => $nomor,
 							'produksi_produksi_produk' => strip_tags(@$produk[$i]),
 							'produksi_produksi_konversi' => strip_tags(str_replace(',', '', @$_POST['produk_konversi'][$i])),
@@ -224,7 +232,7 @@ class Produksi extends CI_Controller{
 							'produksi_produksi_panjang' => strip_tags(str_replace(',', '', @$_POST['produk_panjang'][$i])),
 							'produksi_produksi_qty' => strip_tags(str_replace(',', '', @$_POST['produk_qty'][$i])),	
 							'produksi_produksi_panjang_total' => strip_tags(str_replace(',', '', @$_POST['produk_panjang_total'][$i])),
-							'produksi_produksi_status' => @$_POST['produk_status'][$i],			
+							'produksi_produksi_status' => $produk_status,			
 						);
 
 				$this->query_builder->update('t_produksi_produksi', $set2, ['produksi_produksi_id' => $produk_id]);
@@ -343,15 +351,28 @@ class Produksi extends CI_Controller{
 
 		echo json_encode($data);
 	}
-	function get_produksi($nomor, $status = 1){
+	function get_produksi($nomor, $status = 1, $log = ''){
 
-		$data = $this->query_builder->view("SELECT * FROM t_produksi_produksi AS a LEFT JOIN t_produk AS b ON a.produksi_produksi_produk = b.produk_id WHERE a.produksi_produksi_nomor = '$nomor' AND a.produksi_produksi_status = '$status'");
+		if ($log != '') {
+			
+			$data = $this->query_builder->view("SELECT * FROM t_produksi_produksi AS a LEFT JOIN t_produk AS b ON a.produksi_produksi_produk = b.produk_id WHERE a.produksi_produksi_nomor = '$nomor' AND a.produksi_produksi_status = '$status' AND a.produksi_produksi_log = '$log'");
+
+		}else{
+
+			$data = $this->query_builder->view("SELECT * FROM t_produksi_produksi AS a LEFT JOIN t_produk AS b ON a.produksi_produksi_produk = b.produk_id WHERE a.produksi_produksi_nomor = '$nomor' AND a.produksi_produksi_status = '$status'");
+		}
 
 		echo json_encode($data);
 	}
-	function get_bahan_baku($nomor, $status = 1){  
+	function get_bahan_baku($nomor, $status = 1, $log = ''){  
 
-		$data = $this->query_builder->view("SELECT * FROM t_produksi_barang as a LEFT JOIN t_produksi as b ON a.produksi_barang_nomor = b.produksi_nomor LEFT JOIN t_bahan as c ON a.produksi_barang_barang = c.bahan_id LEFT JOIN t_satuan as d ON c.bahan_satuan = d.satuan_id WHERE a.produksi_barang_nomor = '$nomor' AND a.produksi_barang_status = '$status'");
+		if ($log != '') {
+			
+			$data = $this->query_builder->view("SELECT * FROM t_produksi_barang as a LEFT JOIN t_produksi as b ON a.produksi_barang_nomor = b.produksi_nomor LEFT JOIN t_bahan as c ON a.produksi_barang_barang = c.bahan_id LEFT JOIN t_satuan as d ON c.bahan_satuan = d.satuan_id WHERE a.produksi_barang_nomor = '$nomor' AND a.produksi_barang_status = '$status' AND produksi_barang_log = '$log'");
+		}else{
+
+			$data = $this->query_builder->view("SELECT * FROM t_produksi_barang as a LEFT JOIN t_produksi as b ON a.produksi_barang_nomor = b.produksi_nomor LEFT JOIN t_bahan as c ON a.produksi_barang_barang = c.bahan_id LEFT JOIN t_satuan as d ON c.bahan_satuan = d.satuan_id WHERE a.produksi_barang_nomor = '$nomor' AND a.produksi_barang_status = '$status'");
+		}
 
 		echo json_encode($data); 
 	}
@@ -468,8 +489,8 @@ class Produksi extends CI_Controller{
 	}
 	function proses_get_data()
 	{
-		$model = 'm_produksi';
-		$where = array('produksi_hapus' => '0', 'produksi_proses !=' => '0');
+		$model = 'm_produksi_log';
+		$where = array('produksi_log_hapus' => '0');
 
 		$output = $this->serverside($where, $model);
 		echo json_encode($output);
@@ -547,7 +568,7 @@ class Produksi extends CI_Controller{
 	function proses_view($id){
 
 		$data = $this->add();
-		$data['data'] = $this->query_builder->view_row("SELECT * FROM t_produksi WHERE produksi_id = '$id'");
+		$data['data'] = $this->query_builder->view_row("SELECT * FROM t_produksi as a JOIN t_produksi_log as b ON a.produksi_id = b.produksi_log_produksi WHERE produksi_log_id = '$id'");
 
 		$data['url'] = 'proses';
 		$data['view'] = 1;
@@ -591,9 +612,9 @@ class Produksi extends CI_Controller{
 	    $this->load->view('produksi/produksi-cetak',$data);
 	}	
 
-	function cetak3($nomor){ 
+	function cetak3($log){ 
 
-		$data['data_produksi'] = $this->query_builder->view("SELECT * FROM t_produksi_produksi AS a JOIN t_produk AS b ON a.produksi_produksi_produk = b.produk_id WHERE a.produksi_produksi_nomor = '$nomor'");
+		$data['data_produksi'] = $this->query_builder->view("SELECT * FROM t_produksi_produksi AS a JOIN t_produk AS b ON a.produksi_produksi_produk = b.produk_id WHERE a.produksi_produksi_log = '$log'");
 
 		$data['data'] = $this->query_builder->view("
 			SELECT * FROM t_produksi_barang as a 
@@ -601,7 +622,7 @@ class Produksi extends CI_Controller{
 			LEFT JOIN t_bahan as c ON a.produksi_barang_barang = c.bahan_id 
 			LEFT JOIN t_satuan as d ON c.bahan_satuan = d.satuan_id
 			LEFT JOIN t_bahan_item as e ON e.bahan_item_id = a.produksi_barang_kode 
-			WHERE a.produksi_barang_nomor = '$nomor'");
+			WHERE a.produksi_barang_log = '$log'");
 
 		$this->load->view('produksi/produksi-cetak3',$data);
 	}
