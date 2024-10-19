@@ -3,7 +3,7 @@
 class M_produksi_log extends CI_Model { 
 
 	//nama tabel
-	var $table = 't_produksi_log'; 
+	var $table = 't_produksi_log';   
 
 	//kolom yang di tampilkan
 	var $column_order = array(null, 'produksi_log_id'); 
@@ -63,8 +63,8 @@ class M_produksi_log extends CI_Model {
 	{
 		$this->_get_datatables_query();
 		if($_GET['length'] != -1)
-		$this->db->join('t_produksi', 't_produksi.produksi_id = t_produksi_log.produksi_log_produksi');
-		$this->db->join('t_user', 't_user.user_id = t_produksi.produksi_shift');
+		$this->db->join('t_produksi', 't_produksi.produksi_nomor = t_produksi_log.produksi_log_nomor');
+		$this->db->join('t_user', 't_user.user_id = t_produksi_log.produksi_log_shift');
 		$this->db->where($where);
 		$this->db->limit($_GET['length'], $_GET['start']);
 		$query = $this->db->get();
@@ -74,8 +74,8 @@ class M_produksi_log extends CI_Model {
 	function count_filtered($where)
 	{
 		$this->_get_datatables_query();
-		$this->db->join('t_produksi', 't_produksi.produksi_id = t_produksi_log.produksi_log_produksi');
-		$this->db->join('t_user', 't_user.user_id = t_produksi.produksi_shift');
+		$this->db->join('t_produksi', 't_produksi.produksi_nomor = t_produksi_log.produksi_log_nomor');
+		$this->db->join('t_user', 't_user.user_id = t_produksi_log.produksi_log_shift');
 		$this->db->where($where);
 		$query = $this->db->get();
 		return $query->num_rows();
@@ -84,8 +84,8 @@ class M_produksi_log extends CI_Model {
 	public function count_all($where)
 	{
 		$this->db->from($this->table);
-		$this->db->join('t_produksi', 't_produksi.produksi_id = t_produksi_log.produksi_log_produksi');
-		$this->db->join('t_user', 't_user.user_id = t_produksi.produksi_shift');
+		$this->db->join('t_produksi', 't_produksi.produksi_nomor = t_produksi_log.produksi_log_nomor');
+		$this->db->join('t_user', 't_user.user_id = t_produksi_log.produksi_log_shift');
 		$this->db->where($where);
 		return $this->db->count_all_results();
 	}

@@ -1,7 +1,7 @@
 <?php $set = $this->query_builder->view_row("SELECT * FROM t_logo"); ?>
 
 <!DOCTYPE html>
-<html>
+<html> 
 <head>
 	<meta charset="utf-8"> 
 	<meta name="viewport" content="width=device-width, initial-scale=1">

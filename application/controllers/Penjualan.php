@@ -521,11 +521,12 @@ class Penjualan extends CI_Controller{
 		}
 	}
 	function so_view($id){
-		
+
 		$active = 'produk';
 		$data = $this->edit($id, $active, 1);
 
 		$data['view'] = 1;
+		$data["title"] = 'SO';
 
 	    $this->load->view('v_template_admin/admin_header',$data);
 	    $this->load->view('penjualan/form');

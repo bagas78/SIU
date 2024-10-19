@@ -10,7 +10,7 @@
     font-size: large;
     background: black;
     color: white; 
-    margin-bottom: 15px;  
+    margin-bottom: 15px;   
   }
 </style> 
  
@@ -296,8 +296,11 @@
               </tr>
               <tr class="save">
                 <td colspan="8" align="right">
-                  <button type="submit" class="btn btn-primary">Simpan <i class="fa fa-check"></i></button>
+                  <button onclick="send()" type="button" class="btn btn-primary">Simpan <i class="fa fa-check"></i></button>
                   <a href="<?= @$_SERVER['HTTP_REFERER'] ?>"><button type="button" class="btn btn-danger">Batal <i class="fa fa-times"></i></button></a>
+
+                  <!-- submit -->
+                  <button type="submit" hidden></button>
                 </td>
               </tr>
 
@@ -625,8 +628,17 @@ $(document).on('change', '.produk', function() {
     $.get('<?=base_url('produksi/get_kode/')?>'+id+'/'+gudang, function(data) {
 
       var val = $.parseJSON(data);
+      var stok = val['bahan_item_panjang'];
 
-      target.find('.stok').val(val['bahan_item_panjang']);
+      if (stok > 0) {
+
+        target.find('.stok').val(stok);
+      }else{
+
+        target.find('#kode').val('').change();
+        target.find('.stok').val('');
+        alert_sweet('Stok Kosong');
+      }
 
     });
 
@@ -643,31 +655,72 @@ $(document).on('change', '.produk', function() {
 
   });
 
-  //submit validation
-  $('form').on('submit', function() {
-      
-      var err = 0;
-      $.each($('.bahan'), function(index, val) {
-         
-         var stok = $(this).closest('tr').find('.stok').val().replaceAll(',', '');
-         var panjang = $(this).closest('tr').find('.panjang').val().replaceAll(',', '');
+  function send(){
 
-         if (Number(stok) < panjang) {
+    var panjang_produksi = Number($('#produk_panjang_total').val());
+    var panjang_bahan = 0;
+    $.each($('.panjang'), function() {
+        
+        panjang_bahan += Number($(this).val());
+    });
 
-          err += 1;
+    if (panjang_bahan > panjang_produksi) {
 
-         }
+      swal({
+        title: "Panjang bahan lebih besar dari produksi",
+        text: "Apakah tetap mau lanjut save ?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          
+          $('form').find('[type="submit"]').trigger('click');
+          
+        }
 
       });
 
-      if (err != 0) {
+    }
 
-        alert_sweet('Terdapat panjang yang lebih dari stok');
-        return false;
-      }else{
+    if (panjang_bahan < panjang_produksi) {
 
-        return true;
-      }
+      alert_sweet('Bahan tidak lebih kecil dari total produksi');
+    }
+
+    if (panjang_bahan == panjang_produksi) {
+      
+      $('form').find('[type="submit"]').trigger('click');
+    }
+
+  }
+
+  //submit validation
+  $('form').on('submit', function() {
+
+      // var err = 0;
+      // $.each($('.bahan'), function(index, val) {
+         
+      //    var stok = $(this).closest('tr').find('.stok').val().replaceAll(',', '');
+      //    var panjang = $(this).closest('tr').find('.panjang').val().replaceAll(',', '');
+
+      //    if (Number(stok) < panjang) {
+
+      //     err += 1;
+
+      //    }
+
+      // });
+
+      // if (err != 0) {
+
+      //   alert_sweet('Terdapat panjang yang lebih dari stok');
+        //return false;
+      // }else{
+
+      //   return true;
+      // }
 
   });
 

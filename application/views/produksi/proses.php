@@ -5,7 +5,7 @@
     color: white;
   }
 </style>
-
+ 
     <!-- Main content --> 
     <section class="content">
   
@@ -211,7 +211,7 @@
                             return "<a href='<?php echo base_url('produksi/cetak3/')?>"+data+"'><button class='btn btn-xs btn-warning'><i class='fa fa-file-text' title='cetak'></i> Produksi detail</button></a> ";
                           }
                         },
-                        { "data": "produksi_nomor",
+                        { "data": "produksi_log_id",
                         "render":  
                         function( data ) {
                             return "<a class='action-selesai' href='<?php echo base_url('produksi/selesai/')?>"+data+"'><button class='btn-selesai btn btn-xs btn-success'><i class='fa fa-check' title='selesai produksi'></i> Selesai Produksi</button></a> ";
@@ -260,13 +260,13 @@
                             return "<span>"+data+"</span>";
                           }
                         },
-                        { "data": "produksi_tanggal",
+                        { "data": "produksi_log_tanggal",
                         "render": 
                         function( data ) {
                             return "<span>"+moment(data).format("DD/MM/YYYY  LT")+"</span>";
                           }
                         },
-                        { "data": "produksi_nomor",
+                        { "data": "produksi_log_id",
                         "render":  
                         function( data ) {
                             return "<a href='<?php echo base_url('produksi/surat/')?>"+data+"'><button class='btn btn-xs btn-primary'><i class='fa fa-file-text' title='cetak surat jalan'></i> Cetak Surat Jalan</button></a> ";

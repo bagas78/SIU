@@ -19,7 +19,7 @@ class Produksi extends CI_Controller{
 
 		$output = array(  
 			"draw" => $_GET["draw"],
-			"recordsTotal" => $total,
+			"recordsTotal" => $total, 
 			"recordsFiltered" => $filter,
 			"data" => $data,
 		);
@@ -51,6 +51,7 @@ class Produksi extends CI_Controller{
 
 	function save($redirect, $proses, $so = 0, $so_tanggal = '')
 	{
+		$log_id = @$_POST['log_id'];
 		$nomor = strip_tags(@$_POST['nomor']);
 		$grandtotal = strip_tags(str_replace(',', '', @$_POST['grandtotal']));
 		$set1 = array(
@@ -97,6 +98,7 @@ class Produksi extends CI_Controller{
 			for ($i = 0; $i < $jum_produk; ++$i) {
 
 				$set2 = array(
+							'produksi_produksi_log' => $log_id,
 							'produksi_produksi_nomor' => $nomor,
 							'produksi_produksi_produk' => strip_tags(@$produk[$i]),
 							'produksi_produksi_konversi' => strip_tags(str_replace(',', '', @$_POST['produk_konversi'][$i])),
@@ -117,6 +119,8 @@ class Produksi extends CI_Controller{
 			for ($i = 0; $i < $jum_barang; ++$i) {
 
 				$set3 = array(
+							'produksi_barang_status' => 1,
+							'produksi_barang_log' => $log_id,
 							'produksi_barang_nomor' => $nomor,
 							'produksi_barang_barang' => strip_tags(@$barang[$i]),
 							'produksi_barang_kode' => @$_POST['kode'][$i],
@@ -129,6 +133,23 @@ class Produksi extends CI_Controller{
 
 				$this->query_builder->add('t_produksi_barang',$set3);
 			}
+
+			//log produksi
+			$set4 = array(
+							'produksi_log_id' => $log_id,
+							'produksi_log_nomor' => $nomor,
+							'produksi_log_tanggal' => strip_tags(@$_POST['tanggal']),
+							'produksi_log_shift' => strip_tags(@$_POST['shift']),
+							'produksi_log_gudang' => strip_tags(@$_POST['gudang']),
+							'produksi_log_pekerja' => json_encode(@$_POST['pekerja']),
+							'produksi_log_mesin' => strip_tags(@$_POST['mesin']),
+							'produksi_log_keterangan' => strip_tags(@$_POST['keterangan']),
+						);
+
+			//delete & save
+    		$this->db->query("DELETE FROM t_produksi_log WHERE produksi_log_id = '$log_id'");
+			$this->query_builder->add('t_produksi_log',$set4);
+			//
 			
 			//update dan kartu stok
 			$this->stok->transaksi();
@@ -151,24 +172,24 @@ class Produksi extends CI_Controller{
 
 		//get id
 		$log_id = @$_POST['log_id'];
-		$xnomor = strip_tags(@$_POST['nomor']);
-		$xdb = $this->query_builder->view_row("SELECT * FROM t_produksi WHERE produksi_nomor = '$xnomor'");
+		$nomor = strip_tags(@$_POST['nomor']);
+		$xdb = $this->query_builder->view_row("SELECT * FROM t_produksi WHERE produksi_nomor = '$nomor'");
 		$id = $xdb['produksi_id'];
 		$so_proses = strip_tags(@$_POST['proses']);
 
-		if ($so == 1 && $so_proses == 2) {
+		// if ($so == 1 && $so_proses == 2) {
 
-			//SO jadi PR
-			$nomor = str_replace('SO', 'PR', $xnomor);
+		// 	//SO jadi PR
+		// 	$nomor = str_replace('SO', 'PR', $xnomor);
 
-			//update produksi & barang
-			$this->query_builder->update('t_produksi_produksi', ['produksi_produksi_nomor' => $nomor], ['produksi_produksi_nomor' => $xnomor]);
+		// 	//update produksi & barang
+		// 	$this->query_builder->update('t_produksi_produksi', ['produksi_produksi_nomor' => $nomor], ['produksi_produksi_nomor' => $xnomor]);
 
-			$this->query_builder->update('t_produksi_barang', ['produksi_barang_nomor' => $nomor], ['produksi_barang_nomor' => $xnomor]);
-		}else{
-			//tetap
-			$nomor = $xnomor;
-		}
+		// 	$this->query_builder->update('t_produksi_barang', ['produksi_barang_nomor' => $nomor], ['produksi_barang_nomor' => $xnomor]);
+		// }else{
+		// 	//tetap
+		// 	$nomor = $xnomor;
+		// }
 
 		$grandtotal = strip_tags(str_replace(',', '', @$_POST['grandtotal']));
 		$set1 = array(
@@ -276,7 +297,13 @@ class Produksi extends CI_Controller{
 			//log produksi
 			$set4 = array(
 							'produksi_log_id' => $log_id,
-							'produksi_log_produksi' => $id,
+							'produksi_log_nomor' => $nomor,
+							'produksi_log_tanggal' => strip_tags(@$_POST['tanggal']),
+							'produksi_log_shift' => strip_tags(@$_POST['shift']),
+							'produksi_log_gudang' => strip_tags(@$_POST['gudang']),
+							'produksi_log_pekerja' => json_encode(@$_POST['pekerja']),
+							'produksi_log_mesin' => strip_tags(@$_POST['mesin']),
+							'produksi_log_keterangan' => strip_tags(@$_POST['keterangan']),
 						);
 
 			//delete & save
@@ -490,15 +517,15 @@ class Produksi extends CI_Controller{
 	function proses_get_data()
 	{
 		$model = 'm_produksi_log';
-		$where = array('produksi_log_hapus' => '0');
+		$where = array('produksi_log_hapus' => '0', 'produksi_log_selesai' => '0');
 
 		$output = $this->serverside($where, $model);
 		echo json_encode($output);
 	}
 	function selesai_get_data()
 	{
-		$model = 'm_produksi';
-		$where = array('produksi_hapus' => '0', 'produksi_selesai' => '1');
+		$model = 'm_produksi_log';
+		$where = array('produksi_log_hapus' => '0', 'produksi_log_selesai' => '1');
 
 		$output = $this->serverside($where, $model);
 		echo json_encode($output);
@@ -518,6 +545,9 @@ class Produksi extends CI_Controller{
 
 	    //produk
 	    $data['produk_data'] = $this->query_builder->view("SELECT * FROM t_produk WHERE produk_hapus = 0");
+
+	    //id log
+		$data['log_id'] = $this->query_builder->count("SELECT * FROM t_produksi_log") + 1;
 
 		$data["title"] = $redirect;
 	    $this->load->view('v_template_admin/admin_header',$data);
@@ -548,7 +578,7 @@ class Produksi extends CI_Controller{
 
 	function proses_delete($id){
 		
-		$table = 'produksi';
+		$table = 'produksi_log';
 		$redirect = 'proses';
 		$this->delete($table, $id, $redirect);
 	}
@@ -568,7 +598,7 @@ class Produksi extends CI_Controller{
 	function proses_view($id){
 
 		$data = $this->add();
-		$data['data'] = $this->query_builder->view_row("SELECT * FROM t_produksi as a JOIN t_produksi_log as b ON a.produksi_id = b.produksi_log_produksi WHERE produksi_log_id = '$id'");
+		$data['data'] = $this->query_builder->view_row("SELECT * FROM t_produksi as a JOIN t_produksi_log as b ON a.produksi_nomor = b.produksi_log_nomor WHERE produksi_log_id = '$id'");
 
 		$data['url'] = 'proses';
 		$data['view'] = 1;
@@ -576,7 +606,7 @@ class Produksi extends CI_Controller{
 		$data["title"] = 'proses';
 	    $this->load->view('v_template_admin/admin_header',$data);
 	    $this->load->view('produksi/form');
-	    $this->load->view('produksi/form_edit'); 
+	    $this->load->view('produksi/form_edit_log'); 
 	    $this->load->view('v_template_admin/admin_footer');
 	}
 
@@ -643,26 +673,30 @@ class Produksi extends CI_Controller{
 		echo json_encode($data);
 
 	}
-	function selesai($nomor){
+	function selesai($id){
 
-		$set = ["produksi_selesai" => 1];
-		$where = ["produksi_nomor" => $nomor, "produksi_proses" => 2];
-		$db = $this->query_builder->update("t_produksi",$set,$where);
+		$set = ["produksi_log_selesai" => 1];
+		$where = ["produksi_log_id" => $id];
+		$db = $this->query_builder->update("t_produksi_log",$set,$where);
 
 		if ($db == 1) {
 			$this->session->set_userdata('success', "Data berhasil di simpan");
 		} else {
-			$this->session->set_userdata('gagal','Masih ada barang yang belum di proses');
+			$this->session->set_userdata('gagal','Data gagal di simpan');
 		}
 
 		redirect(base_url('produksi/proses'));
 		
 	}
-	function surat($nomor){
+	function surat($id){
 
 		$user = $this->session->userdata('id');
 		$level = $this->session->userdata('level');
 		$tanggal = date('Y-m-d');
+
+		//nomor 
+		$x = $this->query_builder->view_row("SELECT * FROM t_produksi_log as a JOIN t_produksi as b ON a.produksi_log_nomor = b.produksi_nomor WHERE a.produksi_log_id = '$id'");
+		$nomor = $x['produksi_nomor'];
 
 		//cek
 		$cek = $this->query_builder->view_row("SELECT * FROM t_cetak WHERE cetak_nomor = '$nomor' AND cetak_user = '$user' AND cetak_level = '$level'");
@@ -706,7 +740,7 @@ class Produksi extends CI_Controller{
 
 		if (@$cetak == 1) {
 			
-			$data['data'] = $this->query_builder->view("SELECT * FROM t_produksi as a JOIN t_user as b ON a.produksi_shift = b.user_id JOIN t_produksi_produksi as c ON a.produksi_nomor = c.produksi_produksi_nomor LEFT JOIN t_produk as d ON c.produksi_produksi_produk = d.produk_id WHERE a.produksi_nomor = '$nomor'");
+			$data['data'] = $this->query_builder->view("SELECT * FROM t_produksi_log AS a JOIN t_produksi AS b ON a.produksi_log_nomor = b.produksi_nomor LEFT JOIN t_produksi_produksi AS c ON a.produksi_log_id = c.produksi_produksi_log LEFT JOIN t_produk AS d ON c.produksi_produksi_produk = d.produk_id LEFT JOIN t_user AS e ON a.produksi_log_shift = e.user_id WHERE a.produksi_log_id = '$id'");
 		}
 
 		$data["title"] = 'surat jalan';
