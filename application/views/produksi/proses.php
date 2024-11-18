@@ -4,6 +4,11 @@
     padding: 0.5%;
     color: white;
   }
+  @media only screen and (min-width:1281px) {
+    .w-modal {
+      width: 70%;
+    }
+  }
 </style>
  
     <!-- Main content --> 
@@ -11,7 +16,7 @@
   
       <div class="box">    
         <div class="box-header with-border">
- 
+  
           <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
               <i class="fa fa-minus"></i></button>
@@ -22,8 +27,12 @@
         <div class="box-body">
           <h4 align="center" class="tit">Antrean Pesanan (SO)</h4>
 
-          <button onclick="fil()" class="btn btn-info">Urutkan Produksi <i class="fa fa-filter"></i></button>
-          <br/><br/>
+          <div class="row">
+              <div class="col-md-2">
+                  <button onclick="fil()" class="btn btn-info">Urutkan Produksi <i class="fa fa-filter"></i></button>
+              </div>
+          </div>
+          <br/>
 
           <table id="example1" class="table table-bordered table-hover" style="width: 100%;">
             <thead>
@@ -48,7 +57,20 @@
         <div class="box-header with-border">
           
           <div align="left" class="produksi_add">
-            <a href="<?= base_url('produksi/proses_add/') ?>"><button class="btn btn-primary"><i class="fa fa-plus"></i> Tambah</button></a>
+
+            <div class="row">
+                <div class="col-md-1" style="margin-right: 10px;">
+                    <a href="<?= base_url('produksi/proses_add/') ?>"><button class="btn btn-primary"><i class="fa fa-plus"></i> Tambah</button></a>
+                </div>
+                <div class="col-md-4">
+                    <select class="group-produk form-control select2">
+                        <option value=""></option>
+                        <?php foreach ($produk_data as $v): ?>
+                            <option value="<?=$v['produk_id']?>"><?=$v['produk_nama']?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+            </div>
           </div>
 
           <div class="box-tools pull-right">
@@ -111,6 +133,39 @@
         </div>       
       </div>
       <!-- /.box -->
+
+    <div class="modal fade" id="modal-default">
+      <div class="modal-dialog w-modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title"></h4>
+          </div>
+          <div class="modal-body">
+
+            <table class="table table-bordered">
+                <tr>
+                    <th>Nama Produk</th>
+                    <td id="produk-nama"></td>
+                </tr>
+                <tr>
+                    <th>Total Panjang</th>
+                    <td id="produk-total"></td>
+                </tr>
+            </table>
+            
+            <table class="table table-bordered">
+                <tbody id="produk-bahan"></tbody>
+            </table>
+
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 
 <script type="text/javascript">
     var table1;
@@ -342,6 +397,73 @@ function auto() {
     }, 100);
   }
 
-  auto();  
+  auto();
+
+  //search group produk 
+  $(document).ready(function() {
+
+      $('.group-produk').on('change', function() {
+        
+        let id = $(this).val();
+
+        $.ajax({
+                url: '<?=base_url('produksi/group_produk')?>',
+                type: 'POST',
+                dataType: 'json',
+                data: {id: id},
+            })
+            .done(function(response) {
+
+                //empty
+                $('#produk-bahan').empty();
+                $('#produk-nama').empty();
+                $('#produk-total').empty();
+                
+                if (response != '') {
+
+                    let total = 0;
+                    let nama = '';
+                    let html = '';
+                    $.each(response, function(index1, val1) {
+                         
+                        total += Number(val1['panjang']);
+                        nama = val1['nama'];
+
+                        html += `<tr class="bg-alice">
+                                <th>${val1['nomor']}</th>
+                                <td>Panjang</td>
+                                </tr>`;
+                         
+                        //get bahan
+                        $.get('<?=base_url('produksi/group_bahan/')?>'+val1['log'], function(data) {
+                            
+                            let arr = $.parseJSON(data); 
+                            $.each(arr, function(index2, val2) {
+                                
+                                 html += `<tr>
+                                        <td>${val2['nama']}</td>
+                                        <td>${val2['panjang']} Meter</td>
+                                        </tr>`;
+                            });
+
+                            $('#produk-bahan').append(html);
+               
+                        });
+                    });
+
+                    $('#produk-nama').text(nama);
+                    $('#produk-total').text(total+' Meter');
+
+                    $('#modal-default').modal('toggle');
+                }else{
+
+                    alert_sweet('Produk tidak di temukan');
+                }
+
+            });
+      
+    }); 
+
+  });
 
 </script>

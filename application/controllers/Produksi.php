@@ -20,7 +20,7 @@ class Produksi extends CI_Controller{
 		$output = array(  
 			"draw" => $_GET["draw"],
 			"recordsTotal" => $total, 
-			"recordsFiltered" => $filter,
+			"recordsFiltered" => $filter, 
 			"data" => $data,
 		);
  
@@ -510,6 +510,9 @@ class Produksi extends CI_Controller{
 		//filter run
 		$this->sort();
 
+		//produk
+		$data['produk_data'] = $this->query_builder->view("SELECT * FROM t_produk WHERE produk_hapus = 0");
+
 	    $this->load->view('v_template_admin/admin_header',$data);
 	    $this->load->view('produksi/proses');
 	    $this->load->view('v_template_admin/admin_footer');
@@ -745,5 +748,18 @@ class Produksi extends CI_Controller{
 
 		$data["title"] = 'surat jalan';
 	    $this->load->view('produksi/surat',$data); 
+	}
+	function group_produk(){
+
+		$id = @$_POST['id'];
+
+		$data = $this->query_builder->view("SELECT b.produksi_produksi_log AS log, a.produksi_nomor AS nomor, c.produk_nama AS nama, SUM(b.produksi_produksi_panjang_total) as panjang FROM t_produksi AS a JOIN t_produksi_produksi AS b ON a.produksi_nomor = b.produksi_produksi_nomor JOIN t_produk AS c ON b.produksi_produksi_produk = c.produk_id WHERE a.produksi_proses = 2 AND a.produksi_hapus = 0 AND b.produksi_produksi_status = 1 AND b.produksi_produksi_produk = '$id' GROUP BY a.produksi_nomor");
+
+		echo json_encode($data);		
+	}
+	function group_bahan($log){
+		$data = $this->query_builder->view("SELECT b.bahan_nama AS nama,  REPLACE((a.produksi_barang_panjang),'.00','') AS panjang FROM t_produksi_barang AS a JOIN t_bahan AS b ON a.produksi_barang_barang = b.bahan_id WHERE a.produksi_barang_log = '$log'");
+
+		echo json_encode($data);
 	}
 }
