@@ -430,8 +430,10 @@ function auto() {
                         nama = val1['nama'];
 
                         html += `<tr class="bg-alice">
-                                <th>${val1['nomor']}</th>
-                                <td>Panjang</td>
+                                <th>Nama Bahan</th>
+                                <th>Nomor Transaksi</th>
+                                <th>Panjang</th>
+                                <th>Katerangan</th>
                                 </tr>`;
                          
                         //get bahan
@@ -442,7 +444,9 @@ function auto() {
                                 
                                  html += `<tr>
                                         <td>${val2['nama']}</td>
+                                        <td>${val2['nomor']}</td>
                                         <td>${val2['panjang']} Meter</td>
+                                        <td>${val2['keterangan']}</td>
                                         </tr>`;
                             });
 

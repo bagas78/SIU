@@ -758,7 +758,7 @@ class Produksi extends CI_Controller{
 		echo json_encode($data);		
 	}
 	function group_bahan($log){
-		$data = $this->query_builder->view("SELECT b.bahan_nama AS nama,  REPLACE((a.produksi_barang_panjang),'.00','') AS panjang FROM t_produksi_barang AS a JOIN t_bahan AS b ON a.produksi_barang_barang = b.bahan_id WHERE a.produksi_barang_log = '$log'");
+		$data = $this->query_builder->view("SELECT b.bahan_nama AS nama, a.produksi_barang_nomor AS nomor, c.produksi_log_keterangan AS keterangan, REPLACE((a.produksi_barang_panjang),'.00','') AS panjang FROM t_produksi_barang AS a JOIN t_bahan AS b ON a.produksi_barang_barang = b.bahan_id JOIN t_produksi_log AS c ON a.produksi_barang_log = c.produksi_log_id WHERE a.produksi_barang_log = '$log'");
 
 		echo json_encode($data);
 	}
