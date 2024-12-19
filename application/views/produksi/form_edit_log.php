@@ -3,11 +3,11 @@
   //atribut form
   $('#nomor').val('<?=@$data['produksi_nomor']?>');
   $('#tanggal').val('<?=@$data['produksi_log_tanggal']?>');
-  $('#shift').val('<?=@$data['produksi_log_shift']?>').change();
   $('#keterangan').val('<?=@$data['produksi_log_keterangan']?>'); 
   $('#mesin').val('<?=@$data['produksi_log_mesin']?>').change();   
   $('#gudang').val('<?=@$data['produksi_log_gudang']?>');
   $('#proses').val('<?=@$data['produksi_proses']?>');
+  $('#pelanggan').val('<?=@$data['produksi_pelanggan']?>').change();
  
   if ('<?=@$data['produksi_log_pekerja']?>' != '') { 
     $('#pekerja').val(<?=@$data['produksi_log_pekerja']?>).change();  

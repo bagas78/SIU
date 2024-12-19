@@ -64,8 +64,7 @@ class M_produk_stok extends CI_Model {
 		$this->db->select('*');
 		$this->db->select('IFNULL(gudang_nama, "-") AS gudang');
 		$this->db->select('IFNULL(SUM(produk_gudang_panjang), 0) AS stok');
-		$this->db->select('IFNULL(produk_gudang_harga, 0) AS harga');
-		$this->_get_datatables_query();
+		$this->_get_datatables_query(); 
 		if($_GET['length'] != -1)
 		$this->db->where($where);
 		$this->db->join('t_produk_gudang', 't_produk_gudang.produk_gudang_produk = t_produk.produk_id');

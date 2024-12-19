@@ -49,20 +49,20 @@
               <input step="any" type="datetime-local" name="tanggal" class="form-control" required id="tanggal">
             </div>
             <div class="form-group">
-              <label>Shift</label>
-              <select name="shift" class="form-control select2" required id="shift">
-                <option value="" hidden>-- Pilih --</option>
-                <?php foreach ($user_data as $u): ?>
-                  <option value="<?= $u['user_id']?>"><?= $u['user_name']?></option>
-                <?php endforeach ?>
-              </select>
-            </div>
-            <div class="form-group">
               <label>Gudang</label>
               <select name="gudang" class="form-control select2" required id="gudang">
                 <option value="" hidden>-- Pilih --</option>
                 <?php foreach ($gudang_data as $g): ?>
                   <option value="<?= $g['gudang_id']?>"><?= $g['gudang_nama']?></option>
+                <?php endforeach ?>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Pelanggan</label>
+              <select name="pelanggan" class="form-control select2" required id="pelanggan">
+                <option value="" hidden>-- Pilih --</option>
+                <?php foreach ($kontak_data as $s): ?>
+                  <option value="<?= $s['kontak_id']?>"><?= $s['kontak_nama']?></option>
                 <?php endforeach ?>
               </select>
             </div>
@@ -121,7 +121,7 @@
           <thead>
             <tr>
               <th hidden width="150">id</th>
-              <th width="150">Produk</th>
+              <th width="250">Produk</th>
               <th width="150">Konversi <span class="stn">Mtr</span></th>
               <th width="150">Batang <span class="stn">Btg</span></th>
               <th width="150">Panjang <span class="stn">text</span></th>

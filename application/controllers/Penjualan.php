@@ -109,8 +109,10 @@ class Penjualan extends CI_Controller{
 		$gudang = strip_tags(@$_POST['gudang']);
 		$pelanggan = strip_tags(@$_POST['pelanggan']);
 		$pembayaran = strip_tags(@$_POST['pembayaran']);
+		$user = $this->session->userdata('id');
 
 		$set1 = array(
+						'penjualan_user' => $user,
 						'penjualan_proses' => $proses,
 						'penjualan_so' => $so,
 						'penjualan_so_tanggal' => $so_tanggal,
@@ -204,6 +206,7 @@ class Penjualan extends CI_Controller{
 				
 				//save produksi
 				$set4 = array(
+								'produksi_user' => $user,
 								'produksi_so' => 1,
 								'produksi_nomor' => $nomor,
 								'produksi_gudang' => $gudang,

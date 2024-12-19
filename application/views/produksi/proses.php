@@ -10,7 +10,7 @@
     }
   }
 </style>
- 
+  
     <!-- Main content --> 
     <section class="content">
   
@@ -430,6 +430,7 @@ function auto() {
                         nama = val1['nama'];
 
                         html += `<tr class="bg-alice">
+                                <th>Order</th>
                                 <th>Nama Bahan</th>
                                 <th>Nomor Transaksi</th>
                                 <th>Panjang</th>
@@ -443,6 +444,7 @@ function auto() {
                             $.each(arr, function(index2, val2) {
                                 
                                  html += `<tr>
+                                        <td>${val2['pelanggan']}</td>
                                         <td>${val2['nama']}</td>
                                         <td>${val2['nomor']}</td>
                                         <td>${val2['panjang']} Meter</td>

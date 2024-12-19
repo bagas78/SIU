@@ -450,6 +450,12 @@ thead{
           </a>
           <ul class="treeview-menu">
 
+            <li class="laporan_kasir">
+              <a href="<?= base_url('close/kasir') ?>">
+                <i class="material-icons">more_horiz</i>
+                <span class="multi-li">Kasir</span>
+              </a>
+            </li>
             <li class="laporan_bahan">
               <a href="<?= base_url('laporan/stok_bahan') ?>">
                 <i class="material-icons">more_horiz</i>

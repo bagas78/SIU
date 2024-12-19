@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 19, 2024 at 06:37 PM
+-- Generation Time: Dec 19, 2024 at 05:58 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -124,7 +124,7 @@ CREATE TABLE `t_bahan_gudang` (
 
 INSERT INTO `t_bahan_gudang` (`bahan_gudang_id`, `bahan_gudang_bahan`, `bahan_gudang_gudang`, `bahan_gudang_berat_permeter`, `bahan_gudang_berat`, `bahan_gudang_panjang`, `bahan_gudang_hpp`, `bahan_gudang_tanggal`) VALUES
 (12, '28', '0', '0.00', '0.00', '0.00', '0.00', '2024-06-18'),
-(13, '29', '0', '2.21', '8165.95', '3701.00', '17100.90', '2024-06-18'),
+(13, '29', '0', '2.21', '3094.00', '1406.00', '17100.90', '2024-06-18'),
 (14, '28', '2', '0.00', '0.00', '0.00', '0.00', '2024-06-21'),
 (15, '29', '2', '0.00', '0.00', '0.00', '0.00', '2024-06-21'),
 (16, '30', '2', '0.00', '0.00', '0.00', '0.00', '2024-06-21'),
@@ -165,8 +165,8 @@ INSERT INTO `t_bahan_item` (`bahan_item_id`, `bahan_item_gudang`, `bahan_item_ba
 (32, '2', '32', 'MM003', '20.00', '10.00', '2024-06-22'),
 (33, '2', '32', 'MM004', '20.00', '10.00', '2024-06-22'),
 (34, '2', '32', 'MM005', '20.00', '10.00', '2024-06-22'),
-(35, '0', '29', 'GRTU 223805', '3745.95', '1698.00', '2024-06-25'),
-(36, '0', '29', 'GRTU 223806', '4420.00', '2003.00', '2024-06-25'),
+(35, '0', '29', 'GRTU 223805', '4420.00', '2003.00', '2024-06-25'),
+(36, '0', '29', 'GRTU 223806', '-1326.00', '-597.00', '2024-06-25'),
 (37, '0', '31', 'LQZH1375FT', '4024.00', '1700.00', '2024-07-09'),
 (38, '0', '31', 'LWZH1371FT', '4012.00', '1698.00', '2024-07-09'),
 (39, '0', '31', 'LWZH1373FT', '4012.00', '1699.00', '2024-07-09');
@@ -657,7 +657,9 @@ INSERT INTO `t_kartu` (`kartu_id`, `kartu_gudang`, `kartu_jenis`, `kartu_transak
 (460, '0', 'produksi', 'masuk', 'SO-17102024-1', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', '1000.00', NULL, '2024-10-17', '12:18:58', 0),
 (461, '0', 'produksi', 'keluar', 'SO-19102024-3', '29', 'BH002', 'GALVALUME 0.23 X 914', 'Mtr', '250.00', NULL, '2024-10-19', '23:16:15', 0),
 (462, '0', 'produksi', 'masuk', 'SO-19102024-3', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', '200.00', NULL, '2024-10-19', '23:16:15', 0),
-(463, '0', 'produksi', 'masuk', 'SO-19102024-3', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', '100.00', NULL, '2024-10-19', '23:16:15', 0);
+(463, '0', 'produksi', 'masuk', 'SO-19102024-3', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', '100.00', NULL, '2024-10-19', '23:16:15', 0),
+(470, '0', 'penjualan', 'keluar', 'PJ-17122024-1', '6', 'MP001', 'SPANDEK SILVER 0.25', 'Mtr', '2500.00', NULL, '2024-12-17', '15:53:57', 0),
+(471, '0', 'penjualan', 'keluar', 'PJ-17122024-1', '6', 'MP001', 'SPANDEK SILVER 0.25', 'Mtr', '100.00', NULL, '2024-12-17', '15:53:57', 0);
 
 -- --------------------------------------------------------
 
@@ -892,11 +894,11 @@ INSERT INTO `t_pajak` (`pajak_id`, `pajak_jenis`, `pajak_persen`, `pajak_tanggal
 
 CREATE TABLE `t_pembelian` (
   `pembelian_id` int(11) NOT NULL,
-  `pembelian_jumlah` int(11) NOT NULL DEFAULT 0 COMMENT '0 = belum, 1 = sebagian, 2 = selesai',
+  `pembelian_user` text NOT NULL,
+  `pembelian_jumlah` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '0 = belum, 1 = sebagian, 2 = selesai',
   `pembelian_proses` int(11) NOT NULL DEFAULT 0,
   `pembelian_po` int(11) NOT NULL DEFAULT 0,
   `pembelian_po_tanggal` date DEFAULT NULL,
-  `pembelian_user` text NOT NULL,
   `pembelian_nomor` text NOT NULL,
   `pembelian_supplier` text NOT NULL,
   `pembelian_ekspedisi` text NOT NULL,
@@ -921,14 +923,14 @@ CREATE TABLE `t_pembelian` (
 -- Dumping data for table `t_pembelian`
 --
 
-INSERT INTO `t_pembelian` (`pembelian_id`, `pembelian_jumlah`, `pembelian_proses`, `pembelian_po`, `pembelian_po_tanggal`, `pembelian_user`, `pembelian_nomor`, `pembelian_supplier`, `pembelian_ekspedisi`, `pembelian_gudang`, `pembelian_tanggal`, `pembelian_jam`, `pembelian_jatuh_tempo`, `pembelian_status`, `pembelian_pelunasan`, `pembelian_pelunasan_keterangan`, `pembelian_pembayaran`, `pembelian_keterangan`, `pembelian_lampiran`, `pembelian_subtotal`, `pembelian_ekspedisi_total`, `pembelian_ppn`, `pembelian_grandtotal`, `pembelian_hapus`) VALUES
-(11, 2, 0, 0, '2024-06-20', '5', 'PB-20062024-1', '22', '4', '0', '2024-06-20', '10:46:10', '0000-00-00', 'lunas', NULL, '', 'tunai', 'PO di proses', '', '190', '20000', '0', '3072000', 0),
-(12, 5, 0, 0, '2024-06-21', '5', 'PB-21062024-2', '24', '4', '2', '2024-06-21', '08:03:03', '0000-00-00', 'lunas', NULL, '', 'tunai', '', '', '30', '0', '11', '470000', 0),
-(13, 5, 1, 1, '2024-06-22', '5', 'PB-22062024-3', '92', '4', '2', '2024-06-22', '07:59:30', '0000-00-00', 'lunas', NULL, '', 'tunai', '', '', '40', '0', '11', '636000', 0),
-(14, 2, 0, 1, '2024-06-25', '5', 'PB-25062024-4', '23', '4', '0', '2024-06-25', '08:42:01', '2024-07-25', 'belum', NULL, '', '7', '', '', '8850', '11500000', '11', '151330000', 0),
-(15, 2, 0, 1, '2024-06-25', '5', 'PB-25062024-4', '23', '4', '0', '2024-06-25', '08:42:03', '2024-07-25', 'belum', NULL, '', '7', '', '', '8850', '11500000', '11', '151330000', 0),
-(16, 2, 1, 1, '2024-06-25', '5', 'PB-25062024-6', '22', '4', '0', '2024-06-25', '14:41:27', '2024-07-25', 'belum', NULL, '', '7', '', '', '8840', '11500000', '11', '151172000', 0),
-(17, 3, 1, 1, '2024-07-09', '5', 'PB-09072024-7', '24', '4', '0', '2024-07-09', '10:18:38', '2024-07-22', 'belum', NULL, '', '7', '', '', '12048', '11700000', '11', '193224800', 0);
+INSERT INTO `t_pembelian` (`pembelian_id`, `pembelian_user`, `pembelian_jumlah`, `pembelian_proses`, `pembelian_po`, `pembelian_po_tanggal`, `pembelian_nomor`, `pembelian_supplier`, `pembelian_ekspedisi`, `pembelian_gudang`, `pembelian_tanggal`, `pembelian_jam`, `pembelian_jatuh_tempo`, `pembelian_status`, `pembelian_pelunasan`, `pembelian_pelunasan_keterangan`, `pembelian_pembayaran`, `pembelian_keterangan`, `pembelian_lampiran`, `pembelian_subtotal`, `pembelian_ekspedisi_total`, `pembelian_ppn`, `pembelian_grandtotal`, `pembelian_hapus`) VALUES
+(11, '5', 2, 0, 0, '2024-06-20', 'PB-20062024-1', '22', '4', '0', '2024-06-20', '10:46:10', '0000-00-00', 'lunas', NULL, '', 'tunai', 'PO di proses', '', '190', '20000', '0', '3072000', 0),
+(12, '5', 5, 0, 0, '2024-06-21', 'PB-21062024-2', '24', '4', '2', '2024-06-21', '08:03:03', '0000-00-00', 'lunas', NULL, '', 'tunai', '', '', '30', '0', '11', '470000', 0),
+(13, '5', 5, 1, 1, '2024-06-22', 'PB-22062024-3', '92', '4', '2', '2024-06-22', '07:59:30', '0000-00-00', 'lunas', NULL, '', 'tunai', '', '', '40', '0', '11', '636000', 0),
+(14, '5', 2, 0, 1, '2024-06-25', 'PB-25062024-4', '23', '4', '0', '2024-06-25', '08:42:01', '2024-07-25', 'belum', NULL, '', '7', '', '', '8850', '11500000', '11', '151330000', 0),
+(15, '5', 2, 0, 1, '2024-06-25', 'PB-25062024-4', '23', '4', '0', '2024-06-25', '08:42:03', '2024-07-25', 'belum', NULL, '', '7', '', '', '8850', '11500000', '11', '151330000', 0),
+(16, '5', 2, 1, 1, '2024-06-25', 'PB-25062024-6', '22', '4', '0', '2024-06-25', '14:41:27', '2024-07-25', 'belum', NULL, '', '7', '', '', '8840', '11500000', '11', '151172000', 0),
+(17, '5', 3, 1, 1, '2024-07-09', 'PB-09072024-7', '24', '4', '0', '2024-07-09', '10:18:38', '2024-07-22', 'belum', NULL, '', '7', '', '', '12048', '11700000', '11', '193224800', 0);
 
 -- --------------------------------------------------------
 
@@ -1070,6 +1072,7 @@ CREATE TABLE `t_pembelian_umum_barang` (
 
 CREATE TABLE `t_penjualan` (
   `penjualan_id` int(11) NOT NULL,
+  `penjualan_user` text NOT NULL,
   `penjualan_proses` text NOT NULL,
   `penjualan_so` int(11) NOT NULL DEFAULT 0,
   `penjualan_so_tanggal` date NOT NULL,
@@ -1099,8 +1102,8 @@ CREATE TABLE `t_penjualan` (
 -- Dumping data for table `t_penjualan`
 --
 
-INSERT INTO `t_penjualan` (`penjualan_id`, `penjualan_proses`, `penjualan_so`, `penjualan_so_tanggal`, `penjualan_nomor`, `penjualan_pelanggan`, `penjualan_tanggal`, `penjualan_jam`, `penjualan_jatuh_tempo`, `penjualan_pembayaran`, `penjualan_keterangan`, `penjualan_ambil`, `penjualan_lampiran`, `penjualan_subtotal`, `penjualan_ppn`, `penjualan_grandtotal`, `penjualan_piutang`, `penjualan_status`, `penjualan_pelunasan`, `penjualan_pelunasan_jumlah`, `penjualan_pelunasan_keterangan`, `penjualan_gudang`, `penjualan_ekspedisi`, `penjualan_hapus`) VALUES
-(38, '0', 1, '0000-00-00', 'SO-19102024-1', '20', '2024-10-19', '23:35:08', '0000-00-00', 'tunai', 'SO', 'iya', '', '4400000', '0', '4400000', '0', 'lunas', NULL, '0', NULL, '0', NULL, 0);
+INSERT INTO `t_penjualan` (`penjualan_id`, `penjualan_user`, `penjualan_proses`, `penjualan_so`, `penjualan_so_tanggal`, `penjualan_nomor`, `penjualan_pelanggan`, `penjualan_tanggal`, `penjualan_jam`, `penjualan_jatuh_tempo`, `penjualan_pembayaran`, `penjualan_keterangan`, `penjualan_ambil`, `penjualan_lampiran`, `penjualan_subtotal`, `penjualan_ppn`, `penjualan_grandtotal`, `penjualan_piutang`, `penjualan_status`, `penjualan_pelunasan`, `penjualan_pelunasan_jumlah`, `penjualan_pelunasan_keterangan`, `penjualan_gudang`, `penjualan_ekspedisi`, `penjualan_hapus`) VALUES
+(40, '5', '1', 1, '0000-00-00', 'PJ-17122024-1', '20', '2024-12-17', '15:53:57', '0000-00-00', 'tunai', 'SO di jual', 'iya', '', '301200000', '0', '301200000', '0', 'lunas', NULL, '0', NULL, '0', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -1128,8 +1131,8 @@ CREATE TABLE `t_penjualan_barang` (
 --
 
 INSERT INTO `t_penjualan_barang` (`penjualan_barang_id`, `penjualan_barang_nomor`, `penjualan_barang_barang`, `penjualan_barang_stok`, `penjualan_barang_panjang`, `penjualan_barang_konversi`, `penjualan_barang_batang`, `penjualan_barang_qty`, `penjualan_barang_panjang_total`, `penjualan_barang_harga`, `penjualan_barang_hps`, `penjualan_barang_total`) VALUES
-(100, 'SO-19102024-1', '6', '0.00', '20.00', '0', '0', '10', '200.00', '12000', '0', '2400000'),
-(101, 'SO-19102024-1', '6', '0.00', '10.00', '0', '0', '10', '100.00', '20000', '0', '2000000');
+(105, 'PJ-17122024-1', '6', '2600.00', '50.00', '0', '0', '50', '2500.00', '120000', '0', '300000000'),
+(106, 'PJ-17122024-1', '6', '2600.00', '10.00', '0', '0', '10', '100.00', '12000', '', '1200000');
 
 -- --------------------------------------------------------
 
@@ -1239,15 +1242,15 @@ INSERT INTO `t_produk` (`produk_id`, `produk_kode`, `produk_nama`, `produk_merk`
 
 CREATE TABLE `t_produksi` (
   `produksi_id` int(11) NOT NULL,
+  `produksi_user` text NOT NULL,
+  `produksi_pelanggan` text DEFAULT NULL,
   `produksi_nomor` text NOT NULL,
   `produksi_proses` int(11) NOT NULL DEFAULT 0,
   `produksi_selesai` int(11) DEFAULT 0,
   `produksi_so` int(11) DEFAULT 0,
   `produksi_so_tanggal` date DEFAULT NULL,
-  `produksi_pelanggan` text DEFAULT NULL,
-  `produksi_tanggal` datetime NOT NULL DEFAULT current_timestamp(),
+  `produksi_tanggal` date NOT NULL DEFAULT curdate(),
   `produksi_jam` time NOT NULL DEFAULT current_timestamp(),
-  `produksi_shift` text NOT NULL,
   `produksi_pekerja` text DEFAULT NULL,
   `produksi_gudang` text DEFAULT NULL,
   `produksi_keterangan` text NOT NULL,
@@ -1264,8 +1267,8 @@ CREATE TABLE `t_produksi` (
 -- Dumping data for table `t_produksi`
 --
 
-INSERT INTO `t_produksi` (`produksi_id`, `produksi_nomor`, `produksi_proses`, `produksi_selesai`, `produksi_so`, `produksi_so_tanggal`, `produksi_pelanggan`, `produksi_tanggal`, `produksi_jam`, `produksi_shift`, `produksi_pekerja`, `produksi_gudang`, `produksi_keterangan`, `produksi_mesin`, `produksi_lampiran_1`, `produksi_lampiran_2`, `produksi_subtotal`, `produksi_jasa`, `produksi_grandtotal`, `produksi_hapus`) VALUES
-(56, 'SO-19102024-1', 2, 0, 1, NULL, '20', '2024-10-19 23:35:08', '23:35:08', '84', '[\"11\",\"12\"]', '0', '100', '6', NULL, NULL, 'NaN', '0', 'NaN', 0);
+INSERT INTO `t_produksi` (`produksi_id`, `produksi_user`, `produksi_pelanggan`, `produksi_nomor`, `produksi_proses`, `produksi_selesai`, `produksi_so`, `produksi_so_tanggal`, `produksi_tanggal`, `produksi_jam`, `produksi_pekerja`, `produksi_gudang`, `produksi_keterangan`, `produksi_mesin`, `produksi_lampiran_1`, `produksi_lampiran_2`, `produksi_subtotal`, `produksi_jasa`, `produksi_grandtotal`, `produksi_hapus`) VALUES
+(60, '5', '20', 'SO-17122024-1', 2, 0, 1, NULL, '2024-12-17', '15:53:57', '[\"11\",\"12\"]', '0', 'di proses', '6', NULL, NULL, 'NaN', '0', 'NaN', 0);
 
 -- --------------------------------------------------------
 
@@ -1293,8 +1296,8 @@ CREATE TABLE `t_produksi_barang` (
 --
 
 INSERT INTO `t_produksi_barang` (`produksi_barang_id`, `produksi_barang_log`, `produksi_barang_nomor`, `produksi_barang_stok`, `produksi_barang_barang`, `produksi_barang_kode`, `produksi_barang_panjang`, `produksi_barang_berat`, `produksi_barang_harga`, `produksi_barang_total`, `produksi_barang_status`, `produksi_barang_tanggal`) VALUES
-(99, '1', 'SO-19102024-1', '2003.00', '29', '35', '200.00', '2.21', '17100.90', '342018000', '1', '2024-10-19'),
-(100, '2', 'SO-19102024-1', '1803.00', '29', '35', '105.00', '2.21', '17100.90', '179559450', '1', '2024-10-19');
+(104, '1', 'SO-17122024-1', '2003.00', '29', '36', '1300.00', '2.21', '0', '0', '1', '2024-12-17'),
+(105, '1', 'SO-17122024-1', '2003.00', '29', '35', '1300.00', '2.21', '17100.90', '2223117000', '1', '2024-12-17');
 
 -- --------------------------------------------------------
 
@@ -1307,7 +1310,6 @@ CREATE TABLE `t_produksi_log` (
   `produksi_log_nomor` text DEFAULT NULL,
   `produksi_log_selesai` int(11) DEFAULT 0,
   `produksi_log_tanggal` datetime DEFAULT curdate(),
-  `produksi_log_shift` text DEFAULT NULL,
   `produksi_log_gudang` text DEFAULT NULL,
   `produksi_log_pekerja` text DEFAULT NULL,
   `produksi_log_mesin` text DEFAULT NULL,
@@ -1319,9 +1321,8 @@ CREATE TABLE `t_produksi_log` (
 -- Dumping data for table `t_produksi_log`
 --
 
-INSERT INTO `t_produksi_log` (`produksi_log_id`, `produksi_log_nomor`, `produksi_log_selesai`, `produksi_log_tanggal`, `produksi_log_shift`, `produksi_log_gudang`, `produksi_log_pekerja`, `produksi_log_mesin`, `produksi_log_keterangan`, `produksi_log_hapus`) VALUES
-(1, 'SO-19102024-1', 0, '2024-10-19 23:35:08', '78', '0', '[\"11\",\"12\"]', '6', '200', 0),
-(2, 'SO-19102024-1', 0, '2024-10-19 23:35:08', '84', '0', '[\"11\",\"12\"]', '6', '100', 0);
+INSERT INTO `t_produksi_log` (`produksi_log_id`, `produksi_log_nomor`, `produksi_log_selesai`, `produksi_log_tanggal`, `produksi_log_gudang`, `produksi_log_pekerja`, `produksi_log_mesin`, `produksi_log_keterangan`, `produksi_log_hapus`) VALUES
+(1, 'SO-17122024-1', 1, '2024-12-17 15:54:00', '0', '[\"11\",\"12\"]', '6', 'di proses', 0);
 
 -- --------------------------------------------------------
 
@@ -1348,8 +1349,8 @@ CREATE TABLE `t_produksi_produksi` (
 --
 
 INSERT INTO `t_produksi_produksi` (`produksi_produksi_id`, `produksi_produksi_log`, `produksi_produksi_nomor`, `produksi_produksi_produk`, `produksi_produksi_konversi`, `produksi_produksi_batang`, `produksi_produksi_panjang`, `produksi_produksi_qty`, `produksi_produksi_panjang_total`, `produksi_produksi_status`, `produksi_produksi_tanggal`) VALUES
-(145, '1', 'SO-19102024-1', '6', '0', '0', '20', '10', '200.00', 1, '2024-10-19'),
-(146, '2', 'SO-19102024-1', '6', '0', '0', '10', '10', '100.00', 1, '2024-10-19');
+(150, '1', 'SO-17122024-1', '6', '0', '0', '50', '50', '2500.00', 1, '2024-12-17'),
+(151, '1', 'SO-17122024-1', '6', '0', '0', '10', '10', '100.00', 1, '2024-12-17');
 
 -- --------------------------------------------------------
 
@@ -1373,7 +1374,8 @@ CREATE TABLE `t_produk_gudang` (
 
 INSERT INTO `t_produk_gudang` (`produk_gudang_id`, `produk_gudang_gudang`, `produk_gudang_produk`, `produk_gudang_panjang`, `produk_gudang_hps`, `produk_gudang_tanggal`, `produk_gudang_hapus`) VALUES
 (1, '0', '7', '0.00', '0', '2024-09-16', 0),
-(2, '0', '6', '300.00', '0', '2024-09-25', 0);
+(2, '0', '6', '100.00', '0', '2024-09-25', 0),
+(3, '0', '8', '0.00', '0', '2024-12-16', 0);
 
 -- --------------------------------------------------------
 
@@ -1428,7 +1430,10 @@ INSERT INTO `t_saldo` (`saldo_id`, `saldo_nomor`, `saldo_sumber`, `saldo_nominal
 (8, 'SO-17102024-1', 'penjualan', '31125000', 'tunai', 'setor', 'transaksi penjualan', '2024-10-17 05:18:58', 0),
 (9, 'SO-18102024-2', 'penjualan', '1300000', 'tunai', 'setor', 'transaksi penjualan', '2024-10-18 13:27:22', 0),
 (10, 'SO-19102024-3', 'penjualan', '4500000', 'tunai', 'setor', 'transaksi penjualan', '2024-10-19 16:16:16', 0),
-(13, 'SO-19102024-1', 'penjualan', '4400000', 'tunai', 'setor', 'transaksi penjualan', '2024-10-19 16:35:08', 0);
+(13, 'SO-19102024-1', 'penjualan', '4400000', 'tunai', 'setor', 'transaksi penjualan', '2024-10-19 16:35:08', 0),
+(14, 'SO-16122024-4', 'penjualan', '300000', 'tunai', 'setor', 'transaksi penjualan', '2024-12-16 11:30:28', 0),
+(15, 'SO-17122024-1', 'penjualan', '301200000', 'tunai', 'setor', 'transaksi penjualan', '2024-12-17 08:53:57', 0),
+(16, 'PJ-17122024-1', 'penjualan', '301200000', 'tunai', 'setor', 'transaksi penjualan', '2024-12-17 08:58:53', 0);
 
 -- --------------------------------------------------------
 
@@ -1792,7 +1797,7 @@ ALTER TABLE `t_ekspedisi`
 -- AUTO_INCREMENT for table `t_filter`
 --
 ALTER TABLE `t_filter`
-  MODIFY `filter_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=295;
+  MODIFY `filter_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=317;
 
 --
 -- AUTO_INCREMENT for table `t_gudang`
@@ -1810,7 +1815,7 @@ ALTER TABLE `t_jurnal`
 -- AUTO_INCREMENT for table `t_kartu`
 --
 ALTER TABLE `t_kartu`
-  MODIFY `kartu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=470;
+  MODIFY `kartu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=472;
 
 --
 -- AUTO_INCREMENT for table `t_karyawan`
@@ -1888,13 +1893,13 @@ ALTER TABLE `t_pembelian_umum_barang`
 -- AUTO_INCREMENT for table `t_penjualan`
 --
 ALTER TABLE `t_penjualan`
-  MODIFY `penjualan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `penjualan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `t_penjualan_barang`
 --
 ALTER TABLE `t_penjualan_barang`
-  MODIFY `penjualan_barang_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
+  MODIFY `penjualan_barang_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
 
 --
 -- AUTO_INCREMENT for table `t_penyesuaian`
@@ -1918,25 +1923,25 @@ ALTER TABLE `t_produk`
 -- AUTO_INCREMENT for table `t_produksi`
 --
 ALTER TABLE `t_produksi`
-  MODIFY `produksi_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `produksi_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT for table `t_produksi_barang`
 --
 ALTER TABLE `t_produksi_barang`
-  MODIFY `produksi_barang_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+  MODIFY `produksi_barang_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
 
 --
 -- AUTO_INCREMENT for table `t_produksi_produksi`
 --
 ALTER TABLE `t_produksi_produksi`
-  MODIFY `produksi_produksi_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=147;
+  MODIFY `produksi_produksi_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=152;
 
 --
 -- AUTO_INCREMENT for table `t_produk_gudang`
 --
 ALTER TABLE `t_produk_gudang`
-  MODIFY `produk_gudang_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `produk_gudang_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `t_rekening`
@@ -1948,7 +1953,7 @@ ALTER TABLE `t_rekening`
 -- AUTO_INCREMENT for table `t_saldo`
 --
 ALTER TABLE `t_saldo`
-  MODIFY `saldo_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `saldo_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `t_satuan`

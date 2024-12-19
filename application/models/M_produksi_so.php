@@ -65,7 +65,7 @@ class M_produksi_so extends CI_Model {
 		if($_GET['length'] != -1)
 		
 		$this->db->where($where); 
-		$this->db->join('t_user', 't_produksi.produksi_shift = t_user.user_id', 'LEFT');
+		$this->db->join('t_user', 't_produksi.produksi_user = t_user.user_id', 'LEFT');
 		$this->db->join('t_kontak', 't_produksi.produksi_pelanggan = t_kontak.kontak_id', 'LEFT');
 
 		$this->db->join('t_penjualan', 't_produksi.produksi_nomor = t_penjualan.penjualan_nomor', 'LEFT');
@@ -85,7 +85,7 @@ class M_produksi_so extends CI_Model {
 	function count_filtered($where)
 	{
 		$this->_get_datatables_query();
-		$this->db->join('t_user', 't_produksi.produksi_shift = t_user.user_id', 'LEFT');
+		$this->db->join('t_user', 't_produksi.produksi_user = t_user.user_id', 'LEFT');
 		$this->db->join('t_kontak', 't_produksi.produksi_pelanggan = t_kontak.kontak_id', 'LEFT');
 		$this->db->join('t_produksi_produksi', 't_produksi_produksi.produksi_produksi_nomor = t_produksi.produksi_nomor');
 		$this->db->where($where);
@@ -97,7 +97,7 @@ class M_produksi_so extends CI_Model {
 	public function count_all($where)
 	{
 		$this->db->from($this->table);
-		$this->db->join('t_user', 't_produksi.produksi_shift = t_user.user_id', 'LEFT');
+		$this->db->join('t_user', 't_produksi.produksi_user = t_user.user_id', 'LEFT');
 		$this->db->join('t_kontak', 't_produksi.produksi_pelanggan = t_kontak.kontak_id', 'LEFT');
 				$this->db->join('t_produksi_barang', 't_produksi_barang.produksi_barang_nomor = t_produksi.produksi_nomor');
 		$this->db->join('t_produksi_produksi', 't_produksi_produksi.produksi_produksi_nomor = t_produksi.produksi_nomor');

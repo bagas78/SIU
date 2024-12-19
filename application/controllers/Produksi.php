@@ -46,22 +46,27 @@ class Produksi extends CI_Controller{
 	    //data produk
 	    $data['produk_data'] = $this->query_builder->view("SELECT * FROM t_produk WHERE produk_hapus = 0");
 
+	    //kontak
+	    $data['kontak_data'] = $this->query_builder->view("SELECT * FROM t_kontak WHERE kontak_jenis = 'p' AND kontak_hapus = 0");
+
 	    return $data;
-	}
+	} 
 
 	function save($redirect, $proses, $so = 0, $so_tanggal = '')
 	{
+		$user = $this->session->userdata('id');
 		$log_id = @$_POST['log_id'];
 		$nomor = strip_tags(@$_POST['nomor']);
 		$grandtotal = strip_tags(str_replace(',', '', @$_POST['grandtotal']));
 		$set1 = array(
+					'produksi_user' => $user,
+					'produksi_pelanggan' => strip_tags(@$_POST['pelanggan']),
 					'produksi_proses' => $proses,
 					'produksi_so' => $so,
 					'produksi_so_tanggal' => $so_tanggal,
 					'produksi_pekerja' => json_encode(@$_POST['pekerja']),
 					'produksi_nomor' => $nomor,
 					'produksi_tanggal' => strip_tags(@$_POST['tanggal']),
-					'produksi_shift' => strip_tags(@$_POST['shift']),
 					'produksi_gudang' => strip_tags(@$_POST['gudang']),
 					'produksi_keterangan' => strip_tags(@$_POST['keterangan']),
 					'produksi_mesin' => strip_tags(@$_POST['mesin']), 
@@ -139,7 +144,6 @@ class Produksi extends CI_Controller{
 							'produksi_log_id' => $log_id,
 							'produksi_log_nomor' => $nomor,
 							'produksi_log_tanggal' => strip_tags(@$_POST['tanggal']),
-							'produksi_log_shift' => strip_tags(@$_POST['shift']),
 							'produksi_log_gudang' => strip_tags(@$_POST['gudang']),
 							'produksi_log_pekerja' => json_encode(@$_POST['pekerja']),
 							'produksi_log_mesin' => strip_tags(@$_POST['mesin']),
@@ -198,7 +202,6 @@ class Produksi extends CI_Controller{
 					'produksi_pekerja' => json_encode(@$_POST['pekerja']),
 					'produksi_nomor' => $nomor,
 					'produksi_tanggal' => strip_tags(@$_POST['tanggal']),
-					'produksi_shift' => strip_tags(@$_POST['shift']),
 					'produksi_gudang' => strip_tags(@$_POST['gudang']),
 					'produksi_keterangan' => strip_tags(@$_POST['keterangan']),
 					'produksi_mesin' => strip_tags(@$_POST['mesin']), 
@@ -299,7 +302,6 @@ class Produksi extends CI_Controller{
 							'produksi_log_id' => $log_id,
 							'produksi_log_nomor' => $nomor,
 							'produksi_log_tanggal' => strip_tags(@$_POST['tanggal']),
-							'produksi_log_shift' => strip_tags(@$_POST['shift']),
 							'produksi_log_gudang' => strip_tags(@$_POST['gudang']),
 							'produksi_log_pekerja' => json_encode(@$_POST['pekerja']),
 							'produksi_log_mesin' => strip_tags(@$_POST['mesin']),
@@ -743,7 +745,7 @@ class Produksi extends CI_Controller{
 
 		if (@$cetak == 1) {
 			
-			$data['data'] = $this->query_builder->view("SELECT * FROM t_produksi_log AS a JOIN t_produksi AS b ON a.produksi_log_nomor = b.produksi_nomor LEFT JOIN t_produksi_produksi AS c ON a.produksi_log_id = c.produksi_produksi_log LEFT JOIN t_produk AS d ON c.produksi_produksi_produk = d.produk_id LEFT JOIN t_user AS e ON a.produksi_log_shift = e.user_id WHERE a.produksi_log_id = '$id'");
+			$data['data'] = $this->query_builder->view("SELECT * FROM t_produksi_log AS a JOIN t_produksi AS b ON a.produksi_log_nomor = b.produksi_nomor LEFT JOIN t_produksi_produksi AS c ON a.produksi_log_id = c.produksi_produksi_log LEFT JOIN t_produk AS d ON c.produksi_produksi_produk = d.produk_id LEFT JOIN t_user AS e ON b.produksi_user = e.user_id WHERE a.produksi_log_id = '$id'");
 		}
 
 		$data["title"] = 'surat jalan';
@@ -758,7 +760,7 @@ class Produksi extends CI_Controller{
 		echo json_encode($data);		
 	}
 	function group_bahan($log){
-		$data = $this->query_builder->view("SELECT b.bahan_nama AS nama, a.produksi_barang_nomor AS nomor, c.produksi_log_keterangan AS keterangan, REPLACE((a.produksi_barang_panjang),'.00','') AS panjang FROM t_produksi_barang AS a JOIN t_bahan AS b ON a.produksi_barang_barang = b.bahan_id JOIN t_produksi_log AS c ON a.produksi_barang_log = c.produksi_log_id WHERE a.produksi_barang_log = '$log'");
+		$data = $this->query_builder->view("SELECT e.kontak_nama AS pelanggan, b.bahan_nama AS nama, a.produksi_barang_nomor AS nomor, c.produksi_log_keterangan AS keterangan, REPLACE((a.produksi_barang_panjang),'.00','') AS panjang FROM t_produksi_barang AS a JOIN t_bahan AS b ON a.produksi_barang_barang = b.bahan_id JOIN t_produksi_log AS c ON a.produksi_barang_log = c.produksi_log_id JOIN t_produksi AS d ON a.produksi_barang_nomor = d.produksi_nomor JOIN t_kontak AS e ON d.produksi_pelanggan = e.kontak_id WHERE a.produksi_barang_log = '$log'");
 
 		echo json_encode($data);
 	}

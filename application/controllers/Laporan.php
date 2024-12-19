@@ -6,7 +6,7 @@ class Laporan extends CI_Controller{
 		$this->load->model('m_bahan');
 		$this->load->model('m_produk');
 		$this->load->model('m_produk_stok');
-	}  
+	}   
 	function serverside($where,$model){
 	    $data = $this->$model->get_datatables($where);
 		$total = $this->$model->count_all($where);
@@ -79,11 +79,11 @@ class Laporan extends CI_Controller{
 		    	
 		    	$filter = @$_POST['filter'];
 
-		    	$data['data'] = $this->query_builder->view("SELECT e.gudang_nama AS gudang ,a.produksi_produksi_nomor AS nomor, d.user_name AS shift, c.produk_nama AS produk, a.produksi_produksi_panjang AS jumlah, a.produksi_produksi_tanggal AS tanggal FROM t_produksi_produksi AS a JOIN t_produksi AS b ON a.produksi_produksi_nomor = b.produksi_nomor JOIN t_produk AS c ON a.produksi_produksi_produk = c.produk_id JOIN t_user AS d ON b.produksi_shift = d.user_id JOIN t_gudang AS e ON b.produksi_gudang = e.gudang_id WHERE b.produksi_hapus = 0 AND b.produksi_proses = 1 AND a.produksi_produksi_tanggal = '$filter'");
+		    	$data['data'] = $this->query_builder->view("SELECT e.gudang_nama AS gudang ,a.produksi_produksi_nomor AS nomor, d.user_name AS shift, c.produk_nama AS produk, a.produksi_produksi_panjang AS jumlah, a.produksi_produksi_tanggal AS tanggal FROM t_produksi_produksi AS a JOIN t_produksi AS b ON a.produksi_produksi_nomor = b.produksi_nomor JOIN t_produk AS c ON a.produksi_produksi_produk = c.produk_id JOIN t_user AS d ON b.produksi_user = d.user_id JOIN t_gudang AS e ON b.produksi_gudang = e.gudang_id WHERE b.produksi_hapus = 0 AND b.produksi_proses = 1 AND a.produksi_produksi_tanggal = '$filter'");
 
 		    } else {
 
-		    	$data['data'] = $this->query_builder->view("SELECT e.gudang_nama AS gudang ,a.produksi_produksi_nomor AS nomor, d.user_name AS shift, c.produk_nama AS produk, a.produksi_produksi_panjang AS jumlah, a.produksi_produksi_tanggal AS tanggal FROM t_produksi_produksi AS a JOIN t_produksi AS b ON a.produksi_produksi_nomor = b.produksi_nomor JOIN t_produk AS c ON a.produksi_produksi_produk = c.produk_id JOIN t_user AS d ON b.produksi_shift = d.user_id JOIN t_gudang AS e ON b.produksi_gudang = e.gudang_id WHERE b.produksi_hapus = 0 AND b.produksi_proses = 1");
+		    	$data['data'] = $this->query_builder->view("SELECT e.gudang_nama AS gudang ,a.produksi_produksi_nomor AS nomor, d.user_name AS shift, c.produk_nama AS produk, a.produksi_produksi_panjang AS jumlah, a.produksi_produksi_tanggal AS tanggal FROM t_produksi_produksi AS a JOIN t_produksi AS b ON a.produksi_produksi_nomor = b.produksi_nomor JOIN t_produk AS c ON a.produksi_produksi_produk = c.produk_id JOIN t_user AS d ON b.produksi_user = d.user_id JOIN t_gudang AS e ON b.produksi_gudang = e.gudang_id WHERE b.produksi_hapus = 0 AND b.produksi_proses = 1");
 		    }
 
 		    $this->load->view('v_template_admin/admin_header',$data);
