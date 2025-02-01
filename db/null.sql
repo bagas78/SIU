@@ -14,12 +14,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Dumping data for table siu.t_absen: ~4 rows (approximately)
-INSERT INTO `t_absen` (`absen_id`, `absen_karyawan`, `absen_upah`, `absen_jam`, `absen_tanggal`, `absen_status`, `absen_bayar`) VALUES
-	(34, 2, '55000', '11:46:42', '2024-03-12', 'masuk', 'belum'),
-	(35, 2, '55000', '11:46:42', '2024-04-12', 'masuk', 'belum'),
-	(36, 2, '55000', '11:46:42', '2024-05-12', 'masuk', 'belum'),
-	(37, 3, '70000', '11:53:57', '2024-03-12', 'masuk', 'sudah');
+-- Dumping data for table siu.t_absen: ~0 rows (approximately)
 
 -- Dumping data for table siu.t_bahan: ~30 rows (approximately)
 INSERT INTO `t_bahan` (`bahan_id`, `bahan_kode`, `bahan_nama`, `bahan_satuan`, `bahan_kategori`, `bahan_harga`, `bahan_tanggal`, `bahan_hapus`) VALUES
@@ -54,36 +49,9 @@ INSERT INTO `t_bahan` (`bahan_id`, `bahan_kode`, `bahan_nama`, `bahan_satuan`, `
 	(56, 'BH0029', 'GALVALUM BMT 0.35 AZ100', '', 'utama', '56000', '2024-04-05', 0),
 	(57, 'BH0030', 'PPGL BIRU 0.22 X 914', '', 'utama', '15900', '2024-05-14', 0);
 
--- Dumping data for table siu.t_bahan_gudang: ~7 rows (approximately)
-INSERT INTO `t_bahan_gudang` (`bahan_gudang_id`, `bahan_gudang_bahan`, `bahan_gudang_gudang`, `bahan_gudang_berat_permeter`, `bahan_gudang_berat`, `bahan_gudang_panjang`, `bahan_gudang_hpp`, `bahan_gudang_tanggal`) VALUES
-	(12, '28', '0', 0.00, 0.00, 0.00, 0.00, '2024-06-18'),
-	(13, '29', '0', 2.21, 3094.00, 1406.00, 17100.90, '2024-06-18'),
-	(14, '28', '2', 0.00, 0.00, 0.00, 0.00, '2024-06-21'),
-	(15, '29', '2', 0.00, 0.00, 0.00, 0.00, '2024-06-21'),
-	(16, '30', '2', 0.00, 0.00, 0.00, 0.00, '2024-06-21'),
-	(17, '32', '2', 2.00, 100.00, 50.00, 15900.00, '2024-06-22'),
-	(18, '31', '0', 2.36, 12048.00, 5097.00, 16037.92, '2024-07-09');
+-- Dumping data for table siu.t_bahan_gudang: ~0 rows (approximately)
 
--- Dumping data for table siu.t_bahan_item: ~18 rows (approximately)
-INSERT INTO `t_bahan_item` (`bahan_item_id`, `bahan_item_gudang`, `bahan_item_bahan`, `bahan_item_kode`, `bahan_item_berat`, `bahan_item_panjang`, `bahan_item_tanggal`) VALUES
-	(22, '0', '28', 'GV-1', 0.00, 0.00, '2024-06-18'),
-	(23, '0', '29', 'GV-1', 0.00, 0.00, '2024-06-18'),
-	(24, '0', '29', 'GV-2', 0.00, 0.00, '2024-06-21'),
-	(25, '2', '28', 'A1', 0.00, 0.00, '2024-06-21'),
-	(26, '2', '29', 'A2', 0.00, 0.00, '2024-06-21'),
-	(27, '2', '29', 'A3', 0.00, 0.00, '2024-06-21'),
-	(28, '2', '29', 'A4', 0.00, 0.00, '2024-06-21'),
-	(29, '2', '30', 'A5', 0.00, 0.00, '2024-06-21'),
-	(30, '2', '32', 'MM001', 20.00, 10.00, '2024-06-22'),
-	(31, '2', '32', 'MM002', 20.00, 10.00, '2024-06-22'),
-	(32, '2', '32', 'MM003', 20.00, 10.00, '2024-06-22'),
-	(33, '2', '32', 'MM004', 20.00, 10.00, '2024-06-22'),
-	(34, '2', '32', 'MM005', 20.00, 10.00, '2024-06-22'),
-	(35, '0', '29', 'GRTU 223805', 4420.00, 2003.00, '2024-06-25'),
-	(36, '0', '29', 'GRTU 223806', -1326.00, -597.00, '2024-06-25'),
-	(37, '0', '31', 'LQZH1375FT', 4024.00, 1700.00, '2024-07-09'),
-	(38, '0', '31', 'LWZH1371FT', 4012.00, 1698.00, '2024-07-09'),
-	(39, '0', '31', 'LWZH1373FT', 4012.00, 1699.00, '2024-07-09');
+-- Dumping data for table siu.t_bahan_item: ~0 rows (approximately)
 
 -- Dumping data for table siu.t_bank: ~141 rows (approximately)
 INSERT INTO `t_bank` (`bank_id`, `bank_kode`, `bank_nama`, `bank_tanggal`) VALUES
@@ -230,8 +198,6 @@ INSERT INTO `t_bank` (`bank_id`, `bank_kode`, `bank_nama`, `bank_tanggal`) VALUE
 	(141, '911', 'LINKAJA', '2022-11-30');
 
 -- Dumping data for table siu.t_cetak: ~0 rows (approximately)
-INSERT INTO `t_cetak` (`cetak_id`, `cetak_user`, `cetak_level`, `cetak_jumlah`, `cetak_setujui`, `cetak_berhasil`, `cetak_nomor`, `cetak_tanggal`) VALUES
-	(15, 5, 3, 33, 0, 2, 'PR-18062024-1', '2024-06-20');
 
 -- Dumping data for table siu.t_coa: ~9 rows (approximately)
 INSERT INTO `t_coa` (`coa_id`, `coa_nomor`, `coa_akun`, `coa_sub`, `coa_tanggal`) VALUES
@@ -267,148 +233,9 @@ INSERT INTO `t_gudang` (`gudang_id`, `gudang_kode`, `gudang_nama`, `gudang_keter
 	(0, 'GD000', 'Gudang Utama', NULL, 0, '0000-00-00'),
 	(2, 'GD001', 'Gudang A', NULL, 0, '2023-09-03');
 
--- Dumping data for table siu.t_jurnal: ~42 rows (approximately)
-INSERT INTO `t_jurnal` (`jurnal_id`, `jurnal_nomor`, `jurnal_akun`, `jurnal_keterangan`, `jurnal_type`, `jurnal_nominal`, `jurnal_hapus`, `jurnal_tanggal`) VALUES
-	(1, 'PB-27092023-2', '4', 'stok bahan baku', 'debit', '148000', 0, '2023-09-27'),
-	(2, 'PB-27092023-2', '6', 'utang ( pembelian bahan  )', 'kredit', '148000', 0, '2023-09-27'),
-	(3, 'PR-09102023-1', '9', 'biaya produksi', 'debit', '40000', 0, '2023-10-09'),
-	(4, 'PR-09102023-1', '4', 'stok bahan baku', 'kredit', '40000', 0, '2023-10-09'),
-	(5, 'PR-10102023-1', '9', 'biaya produksi', 'debit', '40000', 0, '2023-10-10'),
-	(6, 'PR-10102023-1', '4', 'stok bahan baku', 'kredit', '40000', 0, '2023-10-10'),
-	(7, 'PR-10102023-1', '9', 'biaya produksi', 'debit', '42000', 0, '2023-10-10'),
-	(8, 'PR-10102023-1', '4', 'stok bahan baku', 'kredit', '42000', 0, '2023-10-10'),
-	(9, 'PR-10102023-1', '9', 'biaya produksi', 'debit', '39000', 0, '2023-10-10'),
-	(10, 'PR-10102023-1', '4', 'stok bahan baku', 'kredit', '39000', 0, '2023-10-10'),
-	(11, 'PB-10102023-3', '4', 'stok bahan baku', 'debit', '2000000', 0, '2023-10-10'),
-	(12, 'PB-10102023-3', '1', 'kas ( pembelian bahan  )', 'kredit', '2000000', 0, '2023-10-10'),
-	(13, 'PR-10102023-1', '9', 'biaya produksi', 'debit', '147000', 0, '2023-10-10'),
-	(14, 'PR-10102023-1', '4', 'stok bahan baku', 'kredit', '147000', 0, '2023-10-10'),
-	(15, 'PR-11102023-1', '9', 'biaya produksi', 'debit', '37000', 0, '2023-10-11'),
-	(16, 'PR-11102023-1', '4', 'stok bahan baku', 'kredit', '37000', 0, '2023-10-11'),
-	(17, 'PR-11102023-1', '9', 'biaya produksi', 'debit', '75000', 0, '2023-10-11'),
-	(18, 'PR-11102023-1', '4', 'stok bahan baku', 'kredit', '75000', 0, '2023-10-11'),
-	(19, 'PR-11102023-1', '9', 'biaya produksi', 'debit', '37100', 0, '2023-10-11'),
-	(20, 'PR-11102023-1', '4', 'stok bahan baku', 'kredit', '37100', 0, '2023-10-11'),
-	(21, 'PR-11102023-1', '9', 'biaya produksi', 'debit', '0', 0, '2023-10-11'),
-	(22, 'PR-11102023-1', '4', 'stok bahan baku', 'kredit', '0', 0, '2023-10-11'),
-	(23, 'PR-11102023-1', '9', 'biaya produksi', 'debit', '37000', 0, '2023-10-11'),
-	(24, 'PR-11102023-1', '4', 'stok bahan baku', 'kredit', '37000', 0, '2023-10-11'),
-	(25, 'PR-11102023-1', '9', 'biaya produksi', 'debit', '37000', 0, '2023-10-11'),
-	(26, 'PR-11102023-1', '4', 'stok bahan baku', 'kredit', '37000', 0, '2023-10-11'),
-	(27, 'PR-11102023-1', '9', 'biaya produksi', 'debit', '47000', 0, '2023-10-11'),
-	(28, 'PR-11102023-1', '4', 'stok bahan baku', 'kredit', '47000', 0, '2023-10-11'),
-	(29, 'PR-11102023-1', '9', 'biaya produksi', 'debit', '38000', 0, '2023-10-11'),
-	(30, 'PR-11102023-1', '4', 'stok bahan baku', 'kredit', '38000', 0, '2023-10-11'),
-	(31, 'PB-17102023-1', '4', 'stok bahan baku', 'debit', '485000', 0, '2023-10-17'),
-	(32, 'PB-17102023-1', '1', 'kas ( pembelian bahan  )', 'kredit', '485000', 0, '2023-10-17'),
-	(33, 'PB-17102023-1', '4', 'stok bahan baku', 'debit', '1850000', 0, '2023-10-17'),
-	(34, 'PB-17102023-1', '1', 'kas ( pembelian bahan  )', 'kredit', '1850000', 0, '2023-10-17'),
-	(35, 'PB-17102023-2', '4', 'stok bahan baku', 'debit', '3850000', 0, '2023-10-17'),
-	(36, 'PB-17102023-2', '6', 'utang ( pembelian bahan  )', 'kredit', '3850000', 0, '2023-10-17'),
-	(37, 'PB-18102023-1', '4', 'stok bahan baku', 'debit', '3850000', 0, '2023-10-18'),
-	(38, 'PB-18102023-1', '1', 'kas ( pembelian bahan  )', 'kredit', '3850000', 0, '2023-10-18'),
-	(39, 'PB-18102023-2', '4', 'stok bahan baku', 'debit', '1850000', 0, '2023-10-18'),
-	(40, 'PB-18102023-2', '1', 'kas ( pembelian bahan  )', 'kredit', '1850000', 0, '2023-10-18'),
-	(41, 'PB-06112023-3', '4', 'stok bahan baku', 'debit', '1850000', 0, '2023-11-06'),
-	(42, 'PB-06112023-3', '1', 'kas ( pembelian bahan  )', 'kredit', '1850000', 0, '2023-11-06');
+-- Dumping data for table siu.t_jurnal: ~0 rows (approximately)
 
--- Dumping data for table siu.t_kartu: ~95 rows (approximately)
-INSERT INTO `t_kartu` (`kartu_id`, `kartu_gudang`, `kartu_jenis`, `kartu_transaksi`, `kartu_nomor`, `kartu_barang`, `kartu_kode`, `kartu_barang_nama`, `kartu_satuan`, `kartu_jumlah`, `kartu_saldo`, `kartu_tanggal`, `kartu_jam`, `kartu_hapus`) VALUES
-	(87, '0', 'pembelian', 'masuk', 'PB-12062024-1', '30', 'BH003', 'GALVALUME 0.27 X 914', 'Mtr', 0.00, NULL, '2024-06-12', '00:39:30', 0),
-	(88, '0', 'pembelian', 'masuk', 'PB-12062024-1', '28', 'BH001', 'GALVALUME 0.20 X 914', 'Mtr', 0.00, NULL, '2024-06-12', '00:39:30', 0),
-	(89, '0', 'pembelian', 'masuk', 'PB-12062024-1', '28', 'BH001', 'GALVALUME 0.20 X 914', 'Mtr', 50.00, NULL, '2024-06-12', '00:39:30', 0),
-	(95, '0', 'pembelian', 'masuk', 'PB-13062024-5', '33', 'BH006', 'PPGL HIJAU 0.23 X 914', 'Mtr', 0.00, NULL, '2024-06-13', '07:59:05', 0),
-	(121, '0', 'pembelian', 'masuk', 'PB-13062024-4', '31', 'BH004', 'GALVALUME 0.33 X 914', 'Mtr', 10.00, NULL, '2024-06-13', '07:56:36', 0),
-	(122, '0', 'pembelian', 'masuk', 'PB-13062024-4', '31', 'BH004', 'GALVALUME 0.33 X 914', 'Mtr', 10.00, NULL, '2024-06-13', '07:56:36', 0),
-	(123, '0', 'pembelian', 'masuk', 'PB-13062024-4', '31', 'BH004', 'GALVALUME 0.33 X 914', 'Mtr', 10.00, NULL, '2024-06-13', '07:56:36', 0),
-	(124, '0', 'pembelian', 'masuk', 'PB-13062024-4', '31', 'BH004', 'GALVALUME 0.33 X 914', 'Mtr', 0.00, NULL, '2024-06-13', '07:56:36', 0),
-	(125, '0', 'pembelian', 'masuk', 'PB-13062024-4', '31', 'BH004', 'GALVALUME 0.33 X 914', 'Mtr', 0.00, NULL, '2024-06-13', '07:56:36', 0),
-	(160, '0', 'pembelian', 'masuk', 'PB-12062024-3', '28', 'BH001', 'GALVALUME 0.20 X 914', 'Mtr', 0.00, NULL, '2024-06-12', '02:10:43', 0),
-	(181, '0', 'pembelian', 'masuk', 'PB-12062024-2', '30', 'BH003', 'GALVALUME 0.27 X 914', 'Mtr', 0.00, NULL, '2024-06-12', '02:07:55', 0),
-	(182, '0', 'pembelian', 'masuk', 'PB-12062024-2', '30', 'BH003', 'GALVALUME 0.27 X 914', 'Mtr', 0.00, NULL, '2024-06-12', '02:07:55', 0),
-	(185, '0', 'pembelian', 'masuk', 'PB-13062024-6', '30', 'BH003', 'GALVALUME 0.27 X 914', 'Mtr', 2003.00, NULL, '2024-06-13', '09:16:23', 0),
-	(186, '0', 'pembelian', 'masuk', 'PB-13062024-6', '30', 'BH003', 'GALVALUME 0.27 X 914', 'Mtr', 0.00, NULL, '2024-06-13', '09:16:23', 0),
-	(197, '0', 'pembelian', 'masuk', 'PB-14062024-1', '28', 'BH001', 'GALVALUME 0.20 X 914', 'Mtr', 0.00, NULL, '2024-06-14', '22:47:16', 0),
-	(198, '0', 'pembelian', 'masuk', 'PB-14062024-1', '28', 'BH001', 'GALVALUME 0.20 X 914', 'Mtr', 0.00, NULL, '2024-06-14', '22:47:16', 0),
-	(207, '0', 'pembelian', 'masuk', 'PB-17062024-1', '28', 'BH001', 'GALVALUME 0.20 X 914', 'Mtr', 0.00, NULL, '2024-06-17', '00:43:01', 0),
-	(208, '0', 'pembelian', 'masuk', 'PB-17062024-1', '28', 'BH001', 'GALVALUME 0.20 X 914', 'Mtr', 0.00, NULL, '2024-06-17', '00:43:01', 0),
-	(231, '0', 'pembelian', 'masuk', 'PB-17062024-2', '28', 'BH001', 'GALVALUME 0.20 X 914', 'Mtr', 60.00, NULL, '2024-06-17', '02:30:29', 0),
-	(232, '0', 'pembelian', 'masuk', 'PB-17062024-2', '29', 'BH002', 'GALVALUME 0.23 X 914', 'Mtr', 180.00, 180.00, '2024-06-17', '02:30:29', 0),
-	(237, '0', 'pembelian', 'masuk', 'PB-18062024-1', '28', 'BH001', 'GALVALUME 0.20 X 914', 'Mtr', 70.00, NULL, '2024-06-18', '11:12:31', 0),
-	(238, '0', 'pembelian', 'masuk', 'PB-18062024-1', '29', 'BH002', 'GALVALUME 0.23 X 914', 'Mtr', 60.00, 240.00, '2024-06-18', '11:12:31', 0),
-	(249, '0', 'produksi', 'keluar', 'PR-18062024-1', '28', 'BH001', 'GALVALUME 0.20 X 914', 'Mtr', 20.00, NULL, '2024-06-19', '11:21:33', 0),
-	(250, '0', 'produksi', 'masuk', 'PR-18062024-1', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', 100.00, NULL, '2024-06-19', '11:21:33', 0),
-	(251, '0', 'produksi', 'masuk', 'PR-18062024-1', '6', 'MP001', 'SPANDEK SILVER 0.25', 'Mtr', 100.00, NULL, '2024-06-19', '11:21:33', 0),
-	(266, '0', 'pembelian', 'masuk', 'PB-20062024-1', '28', 'BH001', 'GALVALUME 0.20 X 914', 'Mtr', 0.00, NULL, '2024-06-20', '10:46:10', 0),
-	(267, '0', 'pembelian', 'masuk', 'PB-20062024-1', '29', 'BH002', 'GALVALUME 0.23 X 914', 'Mtr', 0.00, 240.00, '2024-06-20', '10:46:10', 0),
-	(314, '2', 'pembelian', 'masuk', 'PB-21062024-2', '30', 'BH003', 'GALVALUME 0.27 X 914', 'Mtr', 0.00, NULL, '2024-06-21', '08:03:03', 0),
-	(315, '2', 'pembelian', 'masuk', 'PB-21062024-2', '29', 'BH002', 'GALVALUME 0.23 X 914', 'Mtr', 0.00, 240.00, '2024-06-21', '08:03:03', 0),
-	(316, '2', 'pembelian', 'masuk', 'PB-21062024-2', '29', 'BH002', 'GALVALUME 0.23 X 914', 'Mtr', 0.00, 240.00, '2024-06-21', '08:03:03', 0),
-	(317, '2', 'pembelian', 'masuk', 'PB-21062024-2', '29', 'BH002', 'GALVALUME 0.23 X 914', 'Mtr', 0.00, 240.00, '2024-06-21', '08:03:03', 0),
-	(318, '2', 'pembelian', 'masuk', 'PB-21062024-2', '28', 'BH001', 'GALVALUME 0.20 X 914', 'Mtr', 0.00, NULL, '2024-06-21', '08:03:03', 0),
-	(324, '2', 'pembelian', 'masuk', 'PB-22062024-3', '32', 'BH005', 'PPGL MAROON 0.23 X 914', 'Mtr', 0.00, NULL, '2024-06-22', '07:59:30', 0),
-	(325, '2', 'pembelian', 'masuk', 'PB-22062024-3', '32', 'BH005', 'PPGL MAROON 0.23 X 914', 'Mtr', 0.00, NULL, '2024-06-22', '07:59:30', 0),
-	(326, '2', 'pembelian', 'masuk', 'PB-22062024-3', '32', 'BH005', 'PPGL MAROON 0.23 X 914', 'Mtr', 0.00, NULL, '2024-06-22', '07:59:30', 0),
-	(327, '2', 'pembelian', 'masuk', 'PB-22062024-3', '32', 'BH005', 'PPGL MAROON 0.23 X 914', 'Mtr', 0.00, NULL, '2024-06-22', '07:59:30', 0),
-	(328, '2', 'pembelian', 'masuk', 'PB-22062024-3', '32', 'BH005', 'PPGL MAROON 0.23 X 914', 'Mtr', 0.00, NULL, '2024-06-22', '07:59:30', 0),
-	(334, '0', 'pembelian', 'masuk', 'PB-25062024-6', '29', 'BH002', 'GALVALUME 0.23 X 914', 'Mtr', 0.00, 240.00, '2024-06-25', '14:41:27', 0),
-	(335, '0', 'pembelian', 'masuk', 'PB-25062024-6', '29', 'BH002', 'GALVALUME 0.23 X 914', 'Mtr', 0.00, 240.00, '2024-06-25', '14:41:27', 0),
-	(336, '0', 'produksi', 'keluar', 'PR-25062024-3', '29', 'BH002', 'GALVALUME 0.23 X 914', 'Mtr', 500.00, -260.00, '2024-06-25', '14:47:01', 0),
-	(337, '0', 'produksi', 'masuk', 'PR-25062024-3', '8', 'MP003', 'SPANDEK SILVER 0.35', 'Mtr', 500.00, NULL, '2024-06-25', '14:47:01', 0),
-	(338, '0', 'penjualan', 'keluar', 'PJ-25062024-3', '8', 'MP003', 'SPANDEK SILVER 0.35', 'Mtr', 500.00, NULL, '2024-06-25', '14:47:01', 0),
-	(339, '0', 'penjualan', 'keluar', 'PJ-21062024-1', '6', 'MP001', 'SPANDEK SILVER 0.25', 'Mtr', 20.00, NULL, '2024-06-21', '10:39:42', 0),
-	(340, '0', 'penjualan', 'keluar', 'PJ-21062024-1', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', 30.00, NULL, '2024-06-21', '10:39:42', 0),
-	(341, '0', 'penjualan', 'keluar', 'PJ-21062024-1', '6', 'MP001', 'SPANDEK SILVER 0.25', 'Mtr', 20.00, NULL, '2024-06-21', '10:39:42', 0),
-	(342, '0', 'penjualan', 'keluar', 'PJ-21062024-1', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', 30.00, NULL, '2024-06-21', '10:39:42', 0),
-	(343, '2', 'produksi', 'keluar', 'PR-22062024-2', '32', 'BH005', 'PPGL MAROON 0.23 X 914', 'Mtr', 8.00, NULL, '2024-07-04', '08:02:21', 0),
-	(344, '2', 'produksi', 'masuk', 'PR-22062024-2', '11', 'MP006', 'SPANDEK MAROON 0.30', 'Mtr', 2.00, NULL, '2024-07-04', '08:02:21', 0),
-	(345, '2', 'produksi', 'masuk', 'PR-22062024-2', '12', 'MP007', 'SPANDEK MAROON 0.35', 'Mtr', 2.00, NULL, '2024-07-04', '08:02:21', 0),
-	(346, '2', 'produksi', 'masuk', 'PR-22062024-2', '13', 'MP008', 'SPANDEK MAROON 0.40', 'Mtr', 2.00, NULL, '2024-07-04', '08:02:21', 0),
-	(347, '2', 'produksi', 'masuk', 'PR-22062024-2', '10', 'MP005', 'SPANDEK MAROON 0.25', 'Mtr', 2.00, NULL, '2024-07-04', '08:02:21', 0),
-	(348, '0', 'pembelian', 'masuk', 'PB-09072024-7', '31', 'BH004', 'GALVALUME 0.33 X 914', 'Mtr', 0.00, NULL, '2024-07-09', '10:18:38', 0),
-	(349, '0', 'pembelian', 'masuk', 'PB-09072024-7', '31', 'BH004', 'GALVALUME 0.33 X 914', 'Mtr', 0.00, NULL, '2024-07-09', '10:18:38', 0),
-	(350, '0', 'pembelian', 'masuk', 'PB-09072024-7', '31', 'BH004', 'GALVALUME 0.33 X 914', 'Mtr', 0.00, NULL, '2024-07-09', '10:18:38', 0),
-	(351, '0', 'penjualan', 'keluar', 'PJ-11072024-3', '8', 'MP003', 'SPANDEK SILVER 0.35', 'Mtr', 0.00, NULL, '2024-07-11', '14:56:32', 0),
-	(352, '0', 'penjualan', 'keluar', 'PJ-11072024-3', '8', 'MP003', 'SPANDEK SILVER 0.35', 'Mtr', 22500.00, NULL, '2024-07-11', '14:56:32', 0),
-	(353, '0', 'penjualan', 'keluar', 'PJ-11072024-3', '8', 'MP003', 'SPANDEK SILVER 0.35', 'Mtr', 45000.00, NULL, '2024-07-11', '14:56:32', 0),
-	(354, '0', 'penjualan', 'keluar', 'PJ-11072024-3', '8', 'MP003', 'SPANDEK SILVER 0.35', 'Mtr', 3600.00, NULL, '2024-07-11', '14:56:32', 0),
-	(355, '0', 'penjualan', 'keluar', 'PJ-11072024-3', '9', 'MP004', 'SPANDEK SILVER 0.40', 'Mtr', 60.00, NULL, '2024-07-11', '14:56:32', 0),
-	(356, '0', 'penjualan', 'keluar', 'PJ-11072024-3', '9', 'MP004', 'SPANDEK SILVER 0.40', 'Mtr', 35.00, NULL, '2024-07-11', '14:56:32', 0),
-	(357, '0', 'penjualan', 'keluar', 'PJ-11072024-4', '9', 'MP004', 'SPANDEK SILVER 0.40', 'Mtr', 0.00, NULL, '2024-07-11', '14:56:56', 0),
-	(358, '0', 'penjualan', 'keluar', 'PJ-11072024-4', '9', 'MP004', 'SPANDEK SILVER 0.40', 'Mtr', 5000.00, NULL, '2024-07-11', '14:56:56', 0),
-	(359, '0', 'produksi', 'keluar', 'PR-11072024-6', '29', 'BH002', 'GALVALUME 0.23 X 914', 'Mtr', 100.00, NULL, '2024-07-11', '15:23:49', 0),
-	(360, '0', 'produksi', 'masuk', 'PR-11072024-6', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', 0.00, NULL, '2024-07-11', '15:23:49', 0),
-	(361, '0', 'produksi', 'masuk', 'PR-11072024-6', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', 52.50, NULL, '2024-07-11', '15:23:49', 0),
-	(362, '0', 'penjualan', 'keluar', 'PJ-11072024-6', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', 0.00, NULL, '2024-07-11', '15:23:49', 0),
-	(363, '0', 'penjualan', 'keluar', 'PJ-11072024-6', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', 0.00, NULL, '2024-07-11', '15:23:49', 0),
-	(364, '0', 'penjualan', 'keluar', 'PJ-11072024-6', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', 0.00, NULL, '2024-07-11', '15:23:49', 0),
-	(365, '0', 'penjualan', 'keluar', 'PJ-11072024-6', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', 52.50, NULL, '2024-07-11', '15:23:49', 0),
-	(366, '0', 'produksi', 'keluar', 'PR-11072024-5', '29', 'BH002', 'GALVALUME 0.23 X 914', 'Mtr', 52.50, NULL, '2024-07-12', '15:22:16', 0),
-	(367, '0', 'produksi', 'masuk', 'PR-11072024-5', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', 0.00, NULL, '2024-07-12', '15:22:16', 0),
-	(368, '0', 'produksi', 'masuk', 'PR-11072024-5', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', 52.50, NULL, '2024-07-12', '15:22:16', 0),
-	(430, '0', 'produksi', 'keluar', 'SO-19082024-1', '29', 'BH002', 'GALVALUME 0.23 X 914', 'Mtr', 10.00, NULL, '2024-08-19', '07:25:21', 0),
-	(431, '0', 'produksi', 'masuk', 'SO-19082024-1', '6', 'MP001', 'SPANDEK SILVER 0.25', 'Mtr', 15.00, NULL, '2024-08-19', '07:25:21', 0),
-	(432, '0', 'produksi', 'masuk', 'SO-19082024-1', '6', 'MP001', 'SPANDEK SILVER 0.25', 'Mtr', 20.00, NULL, '2024-08-19', '07:25:21', 0),
-	(439, '0', 'produksi', 'keluar', 'SO-21082024-1', '29', 'BH002', 'GALVALUME 0.23 X 914', 'Mtr', 10.00, NULL, '2024-08-21', '21:02:01', 0),
-	(440, '0', 'produksi', 'masuk', 'SO-21082024-1', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', 25.00, NULL, '2024-08-21', '21:02:01', 0),
-	(441, '0', 'produksi', 'masuk', 'SO-21082024-1', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', 30.00, NULL, '2024-08-21', '21:02:01', 0),
-	(442, '0', 'produksi', 'keluar', 'SO-06102024-1', '29', 'BH002', 'GALVALUME 0.23 X 914', 'Mtr', 20.00, NULL, '2024-10-07', '10:02:29', 0),
-	(443, '0', 'produksi', 'keluar', 'SO-06102024-1', '29', 'BH002', 'GALVALUME 0.23 X 914', 'Mtr', 10.00, NULL, '2024-10-07', '10:02:29', 0),
-	(444, '0', 'produksi', 'masuk', 'SO-06102024-1', '6', 'MP001', 'SPANDEK SILVER 0.25', 'Mtr', 1000.00, NULL, '2024-10-06', '10:02:29', 0),
-	(445, '0', 'produksi', 'masuk', 'SO-06102024-1', '6', 'MP001', 'SPANDEK SILVER 0.25', 'Mtr', 1000.00, NULL, '2024-10-06', '10:02:29', 0),
-	(449, '0', 'produksi', 'keluar', 'SO-09102024-2', '29', 'BH002', 'GALVALUME 0.23 X 914', 'Mtr', 10.00, NULL, '2024-10-09', '22:11:59', 0),
-	(450, '0', 'produksi', 'masuk', 'SO-09102024-2', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', 200.00, NULL, '2024-10-09', '22:11:59', 0),
-	(451, '0', 'produksi', 'masuk', 'SO-09102024-2', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', 100.00, NULL, '2024-10-09', '22:11:59', 0),
-	(456, '0', 'produksi', 'keluar', 'SO-17102024-1', '29', 'BH002', 'GALVALUME 0.23 X 914', 'Mtr', 10.00, NULL, '2024-10-17', '12:18:58', 0),
-	(457, '0', 'produksi', 'keluar', 'SO-17102024-1', '29', 'BH002', 'GALVALUME 0.23 X 914', 'Mtr', 5.00, NULL, '2024-10-17', '12:18:58', 0),
-	(458, '0', 'produksi', 'masuk', 'SO-17102024-1', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', 75.00, NULL, '2024-10-17', '12:18:58', 0),
-	(459, '0', 'produksi', 'masuk', 'SO-17102024-1', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', 1000.00, NULL, '2024-10-17', '12:18:58', 0),
-	(460, '0', 'produksi', 'masuk', 'SO-17102024-1', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', 1000.00, NULL, '2024-10-17', '12:18:58', 0),
-	(461, '0', 'produksi', 'keluar', 'SO-19102024-3', '29', 'BH002', 'GALVALUME 0.23 X 914', 'Mtr', 250.00, NULL, '2024-10-19', '23:16:15', 0),
-	(462, '0', 'produksi', 'masuk', 'SO-19102024-3', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', 200.00, NULL, '2024-10-19', '23:16:15', 0),
-	(463, '0', 'produksi', 'masuk', 'SO-19102024-3', '7', 'MP002', 'SPANDEK SILVER 0.30', 'Mtr', 100.00, NULL, '2024-10-19', '23:16:15', 0),
-	(470, '0', 'penjualan', 'keluar', 'PJ-17122024-1', '6', 'MP001', 'SPANDEK SILVER 0.25', 'Mtr', 2500.00, NULL, '2024-12-17', '15:53:57', 0),
-	(471, '0', 'penjualan', 'keluar', 'PJ-17122024-1', '6', 'MP001', 'SPANDEK SILVER 0.25', 'Mtr', 100.00, NULL, '2024-12-17', '15:53:57', 0);
+-- Dumping data for table siu.t_kartu: ~0 rows (approximately)
 
 -- Dumping data for table siu.t_karyawan: ~12 rows (approximately)
 INSERT INTO `t_karyawan` (`karyawan_id`, `karyawan_nama`, `karyawan_telp`, `karyawan_alamat`, `karyawan_tanggal`, `karyawan_hapus`) VALUES
@@ -504,11 +331,11 @@ INSERT INTO `t_kontak` (`kontak_id`, `kontak_jenis`, `kontak_kode`, `kontak_nama
 	(91, 'p', 'PL0067', 'LESTARI', 'MAKASSAR', '0', '', '0', '1', '-', '2024-03-15', 0),
 	(92, 's', 'SP009', 'GRAHA BINTANG METALINDO', 'JL PU NO 40 MAKASSAR', '0', '', '0', '1', '-', '2024-04-05', 0);
 
--- Dumping data for table siu.t_level: ~0 rows (approximately)
+-- Dumping data for table siu.t_level: ~1 rows (approximately)
 INSERT INTO `t_level` (`level_id`, `level_nama`, `level_akses`, `level_tanggal`, `level_hapus`) VALUES
 	(3, 'Kasir', '{"nama":"Kasir","menu_dashboard":"0","menu_kontak":"0","karyawan":"0","karyawan_add":"0","karyawan_del":"0","supplier":"0","supplier_add":"0","supplier_del":"0","pelanggan":"0","pelanggan_add":"0","pelanggan_del":"0","rekening":"0","rekening_add":"0","rekening_del":"0","menu_pembelian":"0","bahan":"1","bahan_add":"0","bahan_del":"0","bahan_po":"1","bahan_po_add":"1","bahan_po_del":"1","pembelian_bahan":"1","pembelian_bahan_add":"1","pembelian_bahan_del":"1","pembelian_umum":"1","pembelian_umum_add":"1","pembelian_umum_del":"1","hutang":"1","hutang_add":"1","menu_produksi":"0","mesin":"0","mesin_add":"0","mesin_del":"0","peleburan":"0","peleburan_add":"0","peleburan_del":"0","produksi":"0","produksi_add":"0","produksi_del":"0","pewarnaan":"0","pewarnaan_add":"0","pewarnaan_del":"0","packing":"0","packing_add":"0","packing_del":"0","menu_produk":"0","jenis_pewarnaan":"0","jenis_pewarnaan_add":"0","warna_produk":"0","warna_produk_add":"0","warna_produk_del":"0","master_produk":"1","master_produk_add":"0","master_produk_del":"0","menu_penjualan":"0","penjualan_po":"1","penjualan_po_add":"1","penjualan_po_del":"1","penjualan_produk":"1","penjualan_produk_add":"1","penjualan_produk_del":"1","piutang":"1","piutang_add":"1","menu_keuangan":"0","coa":"0","coa_add":"0","coa_del":"0","kas":"0","kas_add":"0","kas_del":"0","jurnal":"0","jurnal_add":"0","jurnal_del":"0","buku_besar":"0","buku_besar_add":"0","buku_besar_del":"0","penyesuaian":"0","penyesuaian_add":"0","penyesuaian_del":"0","menu_laporan":"0","laporan_bahan":"1","laporan_produk":"1","laporan_produksi":"0","laporan_pembelian_po":"1","laporan_pembelian":"1","laporan_hutang":"1","laporan_hutang_jatuh_tampo":"1","laporan_penjualan":"1","laporan_piutang":"1","laporan_piutang_jatuh_tampo":"1","laporan_packing":"0","menu_inventori":"0","opname_pembelian":"0","opname_penjualan":"0","penyesuaian_stok":"0","penyesuaian_stok_add":"0","penyesuaian_stok_del":"0","menu_akun":"0","akses":"0","akses_add":"0","akses_del":"0","user_akun":"0","user_akun_add":"0","user_akun_del":"0","admin_akun":"0","admin_akun_add":"0","admin_akun_del":"0","menu_pengaturan":"0","pajak":"0","pajak_add":"0","backup":"0","informasi":"0"}', '2023-06-01', 0);
 
--- Dumping data for table siu.t_logo: ~0 rows (approximately)
+-- Dumping data for table siu.t_logo: ~1 rows (approximately)
 INSERT INTO `t_logo` (`logo_id`, `logo_foto`, `logo_nama`, `logo_telp`, `logo_kota`, `logo_alamat`) VALUES
 	(1, '8070be03d83f8954076632975a7c8429.jpg', 'WEB APLIKASI SIU', '021-7980421', 'Jakarta', 'JL. Raya Pasar Minggu No. 17 Jakarta Selatan 12520');
 
@@ -524,60 +351,21 @@ INSERT INTO `t_pajak` (`pajak_id`, `pajak_jenis`, `pajak_persen`, `pajak_tanggal
 	(1, 'pembelian', '11', '2022-12-03', '2022-12-02 17:49:05'),
 	(2, 'penjualan', '11', '2022-12-03', '2022-12-02 17:49:10');
 
--- Dumping data for table siu.t_pembelian: ~7 rows (approximately)
-INSERT INTO `t_pembelian` (`pembelian_id`, `pembelian_user`, `pembelian_jumlah`, `pembelian_proses`, `pembelian_po`, `pembelian_po_tanggal`, `pembelian_nomor`, `pembelian_supplier`, `pembelian_ekspedisi`, `pembelian_gudang`, `pembelian_tanggal`, `pembelian_jam`, `pembelian_jatuh_tempo`, `pembelian_status`, `pembelian_pelunasan`, `pembelian_pelunasan_keterangan`, `pembelian_pembayaran`, `pembelian_keterangan`, `pembelian_lampiran`, `pembelian_subtotal`, `pembelian_ekspedisi_total`, `pembelian_ppn`, `pembelian_grandtotal`, `pembelian_hapus`) VALUES
-	(11, '5', 2, 0, 0, '2024-06-20', 'PB-20062024-1', '22', '4', '0', '2024-06-20', '10:46:10', '0000-00-00', 'lunas', NULL, '', 'tunai', 'PO di proses', '', '190', '20000', '0', '3072000', 0),
-	(12, '5', 5, 0, 0, '2024-06-21', 'PB-21062024-2', '24', '4', '2', '2024-06-21', '08:03:03', '0000-00-00', 'lunas', NULL, '', 'tunai', '', '', '30', '0', '11', '470000', 0),
-	(13, '5', 5, 1, 1, '2024-06-22', 'PB-22062024-3', '92', '4', '2', '2024-06-22', '07:59:30', '0000-00-00', 'lunas', NULL, '', 'tunai', '', '', '40', '0', '11', '636000', 0),
-	(14, '5', 2, 0, 1, '2024-06-25', 'PB-25062024-4', '23', '4', '0', '2024-06-25', '08:42:01', '2024-07-25', 'belum', NULL, '', '7', '', '', '8850', '11500000', '11', '151330000', 0),
-	(15, '5', 2, 0, 1, '2024-06-25', 'PB-25062024-4', '23', '4', '0', '2024-06-25', '08:42:03', '2024-07-25', 'belum', NULL, '', '7', '', '', '8850', '11500000', '11', '151330000', 0),
-	(16, '5', 2, 1, 1, '2024-06-25', 'PB-25062024-6', '22', '4', '0', '2024-06-25', '14:41:27', '2024-07-25', 'belum', NULL, '', '7', '', '', '8840', '11500000', '11', '151172000', 0),
-	(17, '5', 3, 1, 1, '2024-07-09', 'PB-09072024-7', '24', '4', '0', '2024-07-09', '10:18:38', '2024-07-22', 'belum', NULL, '', '7', '', '', '12048', '11700000', '11', '193224800', 0);
+-- Dumping data for table siu.t_pembelian: ~0 rows (approximately)
 
--- Dumping data for table siu.t_pembelian_barang: ~19 rows (approximately)
-INSERT INTO `t_pembelian_barang` (`pembelian_barang_id`, `pembelian_barang_terima`, `pembelian_barang_nomor`, `pembelian_barang_barang`, `pembelian_barang_kode`, `pembelian_barang_berat_qty`, `pembelian_barang_panjang_qty`, `pembelian_barang_berat`, `pembelian_barang_panjang`, `pembelian_barang_berat_cek`, `pembelian_barang_panjang_cek`, `pembelian_barang_harga`, `pembelian_barang_total`, `pembelian_barang_ekspedisi`) VALUES
-	(1, 0, 'PB-20062024-1', '28', 'GV-1', 1.11, 0.90, 100.00, 90.00, 0.00, 0.00, '16300', '1630000', '10526.315789474'),
-	(2, 0, 'PB-20062024-1', '29', 'GV-2', 1.29, 0.78, 90.00, 70.00, 0.00, 0.00, '15800', '1422000', '9473.6842105263'),
-	(3, 0, 'PB-21062024-2', '30', 'A5', 1.00, 1.00, 10.00, 10.00, 0.00, 0.00, '15400', '154000', '0'),
-	(4, 0, 'PB-21062024-2', '29', 'A4', 1.00, 1.00, 10.00, 10.00, 0.00, 0.00, '15800', '158000', '0'),
-	(5, 0, 'PB-21062024-2', '29', 'A3', 1.00, 1.00, 10.00, 10.00, 0.00, 0.00, '15800', '158000', '0'),
-	(6, 0, 'PB-21062024-2', '29', 'A2', 1.00, 1.00, 10.00, 10.00, 0.00, 0.00, '15800', '158000', '0'),
-	(7, 0, 'PB-21062024-2', '28', 'A1', 1.00, 1.00, 10.00, 10.00, 0.00, 0.00, '16300', '163000', '0'),
-	(8, 1, 'PB-22062024-3', '32', 'MM005', 2.00, 0.50, 20.00, 10.00, 0.00, 0.00, '15900', '318000', '0'),
-	(9, 1, 'PB-22062024-3', '32', 'MM004', 2.00, 0.50, 20.00, 10.00, 0.00, 0.00, '15900', '318000', '0'),
-	(10, 1, 'PB-22062024-3', '32', 'MM003', 2.00, 0.50, 20.00, 10.00, 0.00, 0.00, '15900', '318000', '0'),
-	(11, 1, 'PB-22062024-3', '32', 'MM002', 2.00, 0.50, 20.00, 10.00, 0.00, 0.00, '15900', '318000', '0'),
-	(12, 1, 'PB-22062024-3', '32', 'MM001', 2.00, 0.50, 20.00, 10.00, 0.00, 0.00, '15900', '318000', '0'),
-	(13, 0, 'PB-25062024-4', '29', 'GRTU 220583', 2.21, 0.45, 4420.00, 2003.00, 0.00, 0.00, '15800', '69836000', '5743502.8248588'),
-	(14, 0, 'PB-25062024-4', '29', 'Grtu 220584', 2.21, 0.45, 4430.00, 2004.00, 0.00, 0.00, '15800', '69994000', '5756497.1751412'),
-	(15, 1, 'PB-25062024-6', '29', 'GRTU 223806', 2.21, 0.45, 4420.00, 2003.00, 0.00, 0.00, '15800', '69836000', '5750000'),
-	(16, 1, 'PB-25062024-6', '29', 'GRTU 223805', 2.21, 0.45, 4420.00, 2003.00, 0.00, 0.00, '15800', '69836000', '5750000'),
-	(17, 1, 'PB-09072024-7', '31', 'LWZH1371FT', 2.36, 0.42, 4012.00, 1698.00, 0.00, 0.00, '15000', '60180000', '3896115.5378486'),
-	(18, 1, 'PB-09072024-7', '31', 'LWZH1373FT', 2.36, 0.42, 4012.00, 1699.00, 0.00, 0.00, '15000', '60180000', '3896115.5378486'),
-	(19, 1, 'PB-09072024-7', '31', 'LQZH1375FT', 2.37, 0.42, 4024.00, 1700.00, 0.00, 0.00, '15200', '61164800', '3907768.9243028');
+-- Dumping data for table siu.t_pembelian_barang: ~0 rows (approximately)
 
 -- Dumping data for table siu.t_pembelian_partial: ~0 rows (approximately)
 
--- Dumping data for table siu.t_pembelian_terima: ~5 rows (approximately)
-INSERT INTO `t_pembelian_terima` (`pembelian_terima_id`, `pembelian_terima_nomor`, `pembelian_terima_bukti`, `pembelian_terima_barang`, `pembelian_terima_tanggal`, `pembelian_terima_hapus`) VALUES
-	(18, 'PB-21062024-2', 'BD-21062024-1', '3,4,5', '2024-06-21', 0),
-	(20, 'PB-22062024-3', 'BD-22062024-2', '10,11,12', '2024-06-22', 0),
-	(21, 'PB-22062024-3', 'BD-22062024-3', '8,9', '2024-06-22', 0),
-	(22, 'PB-25062024-6', 'BD-25062024-4', '15,16', '2024-06-25', 0),
-	(23, 'PB-09072024-7', 'BD-09072024-5', '17,18,19', '2024-07-09', 0);
+-- Dumping data for table siu.t_pembelian_terima: ~0 rows (approximately)
 
 -- Dumping data for table siu.t_pembelian_umum: ~0 rows (approximately)
 
 -- Dumping data for table siu.t_pembelian_umum_barang: ~0 rows (approximately)
 
 -- Dumping data for table siu.t_penjualan: ~0 rows (approximately)
-INSERT INTO `t_penjualan` (`penjualan_id`, `penjualan_user`, `penjualan_proses`, `penjualan_so`, `penjualan_so_tanggal`, `penjualan_nomor`, `penjualan_pelanggan`, `penjualan_tanggal`, `penjualan_jam`, `penjualan_jatuh_tempo`, `penjualan_pembayaran`, `penjualan_keterangan`, `penjualan_ambil`, `penjualan_lampiran`, `penjualan_subtotal`, `penjualan_ppn`, `penjualan_grandtotal`, `penjualan_piutang`, `penjualan_status`, `penjualan_pelunasan`, `penjualan_pelunasan_jumlah`, `penjualan_pelunasan_keterangan`, `penjualan_gudang`, `penjualan_ekspedisi`, `penjualan_hapus`) VALUES
-	(40, '5', '1', 1, '0000-00-00', 'PJ-17122024-1', '20', '2024-12-17', '15:53:57', '0000-00-00', 'tunai', 'SO di jual', 'iya', '', '301200000', '0', '301200000', '0', 'lunas', NULL, '0', NULL, '0', NULL, 0);
 
--- Dumping data for table siu.t_penjualan_barang: ~2 rows (approximately)
-INSERT INTO `t_penjualan_barang` (`penjualan_barang_id`, `penjualan_barang_nomor`, `penjualan_barang_barang`, `penjualan_barang_stok`, `penjualan_barang_panjang`, `penjualan_barang_konversi`, `penjualan_barang_batang`, `penjualan_barang_qty`, `penjualan_barang_panjang_total`, `penjualan_barang_harga`, `penjualan_barang_hps`, `penjualan_barang_total`) VALUES
-	(105, 'PJ-17122024-1', '6', 2600.00, 50.00, '0', '0', '50', 2500.00, '120000', '0', '300000000'),
-	(106, 'PJ-17122024-1', '6', 2600.00, 10.00, '0', '0', '10', 100.00, '12000', '', '1200000');
+-- Dumping data for table siu.t_penjualan_barang: ~0 rows (approximately)
 
 -- Dumping data for table siu.t_penyesuaian: ~0 rows (approximately)
 
@@ -625,47 +413,21 @@ INSERT INTO `t_produk` (`produk_id`, `produk_kode`, `produk_nama`, `produk_merk`
 	(45, 'MP0038', 'SPANDEK SILVER 0.40 AZ100', 'SOLID', '25000', '3', '0.40', '-', '1', '2024-04-05', '2024-04-05', 0);
 
 -- Dumping data for table siu.t_produksi: ~0 rows (approximately)
-INSERT INTO `t_produksi` (`produksi_id`, `produksi_user`, `produksi_pelanggan`, `produksi_nomor`, `produksi_proses`, `produksi_selesai`, `produksi_so`, `produksi_so_tanggal`, `produksi_tanggal`, `produksi_jam`, `produksi_pekerja`, `produksi_gudang`, `produksi_keterangan`, `produksi_mesin`, `produksi_lampiran_1`, `produksi_lampiran_2`, `produksi_subtotal`, `produksi_jasa`, `produksi_grandtotal`, `produksi_hapus`) VALUES
-	(60, '5', '20', 'SO-17122024-1', 2, 0, 1, NULL, '2024-12-17', '15:53:57', '["11","12"]', '0', 'di proses', '6', NULL, NULL, 'NaN', '0', 'NaN', 0);
 
--- Dumping data for table siu.t_produksi_barang: ~2 rows (approximately)
-INSERT INTO `t_produksi_barang` (`produksi_barang_id`, `produksi_barang_log`, `produksi_barang_nomor`, `produksi_barang_stok`, `produksi_barang_barang`, `produksi_barang_kode`, `produksi_barang_panjang`, `produksi_barang_berat`, `produksi_barang_harga`, `produksi_barang_total`, `produksi_barang_status`, `produksi_barang_tanggal`) VALUES
-	(104, '1', 'SO-17122024-1', 2003.00, '29', '36', 1300.00, 2.21, '0', '0', '1', '2024-12-17'),
-	(105, '1', 'SO-17122024-1', 2003.00, '29', '35', 1300.00, 2.21, '17100.90', '2223117000', '1', '2024-12-17');
+-- Dumping data for table siu.t_produksi_barang: ~0 rows (approximately)
 
 -- Dumping data for table siu.t_produksi_log: ~0 rows (approximately)
-INSERT INTO `t_produksi_log` (`produksi_log_id`, `produksi_log_nomor`, `produksi_log_selesai`, `produksi_log_tanggal`, `produksi_log_gudang`, `produksi_log_pekerja`, `produksi_log_mesin`, `produksi_log_keterangan`, `produksi_log_hapus`) VALUES
-	(1, 'SO-17122024-1', 1, '2024-12-17 15:54:00', '0', '["11","12"]', '6', 'di proses', 0);
 
--- Dumping data for table siu.t_produksi_produksi: ~2 rows (approximately)
-INSERT INTO `t_produksi_produksi` (`produksi_produksi_id`, `produksi_produksi_log`, `produksi_produksi_nomor`, `produksi_produksi_produk`, `produksi_produksi_konversi`, `produksi_produksi_batang`, `produksi_produksi_panjang`, `produksi_produksi_qty`, `produksi_produksi_panjang_total`, `produksi_produksi_status`, `produksi_produksi_tanggal`) VALUES
-	(150, '1', 'SO-17122024-1', '6', '0', '0', '50', '50', 2500.00, 1, '2024-12-17'),
-	(151, '1', 'SO-17122024-1', '6', '0', '0', '10', '10', 100.00, 1, '2024-12-17');
+-- Dumping data for table siu.t_produksi_produksi: ~0 rows (approximately)
 
--- Dumping data for table siu.t_produk_gudang: ~3 rows (approximately)
-INSERT INTO `t_produk_gudang` (`produk_gudang_id`, `produk_gudang_gudang`, `produk_gudang_produk`, `produk_gudang_panjang`, `produk_gudang_hps`, `produk_gudang_tanggal`, `produk_gudang_hapus`) VALUES
-	(1, '0', '7', 0.00, '0', '2024-09-16', 0),
-	(2, '0', '6', 100.00, '0', '2024-09-25', 0),
-	(3, '0', '8', 0.00, '0', '2024-12-16', 0);
+-- Dumping data for table siu.t_produk_gudang: ~0 rows (approximately)
 
 -- Dumping data for table siu.t_rekening: ~2 rows (approximately)
 INSERT INTO `t_rekening` (`rekening_id`, `rekening_nama`, `rekening_bank`, `rekening_no`, `rekening_tanggal`, `rekening_hapus`) VALUES
 	(7, 'BCA', '8', '158895555', '2023-09-27', 0),
 	(8, 'BRI', '1', '03430108888303', '2023-12-17', 0);
 
--- Dumping data for table siu.t_saldo: ~8 rows (approximately)
-INSERT INTO `t_saldo` (`saldo_id`, `saldo_nomor`, `saldo_sumber`, `saldo_nominal`, `saldo_rekening`, `saldo_jenis`, `saldo_keterangan`, `saldo_tanggal`, `saldo_hapus`) VALUES
-	(3, 'SO-16092024-4', 'penjualan', '12100000', 'tunai', 'setor', 'transaksi penjualan', '2024-09-16 02:47:55', 0),
-	(4, 'SO-25092024-1', 'penjualan', '1450000', 'tunai', 'setor', 'transaksi penjualan', '2024-09-25 02:41:25', 0),
-	(5, 'SO-06102024-1', 'penjualan', '15000000', 'tunai', 'setor', 'transaksi penjualan', '2024-10-06 03:02:29', 0),
-	(7, 'SO-09102024-2', 'penjualan', '4500000', 'tunai', 'setor', 'transaksi penjualan', '2024-10-09 15:11:59', 0),
-	(8, 'SO-17102024-1', 'penjualan', '31125000', 'tunai', 'setor', 'transaksi penjualan', '2024-10-17 05:18:58', 0),
-	(9, 'SO-18102024-2', 'penjualan', '1300000', 'tunai', 'setor', 'transaksi penjualan', '2024-10-18 13:27:22', 0),
-	(10, 'SO-19102024-3', 'penjualan', '4500000', 'tunai', 'setor', 'transaksi penjualan', '2024-10-19 16:16:16', 0),
-	(13, 'SO-19102024-1', 'penjualan', '4400000', 'tunai', 'setor', 'transaksi penjualan', '2024-10-19 16:35:08', 0),
-	(14, 'SO-16122024-4', 'penjualan', '300000', 'tunai', 'setor', 'transaksi penjualan', '2024-12-16 11:30:28', 0),
-	(15, 'SO-17122024-1', 'penjualan', '301200000', 'tunai', 'setor', 'transaksi penjualan', '2024-12-17 08:53:57', 0),
-	(16, 'PJ-17122024-1', 'penjualan', '301200000', 'tunai', 'setor', 'transaksi penjualan', '2024-12-17 08:58:53', 0);
+-- Dumping data for table siu.t_saldo: ~0 rows (approximately)
 
 -- Dumping data for table siu.t_satuan: ~9 rows (approximately)
 INSERT INTO `t_satuan` (`satuan_id`, `satuan_kepanjangan`, `satuan_singkatan`, `satuan_tanggal`, `satuan_hapus`) VALUES

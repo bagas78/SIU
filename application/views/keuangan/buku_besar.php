@@ -61,7 +61,7 @@
                       <td>JU</td>
                       <td class="debit"><?=(@$val['jurnal_type'] == 'debit')? @$val['jurnal_nominal']:'-'?></td>
                       <td class="kredit"><?=(@$val['jurnal_type'] == 'kredit')? @$val['jurnal_nominal']:'-'?></td>
-                      <td class="saldo"></td>
+                      <td class="saldo_x"></td>
                       <td hidden class="type"><?=@$val['jurnal_type']?></td>
                     </tr>
                   <?php endforeach ?>
@@ -124,7 +124,7 @@
             return num;
     });
 
-    //type
+    //type 
     var type = [];
     var i = $(".type");
     type = $.map(i,function(data){
@@ -132,7 +132,7 @@
     });
 
     //penjumlahan [ debit (+) | kredit (-) ]
-    $.each($('.saldo'), function(index, val) {
+    $.each($('.saldo_x'), function(index, val) {
        var jum = debit[index] + kredit[index];
 
       //saldo awal
@@ -146,14 +146,14 @@
        var be = index - 1;
        if (index != 0) {
 
-        var saldo = $(".saldo").toArray().map(function(i){ return parseInt(i.innerText) })
+        var saldo = $(".saldo_x").toArray().map(function(i){ return parseInt(i.innerText) })
         $(this).text(saldo[be] + saldo[index]);
        }
        
     });
 
     //format number
-    var format = ['.kredit','.debit','.saldo'];
+    var format = ['.kredit','.debit','.saldo_x'];
 
     $.each(format, function(index, val) {
        

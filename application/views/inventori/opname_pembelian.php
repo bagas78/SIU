@@ -12,6 +12,9 @@
     padding: 5px;
     font-size: small; 
   }
+  .p-05{
+    padding: 0.5%;
+  }
 </style>
 
 <!-- Main content --> 
@@ -32,8 +35,8 @@
 
       <form method="POST" action="#">
         <div class="form-group">
-          <input id="tanggal" name="tanggal" required id="date" type="date" class="p03">
-          <button type="submit" class="p03 filter">Filter <i class="fa fa-search"></i></button>
+          <input id="tanggal" name="tanggal" required id="date" type="date" class="p-05">
+          <button type="submit" class="p-05 filter">Filter <i class="fa fa-search"></i></button>
         </div>
       </form>
 
