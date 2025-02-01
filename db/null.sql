@@ -14,7 +14,32 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+-- Dumping structure for table siu.t_absen
+CREATE TABLE IF NOT EXISTS `t_absen` (
+  `absen_id` int(11) NOT NULL AUTO_INCREMENT,
+  `absen_karyawan` int(11) DEFAULT NULL,
+  `absen_upah` text DEFAULT NULL,
+  `absen_jam` time DEFAULT NULL,
+  `absen_tanggal` date DEFAULT NULL,
+  `absen_status` enum('masuk','tidak') DEFAULT NULL,
+  `absen_bayar` enum('sudah','belum') DEFAULT 'belum',
+  PRIMARY KEY (`absen_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4;
+
 -- Dumping data for table siu.t_absen: ~0 rows (approximately)
+
+-- Dumping structure for table siu.t_bahan
+CREATE TABLE IF NOT EXISTS `t_bahan` (
+  `bahan_id` int(11) NOT NULL AUTO_INCREMENT,
+  `bahan_kode` text NOT NULL,
+  `bahan_nama` text NOT NULL,
+  `bahan_satuan` text NOT NULL,
+  `bahan_kategori` set('utama','pembantu') NOT NULL,
+  `bahan_harga` text NOT NULL,
+  `bahan_tanggal` date NOT NULL DEFAULT curdate(),
+  `bahan_hapus` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`bahan_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table siu.t_bahan: ~30 rows (approximately)
 INSERT INTO `t_bahan` (`bahan_id`, `bahan_kode`, `bahan_nama`, `bahan_satuan`, `bahan_kategori`, `bahan_harga`, `bahan_tanggal`, `bahan_hapus`) VALUES
@@ -49,9 +74,43 @@ INSERT INTO `t_bahan` (`bahan_id`, `bahan_kode`, `bahan_nama`, `bahan_satuan`, `
 	(56, 'BH0029', 'GALVALUM BMT 0.35 AZ100', '', 'utama', '56000', '2024-04-05', 0),
 	(57, 'BH0030', 'PPGL BIRU 0.22 X 914', '', 'utama', '15900', '2024-05-14', 0);
 
+-- Dumping structure for table siu.t_bahan_gudang
+CREATE TABLE IF NOT EXISTS `t_bahan_gudang` (
+  `bahan_gudang_id` int(11) NOT NULL AUTO_INCREMENT,
+  `bahan_gudang_bahan` text NOT NULL,
+  `bahan_gudang_gudang` text DEFAULT NULL,
+  `bahan_gudang_berat_permeter` decimal(20,2) DEFAULT NULL COMMENT 'Berat permeter ',
+  `bahan_gudang_berat` decimal(20,2) DEFAULT NULL COMMENT 'Stok berat bahan baku',
+  `bahan_gudang_panjang` decimal(20,2) DEFAULT NULL COMMENT 'Stok panjang bahan baku',
+  `bahan_gudang_hpp` decimal(20,2) DEFAULT NULL,
+  `bahan_gudang_tanggal` date DEFAULT curdate(),
+  PRIMARY KEY (`bahan_gudang_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4;
+
 -- Dumping data for table siu.t_bahan_gudang: ~0 rows (approximately)
 
+-- Dumping structure for table siu.t_bahan_item
+CREATE TABLE IF NOT EXISTS `t_bahan_item` (
+  `bahan_item_id` int(11) NOT NULL AUTO_INCREMENT,
+  `bahan_item_gudang` text NOT NULL,
+  `bahan_item_bahan` text NOT NULL,
+  `bahan_item_kode` text DEFAULT NULL,
+  `bahan_item_berat` decimal(20,2) DEFAULT NULL,
+  `bahan_item_panjang` decimal(20,2) DEFAULT NULL,
+  `bahan_item_tanggal` date DEFAULT curdate(),
+  PRIMARY KEY (`bahan_item_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4;
+
 -- Dumping data for table siu.t_bahan_item: ~0 rows (approximately)
+
+-- Dumping structure for table siu.t_bank
+CREATE TABLE IF NOT EXISTS `t_bank` (
+  `bank_id` int(11) NOT NULL AUTO_INCREMENT,
+  `bank_kode` text NOT NULL,
+  `bank_nama` text NOT NULL,
+  `bank_tanggal` date NOT NULL DEFAULT curdate(),
+  PRIMARY KEY (`bank_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=142 DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table siu.t_bank: ~141 rows (approximately)
 INSERT INTO `t_bank` (`bank_id`, `bank_kode`, `bank_nama`, `bank_tanggal`) VALUES
@@ -197,7 +256,30 @@ INSERT INTO `t_bank` (`bank_id`, `bank_kode`, `bank_nama`, `bank_tanggal`) VALUE
 	(140, '911', 'TELKOMSEL TCASH', '2022-11-30'),
 	(141, '911', 'LINKAJA', '2022-11-30');
 
+-- Dumping structure for table siu.t_cetak
+CREATE TABLE IF NOT EXISTS `t_cetak` (
+  `cetak_id` int(11) NOT NULL AUTO_INCREMENT,
+  `cetak_user` int(11) NOT NULL,
+  `cetak_level` int(11) NOT NULL,
+  `cetak_jumlah` int(11) NOT NULL DEFAULT 0,
+  `cetak_setujui` int(11) DEFAULT 0,
+  `cetak_berhasil` int(11) NOT NULL DEFAULT 0,
+  `cetak_nomor` text NOT NULL,
+  `cetak_tanggal` date DEFAULT curdate(),
+  PRIMARY KEY (`cetak_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
+
 -- Dumping data for table siu.t_cetak: ~0 rows (approximately)
+
+-- Dumping structure for table siu.t_coa
+CREATE TABLE IF NOT EXISTS `t_coa` (
+  `coa_id` int(11) NOT NULL AUTO_INCREMENT,
+  `coa_nomor` text NOT NULL,
+  `coa_akun` text NOT NULL,
+  `coa_sub` text NOT NULL,
+  `coa_tanggal` date NOT NULL DEFAULT curdate(),
+  PRIMARY KEY (`coa_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table siu.t_coa: ~9 rows (approximately)
 INSERT INTO `t_coa` (`coa_id`, `coa_nomor`, `coa_akun`, `coa_sub`, `coa_tanggal`) VALUES
@@ -211,6 +293,17 @@ INSERT INTO `t_coa` (`coa_id`, `coa_nomor`, `coa_akun`, `coa_sub`, `coa_tanggal`
 	(9, '152', 'Biaya produksi', '5', '2023-01-27'),
 	(10, '153', 'Penyesuaian stok', '5', '2023-03-14');
 
+-- Dumping structure for table siu.t_coa_sub
+CREATE TABLE IF NOT EXISTS `t_coa_sub` (
+  `coa_sub_id` int(11) NOT NULL AUTO_INCREMENT,
+  `coa_sub_nomor` text NOT NULL,
+  `coa_sub_akun` text NOT NULL,
+  `coa_sub_plus` text NOT NULL,
+  `coa_sub_min` text NOT NULL,
+  `coa_sub_tanggal` date NOT NULL DEFAULT curdate(),
+  PRIMARY KEY (`coa_sub_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+
 -- Dumping data for table siu.t_coa_sub: ~5 rows (approximately)
 INSERT INTO `t_coa_sub` (`coa_sub_id`, `coa_sub_nomor`, `coa_sub_akun`, `coa_sub_plus`, `coa_sub_min`, `coa_sub_tanggal`) VALUES
 	(1, '111', 'Harta', 'D', 'K', '2023-01-27'),
@@ -219,6 +312,17 @@ INSERT INTO `t_coa_sub` (`coa_sub_id`, `coa_sub_nomor`, `coa_sub_akun`, `coa_sub
 	(4, '141', 'Pendapatan', 'K', 'D', '2023-01-27'),
 	(5, '151', 'Beban', 'D', 'K', '2023-01-27');
 
+-- Dumping structure for table siu.t_ekspedisi
+CREATE TABLE IF NOT EXISTS `t_ekspedisi` (
+  `ekspedisi_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ekspedisi_kode` varchar(255) DEFAULT NULL,
+  `ekspedisi_nama` varchar(255) DEFAULT NULL,
+  `ekspedisi_keterangan` text DEFAULT NULL,
+  `ekspedisi_hapus` int(2) DEFAULT 0,
+  `ekspedisi_tanggal` date DEFAULT curdate(),
+  PRIMARY KEY (`ekspedisi_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+
 -- Dumping data for table siu.t_ekspedisi: ~4 rows (approximately)
 INSERT INTO `t_ekspedisi` (`ekspedisi_id`, `ekspedisi_kode`, `ekspedisi_nama`, `ekspedisi_keterangan`, `ekspedisi_hapus`, `ekspedisi_tanggal`) VALUES
 	(1, 'EXPEDISI-001', 'EKONOMI', 'Jalur Gaza', 1, '2023-08-12'),
@@ -226,16 +330,80 @@ INSERT INTO `t_ekspedisi` (`ekspedisi_id`, `ekspedisi_kode`, `ekspedisi_nama`, `
 	(3, 'ABC', 'TEST', NULL, 1, '2023-12-17'),
 	(4, 'EKS01', 'PT. MANDALIKA PUTRA TRANS', NULL, 0, '2024-01-25');
 
+-- Dumping structure for table siu.t_filter
+CREATE TABLE IF NOT EXISTS `t_filter` (
+  `filter_id` int(11) NOT NULL AUTO_INCREMENT,
+  `filter_nomor` text DEFAULT NULL,
+  `filter_produksi` text DEFAULT NULL,
+  `filter_barang` text DEFAULT NULL,
+  `filter_tanggal` date DEFAULT curdate(),
+  PRIMARY KEY (`filter_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=317 DEFAULT CHARSET=utf8mb4;
+
 -- Dumping data for table siu.t_filter: ~0 rows (approximately)
+
+-- Dumping structure for table siu.t_gudang
+CREATE TABLE IF NOT EXISTS `t_gudang` (
+  `gudang_id` int(11) NOT NULL AUTO_INCREMENT,
+  `gudang_kode` varchar(255) DEFAULT NULL,
+  `gudang_nama` varchar(255) DEFAULT NULL,
+  `gudang_keterangan` text DEFAULT NULL,
+  `gudang_hapus` int(2) DEFAULT 0,
+  `gudang_tanggal` date DEFAULT curdate(),
+  PRIMARY KEY (`gudang_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table siu.t_gudang: ~2 rows (approximately)
 INSERT INTO `t_gudang` (`gudang_id`, `gudang_kode`, `gudang_nama`, `gudang_keterangan`, `gudang_hapus`, `gudang_tanggal`) VALUES
 	(0, 'GD000', 'Gudang Utama', NULL, 0, '0000-00-00'),
 	(2, 'GD001', 'Gudang A', NULL, 0, '2023-09-03');
 
+-- Dumping structure for table siu.t_jurnal
+CREATE TABLE IF NOT EXISTS `t_jurnal` (
+  `jurnal_id` int(11) NOT NULL AUTO_INCREMENT,
+  `jurnal_nomor` text NOT NULL,
+  `jurnal_akun` text NOT NULL,
+  `jurnal_keterangan` text NOT NULL,
+  `jurnal_type` enum('debit','kredit') NOT NULL,
+  `jurnal_nominal` text NOT NULL,
+  `jurnal_hapus` int(11) NOT NULL DEFAULT 0,
+  `jurnal_tanggal` date NOT NULL DEFAULT curdate(),
+  PRIMARY KEY (`jurnal_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4;
+
 -- Dumping data for table siu.t_jurnal: ~0 rows (approximately)
 
+-- Dumping structure for table siu.t_kartu
+CREATE TABLE IF NOT EXISTS `t_kartu` (
+  `kartu_id` int(11) NOT NULL AUTO_INCREMENT,
+  `kartu_gudang` text NOT NULL,
+  `kartu_jenis` set('pembelian','produksi','penjualan') NOT NULL,
+  `kartu_transaksi` set('masuk','keluar') NOT NULL,
+  `kartu_nomor` text DEFAULT NULL,
+  `kartu_barang` text DEFAULT NULL,
+  `kartu_kode` text DEFAULT NULL,
+  `kartu_barang_nama` text DEFAULT NULL,
+  `kartu_satuan` text DEFAULT NULL,
+  `kartu_jumlah` decimal(20,2) DEFAULT NULL,
+  `kartu_saldo` decimal(20,2) DEFAULT NULL,
+  `kartu_tanggal` date DEFAULT NULL,
+  `kartu_jam` time DEFAULT NULL,
+  `kartu_hapus` int(11) DEFAULT 0,
+  PRIMARY KEY (`kartu_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=472 DEFAULT CHARSET=utf8mb4;
+
 -- Dumping data for table siu.t_kartu: ~0 rows (approximately)
+
+-- Dumping structure for table siu.t_karyawan
+CREATE TABLE IF NOT EXISTS `t_karyawan` (
+  `karyawan_id` int(11) NOT NULL AUTO_INCREMENT,
+  `karyawan_nama` text NOT NULL,
+  `karyawan_telp` text NOT NULL,
+  `karyawan_alamat` text NOT NULL,
+  `karyawan_tanggal` date NOT NULL DEFAULT curdate(),
+  `karyawan_hapus` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`karyawan_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table siu.t_karyawan: ~12 rows (approximately)
 INSERT INTO `t_karyawan` (`karyawan_id`, `karyawan_nama`, `karyawan_telp`, `karyawan_alamat`, `karyawan_tanggal`, `karyawan_hapus`) VALUES
@@ -251,6 +419,23 @@ INSERT INTO `t_karyawan` (`karyawan_id`, `karyawan_nama`, `karyawan_telp`, `kary
 	(17, 'ANTO', '0', '-', '2024-02-20', 0),
 	(18, 'VALEN', '0', '-', '2024-02-20', 0),
 	(19, 'JACK', '0', '-', '2024-02-20', 0);
+
+-- Dumping structure for table siu.t_kontak
+CREATE TABLE IF NOT EXISTS `t_kontak` (
+  `kontak_id` int(11) NOT NULL AUTO_INCREMENT,
+  `kontak_jenis` set('s','p') NOT NULL,
+  `kontak_kode` text NOT NULL,
+  `kontak_nama` text NOT NULL,
+  `kontak_alamat` text NOT NULL,
+  `kontak_tlp` text NOT NULL,
+  `kontak_email` text NOT NULL,
+  `kontak_rek` text NOT NULL,
+  `kontak_bank` text NOT NULL,
+  `kontak_npwp` text NOT NULL,
+  `kontak_tanggal` date NOT NULL DEFAULT curdate(),
+  `kontak_hapus` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`kontak_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table siu.t_kontak: ~76 rows (approximately)
 INSERT INTO `t_kontak` (`kontak_id`, `kontak_jenis`, `kontak_kode`, `kontak_nama`, `kontak_alamat`, `kontak_tlp`, `kontak_email`, `kontak_rek`, `kontak_bank`, `kontak_npwp`, `kontak_tanggal`, `kontak_hapus`) VALUES
@@ -331,13 +516,44 @@ INSERT INTO `t_kontak` (`kontak_id`, `kontak_jenis`, `kontak_kode`, `kontak_nama
 	(91, 'p', 'PL0067', 'LESTARI', 'MAKASSAR', '0', '', '0', '1', '-', '2024-03-15', 0),
 	(92, 's', 'SP009', 'GRAHA BINTANG METALINDO', 'JL PU NO 40 MAKASSAR', '0', '', '0', '1', '-', '2024-04-05', 0);
 
+-- Dumping structure for table siu.t_level
+CREATE TABLE IF NOT EXISTS `t_level` (
+  `level_id` int(11) NOT NULL AUTO_INCREMENT,
+  `level_nama` text DEFAULT NULL,
+  `level_akses` text DEFAULT NULL,
+  `level_tanggal` date DEFAULT curdate(),
+  `level_hapus` int(11) DEFAULT 0,
+  PRIMARY KEY (`level_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+
 -- Dumping data for table siu.t_level: ~1 rows (approximately)
 INSERT INTO `t_level` (`level_id`, `level_nama`, `level_akses`, `level_tanggal`, `level_hapus`) VALUES
 	(3, 'Kasir', '{"nama":"Kasir","menu_dashboard":"0","menu_kontak":"0","karyawan":"0","karyawan_add":"0","karyawan_del":"0","supplier":"0","supplier_add":"0","supplier_del":"0","pelanggan":"0","pelanggan_add":"0","pelanggan_del":"0","rekening":"0","rekening_add":"0","rekening_del":"0","menu_pembelian":"0","bahan":"1","bahan_add":"0","bahan_del":"0","bahan_po":"1","bahan_po_add":"1","bahan_po_del":"1","pembelian_bahan":"1","pembelian_bahan_add":"1","pembelian_bahan_del":"1","pembelian_umum":"1","pembelian_umum_add":"1","pembelian_umum_del":"1","hutang":"1","hutang_add":"1","menu_produksi":"0","mesin":"0","mesin_add":"0","mesin_del":"0","peleburan":"0","peleburan_add":"0","peleburan_del":"0","produksi":"0","produksi_add":"0","produksi_del":"0","pewarnaan":"0","pewarnaan_add":"0","pewarnaan_del":"0","packing":"0","packing_add":"0","packing_del":"0","menu_produk":"0","jenis_pewarnaan":"0","jenis_pewarnaan_add":"0","warna_produk":"0","warna_produk_add":"0","warna_produk_del":"0","master_produk":"1","master_produk_add":"0","master_produk_del":"0","menu_penjualan":"0","penjualan_po":"1","penjualan_po_add":"1","penjualan_po_del":"1","penjualan_produk":"1","penjualan_produk_add":"1","penjualan_produk_del":"1","piutang":"1","piutang_add":"1","menu_keuangan":"0","coa":"0","coa_add":"0","coa_del":"0","kas":"0","kas_add":"0","kas_del":"0","jurnal":"0","jurnal_add":"0","jurnal_del":"0","buku_besar":"0","buku_besar_add":"0","buku_besar_del":"0","penyesuaian":"0","penyesuaian_add":"0","penyesuaian_del":"0","menu_laporan":"0","laporan_bahan":"1","laporan_produk":"1","laporan_produksi":"0","laporan_pembelian_po":"1","laporan_pembelian":"1","laporan_hutang":"1","laporan_hutang_jatuh_tampo":"1","laporan_penjualan":"1","laporan_piutang":"1","laporan_piutang_jatuh_tampo":"1","laporan_packing":"0","menu_inventori":"0","opname_pembelian":"0","opname_penjualan":"0","penyesuaian_stok":"0","penyesuaian_stok_add":"0","penyesuaian_stok_del":"0","menu_akun":"0","akses":"0","akses_add":"0","akses_del":"0","user_akun":"0","user_akun_add":"0","user_akun_del":"0","admin_akun":"0","admin_akun_add":"0","admin_akun_del":"0","menu_pengaturan":"0","pajak":"0","pajak_add":"0","backup":"0","informasi":"0"}', '2023-06-01', 0);
 
+-- Dumping structure for table siu.t_logo
+CREATE TABLE IF NOT EXISTS `t_logo` (
+  `logo_id` int(11) NOT NULL AUTO_INCREMENT,
+  `logo_foto` text NOT NULL,
+  `logo_nama` text NOT NULL,
+  `logo_telp` text NOT NULL,
+  `logo_kota` text NOT NULL,
+  `logo_alamat` text NOT NULL,
+  PRIMARY KEY (`logo_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+
 -- Dumping data for table siu.t_logo: ~1 rows (approximately)
 INSERT INTO `t_logo` (`logo_id`, `logo_foto`, `logo_nama`, `logo_telp`, `logo_kota`, `logo_alamat`) VALUES
 	(1, '8070be03d83f8954076632975a7c8429.jpg', 'WEB APLIKASI SIU', '021-7980421', 'Jakarta', 'JL. Raya Pasar Minggu No. 17 Jakarta Selatan 12520');
+
+-- Dumping structure for table siu.t_mesin
+CREATE TABLE IF NOT EXISTS `t_mesin` (
+  `mesin_id` int(11) NOT NULL AUTO_INCREMENT,
+  `mesin_kode` text NOT NULL,
+  `mesin_nama` text NOT NULL,
+  `mesin_hapus` int(11) NOT NULL DEFAULT 0,
+  `mesin_tanggal` date NOT NULL DEFAULT curdate(),
+  PRIMARY KEY (`mesin_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table siu.t_mesin: ~4 rows (approximately)
 INSERT INTO `t_mesin` (`mesin_id`, `mesin_kode`, `mesin_nama`, `mesin_hapus`, `mesin_tanggal`) VALUES
@@ -346,30 +562,236 @@ INSERT INTO `t_mesin` (`mesin_id`, `mesin_kode`, `mesin_nama`, `mesin_hapus`, `m
 	(8, 'VS003', 'MESIN HOLLOW 2X4', 0, '2024-01-25'),
 	(9, 'VS004', 'MESIN RENG', 0, '2024-01-25');
 
+-- Dumping structure for table siu.t_pajak
+CREATE TABLE IF NOT EXISTS `t_pajak` (
+  `pajak_id` int(11) NOT NULL AUTO_INCREMENT,
+  `pajak_jenis` enum('pembelian','penjualan') NOT NULL,
+  `pajak_persen` text NOT NULL,
+  `pajak_tanggal` date NOT NULL DEFAULT curdate(),
+  `pajak_update` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`pajak_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+
 -- Dumping data for table siu.t_pajak: ~2 rows (approximately)
 INSERT INTO `t_pajak` (`pajak_id`, `pajak_jenis`, `pajak_persen`, `pajak_tanggal`, `pajak_update`) VALUES
 	(1, 'pembelian', '11', '2022-12-03', '2022-12-02 17:49:05'),
 	(2, 'penjualan', '11', '2022-12-03', '2022-12-02 17:49:10');
 
+-- Dumping structure for table siu.t_pembelian
+CREATE TABLE IF NOT EXISTS `t_pembelian` (
+  `pembelian_id` int(11) NOT NULL AUTO_INCREMENT,
+  `pembelian_user` text NOT NULL,
+  `pembelian_jumlah` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '0 = belum, 1 = sebagian, 2 = selesai',
+  `pembelian_proses` int(11) NOT NULL DEFAULT 0,
+  `pembelian_po` int(11) NOT NULL DEFAULT 0,
+  `pembelian_po_tanggal` date DEFAULT NULL,
+  `pembelian_nomor` text NOT NULL,
+  `pembelian_supplier` text NOT NULL,
+  `pembelian_ekspedisi` text NOT NULL,
+  `pembelian_gudang` text NOT NULL,
+  `pembelian_tanggal` date NOT NULL DEFAULT curdate(),
+  `pembelian_jam` time NOT NULL DEFAULT current_timestamp(),
+  `pembelian_jatuh_tempo` date NOT NULL,
+  `pembelian_status` enum('lunas','belum') NOT NULL COMMENT 'l = lunas | b = belum lunas',
+  `pembelian_pelunasan` text DEFAULT NULL,
+  `pembelian_pelunasan_keterangan` text NOT NULL,
+  `pembelian_pembayaran` text DEFAULT NULL,
+  `pembelian_keterangan` text NOT NULL,
+  `pembelian_lampiran` text NOT NULL,
+  `pembelian_subtotal` text DEFAULT NULL,
+  `pembelian_ekspedisi_total` text DEFAULT NULL,
+  `pembelian_ppn` text DEFAULT NULL,
+  `pembelian_grandtotal` text DEFAULT NULL,
+  `pembelian_hapus` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`pembelian_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
+
 -- Dumping data for table siu.t_pembelian: ~0 rows (approximately)
+
+-- Dumping structure for table siu.t_pembelian_barang
+CREATE TABLE IF NOT EXISTS `t_pembelian_barang` (
+  `pembelian_barang_id` int(11) NOT NULL AUTO_INCREMENT,
+  `pembelian_barang_terima` int(11) unsigned NOT NULL DEFAULT 1 COMMENT '0 = belum di terima, 1 = di terima',
+  `pembelian_barang_nomor` text NOT NULL,
+  `pembelian_barang_barang` text NOT NULL,
+  `pembelian_barang_kode` text NOT NULL,
+  `pembelian_barang_berat_qty` decimal(20,2) NOT NULL DEFAULT 0.00,
+  `pembelian_barang_panjang_qty` decimal(20,2) NOT NULL DEFAULT 0.00,
+  `pembelian_barang_berat` decimal(20,2) NOT NULL DEFAULT 0.00,
+  `pembelian_barang_panjang` decimal(20,2) NOT NULL DEFAULT 0.00,
+  `pembelian_barang_berat_cek` decimal(20,2) NOT NULL DEFAULT 0.00,
+  `pembelian_barang_panjang_cek` decimal(20,2) NOT NULL DEFAULT 0.00,
+  `pembelian_barang_harga` text NOT NULL,
+  `pembelian_barang_total` text NOT NULL,
+  `pembelian_barang_ekspedisi` text NOT NULL,
+  PRIMARY KEY (`pembelian_barang_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table siu.t_pembelian_barang: ~0 rows (approximately)
 
+-- Dumping structure for table siu.t_pembelian_partial
+CREATE TABLE IF NOT EXISTS `t_pembelian_partial` (
+  `pembelian_partial_id` int(11) NOT NULL AUTO_INCREMENT,
+  `pembelian_partial_nomor` text DEFAULT NULL,
+  `pembelian_partial_barang` int(11) DEFAULT NULL,
+  `pembelian_partial_kode` text DEFAULT NULL,
+  `pembelian_partial_berat` decimal(20,2) DEFAULT NULL,
+  `pembelian_partial_panjang` decimal(20,2) DEFAULT NULL,
+  `pembelian_partial_tanggal` date DEFAULT curdate(),
+  `pembelian_partial_hapus` int(11) DEFAULT 0,
+  PRIMARY KEY (`pembelian_partial_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- Dumping data for table siu.t_pembelian_partial: ~0 rows (approximately)
+
+-- Dumping structure for table siu.t_pembelian_terima
+CREATE TABLE IF NOT EXISTS `t_pembelian_terima` (
+  `pembelian_terima_id` int(11) NOT NULL AUTO_INCREMENT,
+  `pembelian_terima_nomor` text DEFAULT NULL,
+  `pembelian_terima_bukti` text DEFAULT NULL,
+  `pembelian_terima_barang` text DEFAULT NULL,
+  `pembelian_terima_tanggal` date DEFAULT curdate(),
+  `pembelian_terima_hapus` int(11) DEFAULT 0,
+  PRIMARY KEY (`pembelian_terima_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table siu.t_pembelian_terima: ~0 rows (approximately)
 
+-- Dumping structure for table siu.t_pembelian_umum
+CREATE TABLE IF NOT EXISTS `t_pembelian_umum` (
+  `pembelian_umum_id` int(11) NOT NULL AUTO_INCREMENT,
+  `pembelian_umum_user` text NOT NULL,
+  `pembelian_umum_nomor` text NOT NULL,
+  `pembelian_umum_gudang` text NOT NULL,
+  `pembelian_umum_tanggal` date NOT NULL DEFAULT curdate(),
+  `pembelian_umum_jatuh_tempo` text NOT NULL,
+  `pembelian_umum_status` enum('lunas','belum') NOT NULL COMMENT 'l = lunas | b = belum',
+  `pembelian_umum_pelunasan` text DEFAULT NULL,
+  `pembelian_umum_pelunasan_keterangan` text DEFAULT NULL,
+  `pembelian_umum_pembayaran` text NOT NULL,
+  `pembelian_umum_keterangan` text NOT NULL,
+  `pembelian_umum_lampiran` text NOT NULL,
+  `pembelian_umum_qty_akhir` text NOT NULL,
+  `pembelian_umum_ppn` text NOT NULL,
+  `pembelian_umum_total` text NOT NULL,
+  `pembelian_umum_hapus` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`pembelian_umum_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- Dumping data for table siu.t_pembelian_umum: ~0 rows (approximately)
+
+-- Dumping structure for table siu.t_pembelian_umum_barang
+CREATE TABLE IF NOT EXISTS `t_pembelian_umum_barang` (
+  `pembelian_umum_barang_id` int(11) NOT NULL AUTO_INCREMENT,
+  `pembelian_umum_barang_nomor` text NOT NULL,
+  `pembelian_umum_barang_barang` text NOT NULL,
+  `pembelian_umum_barang_qty` text NOT NULL,
+  `pembelian_umum_barang_potongan` text NOT NULL,
+  `pembelian_umum_barang_harga` text NOT NULL,
+  `pembelian_umum_barang_subtotal` text NOT NULL,
+  PRIMARY KEY (`pembelian_umum_barang_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table siu.t_pembelian_umum_barang: ~0 rows (approximately)
 
+-- Dumping structure for table siu.t_penjualan
+CREATE TABLE IF NOT EXISTS `t_penjualan` (
+  `penjualan_id` int(11) NOT NULL AUTO_INCREMENT,
+  `penjualan_user` text NOT NULL,
+  `penjualan_proses` text NOT NULL,
+  `penjualan_so` int(11) NOT NULL DEFAULT 0,
+  `penjualan_so_tanggal` date NOT NULL,
+  `penjualan_nomor` text NOT NULL,
+  `penjualan_pelanggan` text NOT NULL,
+  `penjualan_tanggal` date NOT NULL,
+  `penjualan_jam` time NOT NULL DEFAULT current_timestamp(),
+  `penjualan_jatuh_tempo` date DEFAULT NULL,
+  `penjualan_pembayaran` text DEFAULT NULL,
+  `penjualan_keterangan` text NOT NULL,
+  `penjualan_ambil` set('iya','tidak') NOT NULL DEFAULT '',
+  `penjualan_lampiran` text NOT NULL,
+  `penjualan_subtotal` text DEFAULT NULL,
+  `penjualan_ppn` text DEFAULT NULL,
+  `penjualan_grandtotal` text DEFAULT NULL,
+  `penjualan_piutang` enum('1','0') DEFAULT '0' COMMENT '1 = ada piutang , 0 = tidak ada',
+  `penjualan_status` set('lunas','belum') NOT NULL,
+  `penjualan_pelunasan` date DEFAULT NULL,
+  `penjualan_pelunasan_jumlah` text DEFAULT '0',
+  `penjualan_pelunasan_keterangan` text DEFAULT NULL,
+  `penjualan_gudang` text DEFAULT NULL,
+  `penjualan_ekspedisi` int(11) DEFAULT NULL,
+  `penjualan_hapus` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`penjualan_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4;
+
 -- Dumping data for table siu.t_penjualan: ~0 rows (approximately)
+
+-- Dumping structure for table siu.t_penjualan_barang
+CREATE TABLE IF NOT EXISTS `t_penjualan_barang` (
+  `penjualan_barang_id` int(11) NOT NULL AUTO_INCREMENT,
+  `penjualan_barang_nomor` text NOT NULL,
+  `penjualan_barang_barang` text NOT NULL,
+  `penjualan_barang_stok` decimal(20,2) DEFAULT NULL,
+  `penjualan_barang_panjang` decimal(20,2) DEFAULT NULL,
+  `penjualan_barang_konversi` text DEFAULT '0',
+  `penjualan_barang_batang` text DEFAULT '0',
+  `penjualan_barang_qty` text DEFAULT '0',
+  `penjualan_barang_panjang_total` decimal(20,2) DEFAULT NULL,
+  `penjualan_barang_harga` text NOT NULL,
+  `penjualan_barang_hps` text NOT NULL,
+  `penjualan_barang_total` text NOT NULL,
+  PRIMARY KEY (`penjualan_barang_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=107 DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table siu.t_penjualan_barang: ~0 rows (approximately)
 
+-- Dumping structure for table siu.t_penyesuaian
+CREATE TABLE IF NOT EXISTS `t_penyesuaian` (
+  `penyesuaian_id` int(11) NOT NULL AUTO_INCREMENT,
+  `penyesuaian_nomor` text DEFAULT NULL,
+  `penyesuaian_jenis` enum('penjualan','pembelian') NOT NULL,
+  `penyesuaian_transaksi` enum('perhitungan','masuk','keluar') NOT NULL,
+  `penyesuaian_kategori` enum('umum','rusak') NOT NULL,
+  `penyesuaian_keterangan` text DEFAULT NULL,
+  `penyesuaian_tanggal` date DEFAULT NULL,
+  `penyesuaian_hapus` int(11) DEFAULT 0,
+  PRIMARY KEY (`penyesuaian_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- Dumping data for table siu.t_penyesuaian: ~0 rows (approximately)
 
+-- Dumping structure for table siu.t_penyesuaian_barang
+CREATE TABLE IF NOT EXISTS `t_penyesuaian_barang` (
+  `penyesuaian_barang_id` int(11) NOT NULL AUTO_INCREMENT,
+  `penyesuaian_barang_nomor` text DEFAULT NULL,
+  `penyesuaian_barang_barang` text DEFAULT NULL,
+  `penyesuaian_barang_jenis` text DEFAULT NULL,
+  `penyesuaian_barang_warna` text DEFAULT NULL,
+  `penyesuaian_barang_jumlah` text DEFAULT NULL,
+  `penyesuaian_barang_stok` text DEFAULT NULL,
+  `penyesuaian_barang_selisih` text DEFAULT NULL,
+  `penyesuaian_barang_status` enum('bertambah','berkurang') DEFAULT NULL,
+  PRIMARY KEY (`penyesuaian_barang_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- Dumping data for table siu.t_penyesuaian_barang: ~0 rows (approximately)
+
+-- Dumping structure for table siu.t_produk
+CREATE TABLE IF NOT EXISTS `t_produk` (
+  `produk_id` int(11) NOT NULL AUTO_INCREMENT,
+  `produk_kode` text NOT NULL,
+  `produk_nama` text NOT NULL,
+  `produk_merk` text NOT NULL,
+  `produk_harga` text NOT NULL DEFAULT '0',
+  `produk_konversi` text DEFAULT NULL,
+  `produk_ketebalan` text NOT NULL,
+  `produk_keterangan` text NOT NULL,
+  `produk_colly` text NOT NULL COMMENT 'jumlah isi / pack',
+  `produk_update` date NOT NULL DEFAULT curdate(),
+  `produk_tanggal` date NOT NULL DEFAULT curdate(),
+  `produk_hapus` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`produk_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table siu.t_produk: ~38 rows (approximately)
 INSERT INTO `t_produk` (`produk_id`, `produk_kode`, `produk_nama`, `produk_merk`, `produk_harga`, `produk_konversi`, `produk_ketebalan`, `produk_keterangan`, `produk_colly`, `produk_update`, `produk_tanggal`, `produk_hapus`) VALUES
@@ -412,22 +834,141 @@ INSERT INTO `t_produk` (`produk_id`, `produk_kode`, `produk_nama`, `produk_merk`
 	(42, 'MP0037', 'RENG DALLE 30.45', 'DALLE', '30000', '6', '0.45', '-', '1', '2024-01-26', '2024-01-26', 0),
 	(45, 'MP0038', 'SPANDEK SILVER 0.40 AZ100', 'SOLID', '25000', '3', '0.40', '-', '1', '2024-04-05', '2024-04-05', 0);
 
+-- Dumping structure for table siu.t_produksi
+CREATE TABLE IF NOT EXISTS `t_produksi` (
+  `produksi_id` int(11) NOT NULL AUTO_INCREMENT,
+  `produksi_user` text NOT NULL,
+  `produksi_pelanggan` text DEFAULT NULL,
+  `produksi_nomor` text NOT NULL,
+  `produksi_proses` int(11) NOT NULL DEFAULT 0,
+  `produksi_selesai` int(11) DEFAULT 0,
+  `produksi_so` int(11) DEFAULT 0,
+  `produksi_so_tanggal` date DEFAULT NULL,
+  `produksi_tanggal` date NOT NULL DEFAULT curdate(),
+  `produksi_jam` time NOT NULL DEFAULT current_timestamp(),
+  `produksi_pekerja` text DEFAULT NULL,
+  `produksi_gudang` text DEFAULT NULL,
+  `produksi_keterangan` text NOT NULL,
+  `produksi_mesin` text DEFAULT NULL,
+  `produksi_lampiran_1` text DEFAULT NULL,
+  `produksi_lampiran_2` text DEFAULT NULL,
+  `produksi_subtotal` text DEFAULT NULL,
+  `produksi_jasa` text DEFAULT NULL,
+  `produksi_grandtotal` text DEFAULT NULL,
+  `produksi_hapus` int(11) DEFAULT 0,
+  PRIMARY KEY (`produksi_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4;
+
 -- Dumping data for table siu.t_produksi: ~0 rows (approximately)
+
+-- Dumping structure for table siu.t_produksi_barang
+CREATE TABLE IF NOT EXISTS `t_produksi_barang` (
+  `produksi_barang_id` int(11) NOT NULL AUTO_INCREMENT,
+  `produksi_barang_log` text NOT NULL,
+  `produksi_barang_nomor` text NOT NULL,
+  `produksi_barang_stok` decimal(20,2) NOT NULL DEFAULT 0.00,
+  `produksi_barang_barang` text NOT NULL,
+  `produksi_barang_kode` text NOT NULL,
+  `produksi_barang_panjang` decimal(20,2) NOT NULL DEFAULT 0.00,
+  `produksi_barang_berat` decimal(20,2) NOT NULL DEFAULT 0.00,
+  `produksi_barang_harga` text NOT NULL DEFAULT '0',
+  `produksi_barang_total` text NOT NULL DEFAULT '0',
+  `produksi_barang_status` text NOT NULL DEFAULT '0',
+  `produksi_barang_tanggal` date NOT NULL DEFAULT curdate(),
+  PRIMARY KEY (`produksi_barang_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=106 DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table siu.t_produksi_barang: ~0 rows (approximately)
 
+-- Dumping structure for table siu.t_produksi_log
+CREATE TABLE IF NOT EXISTS `t_produksi_log` (
+  `produksi_log_id` int(11) NOT NULL,
+  `produksi_log_nomor` text DEFAULT NULL,
+  `produksi_log_selesai` int(11) DEFAULT 0,
+  `produksi_log_tanggal` datetime DEFAULT curdate(),
+  `produksi_log_gudang` text DEFAULT NULL,
+  `produksi_log_pekerja` text DEFAULT NULL,
+  `produksi_log_mesin` text DEFAULT NULL,
+  `produksi_log_keterangan` text DEFAULT NULL,
+  `produksi_log_hapus` int(11) DEFAULT 0,
+  PRIMARY KEY (`produksi_log_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- Dumping data for table siu.t_produksi_log: ~0 rows (approximately)
+
+-- Dumping structure for table siu.t_produksi_produksi
+CREATE TABLE IF NOT EXISTS `t_produksi_produksi` (
+  `produksi_produksi_id` int(11) NOT NULL AUTO_INCREMENT,
+  `produksi_produksi_log` text DEFAULT NULL,
+  `produksi_produksi_nomor` text NOT NULL,
+  `produksi_produksi_produk` text NOT NULL,
+  `produksi_produksi_konversi` text NOT NULL,
+  `produksi_produksi_batang` text NOT NULL,
+  `produksi_produksi_panjang` text NOT NULL,
+  `produksi_produksi_qty` text NOT NULL,
+  `produksi_produksi_panjang_total` decimal(20,2) NOT NULL DEFAULT 0.00,
+  `produksi_produksi_status` int(11) NOT NULL DEFAULT 0,
+  `produksi_produksi_tanggal` date NOT NULL DEFAULT curdate(),
+  PRIMARY KEY (`produksi_produksi_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=152 DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table siu.t_produksi_produksi: ~0 rows (approximately)
 
+-- Dumping structure for table siu.t_produk_gudang
+CREATE TABLE IF NOT EXISTS `t_produk_gudang` (
+  `produk_gudang_id` int(11) NOT NULL AUTO_INCREMENT,
+  `produk_gudang_gudang` text DEFAULT '0',
+  `produk_gudang_produk` text DEFAULT NULL,
+  `produk_gudang_panjang` decimal(20,2) DEFAULT NULL COMMENT 'stok panjang produk',
+  `produk_gudang_hps` text DEFAULT '0',
+  `produk_gudang_tanggal` date NOT NULL DEFAULT curdate(),
+  `produk_gudang_hapus` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`produk_gudang_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+
 -- Dumping data for table siu.t_produk_gudang: ~0 rows (approximately)
+
+-- Dumping structure for table siu.t_rekening
+CREATE TABLE IF NOT EXISTS `t_rekening` (
+  `rekening_id` int(11) NOT NULL AUTO_INCREMENT,
+  `rekening_nama` text DEFAULT NULL,
+  `rekening_bank` text DEFAULT NULL,
+  `rekening_no` text DEFAULT NULL,
+  `rekening_tanggal` date DEFAULT curdate(),
+  `rekening_hapus` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`rekening_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table siu.t_rekening: ~2 rows (approximately)
 INSERT INTO `t_rekening` (`rekening_id`, `rekening_nama`, `rekening_bank`, `rekening_no`, `rekening_tanggal`, `rekening_hapus`) VALUES
 	(7, 'BCA', '8', '158895555', '2023-09-27', 0),
 	(8, 'BRI', '1', '03430108888303', '2023-12-17', 0);
 
+-- Dumping structure for table siu.t_saldo
+CREATE TABLE IF NOT EXISTS `t_saldo` (
+  `saldo_id` int(11) NOT NULL AUTO_INCREMENT,
+  `saldo_nomor` text DEFAULT NULL,
+  `saldo_sumber` set('langsung','pembelian','penjualan') DEFAULT NULL,
+  `saldo_nominal` text DEFAULT '0',
+  `saldo_rekening` text DEFAULT NULL,
+  `saldo_jenis` set('setor','tarik') DEFAULT NULL,
+  `saldo_keterangan` text DEFAULT NULL,
+  `saldo_tanggal` timestamp NULL DEFAULT current_timestamp(),
+  `saldo_hapus` int(11) DEFAULT 0,
+  PRIMARY KEY (`saldo_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4;
+
 -- Dumping data for table siu.t_saldo: ~0 rows (approximately)
+
+-- Dumping structure for table siu.t_satuan
+CREATE TABLE IF NOT EXISTS `t_satuan` (
+  `satuan_id` int(11) NOT NULL AUTO_INCREMENT,
+  `satuan_kepanjangan` text NOT NULL,
+  `satuan_singkatan` text NOT NULL,
+  `satuan_tanggal` date NOT NULL DEFAULT curdate(),
+  `satuan_hapus` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`satuan_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table siu.t_satuan: ~9 rows (approximately)
 INSERT INTO `t_satuan` (`satuan_id`, `satuan_kepanjangan`, `satuan_singkatan`, `satuan_tanggal`, `satuan_hapus`) VALUES
@@ -440,6 +981,26 @@ INSERT INTO `t_satuan` (`satuan_id`, `satuan_kepanjangan`, `satuan_singkatan`, `
 	(7, 'Pieces', 'PCS', '2023-01-06', 0),
 	(8, 'Batang', 'Btg', '2023-04-14', 0),
 	(9, 'Meter', 'Mtr', '2023-11-12', 0);
+
+-- Dumping structure for table siu.t_user
+CREATE TABLE IF NOT EXISTS `t_user` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_email` text DEFAULT NULL,
+  `user_password` text DEFAULT NULL,
+  `user_name` varchar(50) DEFAULT NULL,
+  `user_ttl` date DEFAULT NULL,
+  `user_nohp` text DEFAULT NULL,
+  `user_alamat` text DEFAULT NULL,
+  `user_biodata` text DEFAULT NULL,
+  `user_foto` text DEFAULT NULL,
+  `user_level` int(11) DEFAULT NULL,
+  `user_pelajaran` text DEFAULT NULL,
+  `user_kelas` text DEFAULT NULL,
+  `user_email_2` text DEFAULT NULL,
+  `user_tanggal` date DEFAULT curdate(),
+  `user_hapus` int(11) DEFAULT 0,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table siu.t_user: ~3 rows (approximately)
 INSERT INTO `t_user` (`user_id`, `user_email`, `user_password`, `user_name`, `user_ttl`, `user_nohp`, `user_alamat`, `user_biodata`, `user_foto`, `user_level`, `user_pelajaran`, `user_kelas`, `user_email_2`, `user_tanggal`, `user_hapus`) VALUES
